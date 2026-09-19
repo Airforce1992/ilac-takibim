@@ -82,6 +82,11 @@ button{cursor:pointer}
   z-index:20;
 }
 .header-inner{max-width:720px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.header-actions{display:flex;align-items:center;gap:8px}
+.header-language{
+  width:auto;min-width:92px;padding:10px 30px 10px 10px;margin:0;
+  border-radius:13px;background:var(--surface-2);font-size:13px;font-weight:800
+}
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
 .pill-logo{
   width:52px;height:26px;border-radius:999px;flex:0 0 auto;
@@ -321,7 +326,14 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
         <p data-i18n="brandSubtitle">Kişisel ilaç ve sağlık takvimin</p>
       </div>
     </div>
-    <button class="icon-button" id="quickThemeButton" onclick="cycleTheme()" aria-label="Tema değiştir">◐</button>
+    <div class="header-actions">
+      <select id="languageSelect" class="header-language" onchange="setLanguage(this.value)" aria-label="Dil seçimi">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+      </select>
+      <button class="icon-button" id="quickThemeButton" onclick="cycleTheme()" aria-label="Tema değiştir">◐</button>
+    </div>
   </div>
 </header>
 
@@ -557,21 +569,6 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
   </section>
 
   <section id="panel-settings" class="panel">
-    <div class="card">
-      <h3 data-i18n="languageTitle">Dil</h3>
-      <div class="setting-row">
-        <div>
-          <div class="setting-title" data-i18n="appLanguage">Uygulama dili</div>
-          <div class="setting-desc" data-i18n="appLanguageDesc">Uygulama arayüzünün dilini seç.</div>
-        </div>
-        <select id="languageSelect" class="language-select" onchange="setLanguage(this.value)">
-          <option value="tr">Türkçe</option>
-          <option value="en">English</option>
-          <option value="de">Deutsch</option>
-        </select>
-      </div>
-    </div>
-
 
     <div class="card">
       <h3>Görünüm</h3>
