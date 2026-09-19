@@ -212,7 +212,7 @@ html[data-theme="dark"] .view-mode-switch button.active{color:#14213d}
 .period-dose{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 14px;border-top:1px solid var(--border)}
 .period-dose:first-child{border-top:0}
 .period-dose input[type=checkbox]{width:22px;height:22px;margin:0;accent-color:var(--yellow)}
-.period-dose-name{font-weight:700;overflow-wrap:anywhere}
+.period-dose-name{display:block;font-weight:700;overflow-wrap:anywhere}
 .period-dose-name.taken{text-decoration:line-through;color:var(--muted)}
 .period-dose-time{font-size:13px;font-weight:800;color:var(--accent);white-space:nowrap}
 .period-dose-state{font-size:11px;color:var(--muted);margin-top:3px}
@@ -1304,10 +1304,11 @@ function toggleDose(day, id, checked) {
   all[day][id] = Boolean(checked);
   try {
     localStorage.setItem("records", JSON.stringify(all));
+    render();
   } catch (error) {
     alert(t("recordSaveFailed"));
+    render();
   }
-  render();
 }
 
 function toggle(id, checked) {
@@ -1385,12 +1386,12 @@ function render() {
       const dateText=new Date(s.date+"T12:00:00").toLocaleDateString(locale,{weekday:"long",day:"numeric",month:"long"});
       const doses=entries.length ? entries.map(o => {
         const checked=doseIsTaken(o, records);
-        const key=JSON.stringify(o.key);
-        const date=JSON.stringify(s.date);
         const state=doseState(s.date,o.time,checked);
         return '<label class="period-dose">' +
           '<input type="checkbox" '+(checked?'checked ':'')+
-          'aria-label="'+safe(o.med.name+" "+o.time+" "+t("markDose"))+'" onchange="toggleDose('+date+','+key+',this.checked)">' +
+          'data-dose-day="'+safe(s.date)+'" data-dose-key="'+safe(o.key)+'" '+
+          'aria-label="'+safe(o.med.name+" "+o.time+" "+t("markDose"))+'" '+
+          'onchange="toggleDose(this.dataset.doseDay,this.dataset.doseKey,this.checked)">' +
           '<span><span class="period-dose-name'+(checked?' taken':'')+'">'+safe(o.med.name)+'</span><span class="period-dose-state '+state.kind+'">'+safe(state.label)+'</span><span class="med-count-row">'+safe(t("medRemaining"))+': <strong>'+remainingForMedicine(s.date,o.med,records)+'</strong></span></span>' +
           '<span class="period-dose-time">'+safe(o.time)+'</span></label>';
       }).join(""):'<div class="period-detail-empty">'+safe(t("emptyMedicineDay"))+'</div>';
@@ -1426,7 +1427,8 @@ function render() {
       const state = doseState(day,o.time,checked);
       html += '<div class="med">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") +
-        ' onchange="toggle(' + JSON.stringify(o.key) + ',this.checked)">' +
+        ' data-dose-key="' + safe(o.key) + '"' +
+        ' onchange="toggleDose(dateInput.value,this.dataset.doseKey,this.checked)">' +
         '<button class="med-name ' + (checked ? "done" : "") + '" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name + " " + t("editMedicineAria")) + '">' +
           safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span><span class="med-dose-status ' + state.kind + '">' + safe(state.label) + '</span><span class="med-count-row">' + safe(t("medRemaining")) + ': <strong>' + remainingForMedicine(day,m,records) + '</strong></span></button>' +
         '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')">' + safe(o.time) + '</button>' +
