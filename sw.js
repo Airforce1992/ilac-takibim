@@ -4,12 +4,12 @@ self.addEventListener("push", event => {
     data = event.data ? event.data.json() : {};
   } catch {
     data = {
-      title: "İlaç Takibim",
+      title: "Sağlık Cepte",
       body: event.data ? event.data.text() : "İlaç hatırlatıcın var."
     };
   }
 
-  const title = data.title || "İlaç Takibim";
+  const title = data.title || "Sağlık Cepte";
   const options = {
     body: data.body || "İlaç hatırlatıcın var.",
     tag: data.tag || "ilac-hatirlatma",
