@@ -327,18 +327,18 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       </div>
     </div>
     <div class="header-actions">
-      <select id="languageSelect" class="header-language" onchange="setLanguage(this.value)" aria-label="Dil seçimi">
+      <select id="languageSelect" class="header-language" onchange="setLanguage(this.value)" data-i18n-aria-label="languageSelectAria" aria-label="Dil seçimi">
         <option value="tr">TR</option>
         <option value="en">EN</option>
         <option value="de">DE</option>
       </select>
-      <button class="icon-button" id="quickThemeButton" onclick="cycleTheme()" aria-label="Tema değiştir">◐</button>
+      <button class="icon-button" id="quickThemeButton" onclick="cycleTheme()" data-i18n-aria-label="themeToggleAria" aria-label="Tema değiştir">◐</button>
     </div>
   </div>
 </header>
 
 <main>
-  <div class="tabs" aria-label="Ana bölümler">
+  <div class="tabs" data-i18n-aria-label="mainSectionsAria" aria-label="Ana bölümler">
     <button class="tab active" data-tab="today" onclick="showTab('today')" data-i18n="tabToday">Bugün</button>
     <button class="tab" data-tab="health" onclick="showTab('health')" data-i18n="tabHealth">Sağlık</button>
     <button class="tab" data-tab="add" onclick="showTab('add')" data-i18n="tabAdd">Ekle</button>
@@ -403,7 +403,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
           <label for="date" data-i18n="viewDay">Görüntülenecek gün</label>
           <input class="field" type="date" id="date" onchange="render()">
         </div>
-        <button class="btn secondary small" onclick="goToday()">Bugün</button>
+        <button class="btn secondary small" onclick="goToday()" data-i18n="today">Bugün</button>
       </div>
     </div>
 
@@ -420,13 +420,13 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
           <label data-i18n="whichDays">Hangi günler?</label>
           <div id="addDays" class="days">
-            <label class="daycheck"><input type="checkbox" value="1" checked>Pzt</label>
-            <label class="daycheck"><input type="checkbox" value="2" checked>Sal</label>
-            <label class="daycheck"><input type="checkbox" value="3" checked>Çar</label>
-            <label class="daycheck"><input type="checkbox" value="4" checked>Per</label>
-            <label class="daycheck"><input type="checkbox" value="5" checked>Cum</label>
-            <label class="daycheck"><input type="checkbox" value="6" checked>Cmt</label>
-            <label class="daycheck"><input type="checkbox" value="0" checked>Paz</label>
+            <label class="daycheck"><input type="checkbox" value="1" checked><span data-day-short="1">Pzt</span></label>
+            <label class="daycheck"><input type="checkbox" value="2" checked><span data-day-short="2">Sal</span></label>
+            <label class="daycheck"><input type="checkbox" value="3" checked><span data-day-short="3">Çar</span></label>
+            <label class="daycheck"><input type="checkbox" value="4" checked><span data-day-short="4">Per</span></label>
+            <label class="daycheck"><input type="checkbox" value="5" checked><span data-day-short="5">Cum</span></label>
+            <label class="daycheck"><input type="checkbox" value="6" checked><span data-day-short="6">Cmt</span></label>
+            <label class="daycheck"><input type="checkbox" value="0" checked><span data-day-short="0">Paz</span></label>
           </div>
 
           <div class="date-grid">
@@ -466,21 +466,21 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
           </div>
 
           <div class="health-form-grid">
-            <div><label for="sys" data-i18n="systolic">Büyük tansiyon</label><input class="field" id="sys" type="number" inputmode="numeric" placeholder="örn. 120"></div>
-            <div><label for="dia" data-i18n="diastolic">Küçük tansiyon</label><input class="field" id="dia" type="number" inputmode="numeric" placeholder="örn. 80"></div>
-            <div><label for="pulse" data-i18n="pulse">Nabız</label><input class="field" id="pulse" type="number" inputmode="numeric" placeholder="atım/dk"></div>
+            <div><label for="sys" data-i18n="systolic">Büyük tansiyon</label><input class="field" id="sys" type="number" inputmode="numeric" placeholder="örn. 120" data-i18n-placeholder="systolicPh"></div>
+            <div><label for="dia" data-i18n="diastolic">Küçük tansiyon</label><input class="field" id="dia" type="number" inputmode="numeric" placeholder="örn. 80" data-i18n-placeholder="diastolicPh"></div>
+            <div><label for="pulse" data-i18n="pulse">Nabız</label><input class="field" id="pulse" type="number" inputmode="numeric" placeholder="atım/dk" data-i18n-placeholder="pulsePh"></div>
             <div><label for="spo2" data-i18n="oxygen">Oksijen (SpO₂)</label><input class="field" id="spo2" type="number" inputmode="decimal" step="0.1" placeholder="%"></div>
             <div><label for="temp" data-i18n="temperature">Ateş</label><input class="field" id="temp" type="number" inputmode="decimal" step="0.1" placeholder="°C"></div>
             <div><label for="glucose" data-i18n="glucose">Kan şekeri</label><input class="field" id="glucose" type="number" inputmode="decimal" step="0.1" placeholder="mg/dL"></div>
             <div><label for="weight" data-i18n="weight">Kilo</label><input class="field" id="weight" type="number" inputmode="decimal" step="0.1" placeholder="kg"></div>
-            <div><label for="customHealthName" data-i18n="customMeasurement">Özel ölçüm</label><input class="field" id="customHealthName" placeholder="örn. Bel çevresi"></div>
+            <div><label for="customHealthName" data-i18n="customMeasurement">Özel ölçüm</label><input class="field" id="customHealthName" placeholder="örn. Bel çevresi" data-i18n-placeholder="customHealthNamePh"></div>
           </div>
 
           <label for="customHealthValue" data-i18n="customMeasurementValue">Özel ölçüm değeri</label>
-          <input class="field" id="customHealthValue" placeholder="örn. 82 cm">
+          <input class="field" id="customHealthValue" placeholder="örn. 82 cm" data-i18n-placeholder="customHealthValuePh">
 
           <label for="healthNote" data-i18n="note">Not</label>
-          <textarea class="field" id="healthNote" rows="2" placeholder="İsteğe bağlı not"></textarea>
+          <textarea class="field" id="healthNote" rows="2" placeholder="İsteğe bağlı not" data-i18n-placeholder="optionalNotePh"></textarea>
 
           <button class="btn" onclick="addHealthEntry()" data-i18n="saveMeasurement">Ölçümü kaydet</button>
         </div>
@@ -528,13 +528,13 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       </div>
 
       <div class="calendar-head">
-        <button class="btn secondary small" onclick="changeCalendarMonth(-1)" aria-label="Önceki ay">‹</button>
+        <button class="btn secondary small" onclick="changeCalendarMonth(-1)" data-i18n-aria-label="previousMonthAria" aria-label="Önceki ay">‹</button>
         <div class="calendar-title" id="calendarTitle"></div>
-        <button class="btn secondary small" onclick="changeCalendarMonth(1)" aria-label="Sonraki ay">›</button>
+        <button class="btn secondary small" onclick="changeCalendarMonth(1)" data-i18n-aria-label="nextMonthAria" aria-label="Sonraki ay">›</button>
       </div>
 
       <div class="calendar-weekdays">
-        <div>Pzt</div><div>Sal</div><div>Çar</div><div>Per</div><div>Cum</div><div>Cmt</div><div>Paz</div>
+        <div data-cal-day="1">Pzt</div><div data-cal-day="2">Sal</div><div data-cal-day="3">Çar</div><div data-cal-day="4">Per</div><div data-cal-day="5">Cum</div><div data-cal-day="6">Cmt</div><div data-cal-day="0">Paz</div>
       </div>
       <div id="calendarGrid" class="calendar-grid"></div>
 
@@ -589,7 +589,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       <h3 data-i18n="notifications">Bildirimler</h3>
       <p class="note"><span data-i18n="notificationsDesc">Anlık ve zamanlı push bildirimlerini buradan kontrol edebilirsin.</span></p>
       <div class="actions">
-        <button class="btn" onclick="enableNotifications()">Bildirimleri etkinleştir</button>
+        <button class="btn" onclick="enableNotifications()" data-i18n="enableNotifications">Bildirimleri etkinleştir</button>
         <button class="btn secondary" onclick="sendTestNotification()" data-i18n="testNotification">Test bildirimi</button>
         <button class="btn secondary" onclick="sendScheduledTest()" data-i18n="scheduledTest">2 dk sonra test</button>
       </div>
@@ -600,20 +600,20 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       <div class="setting-row">
         <div>
           <div class="setting-title">iPhone</div>
-          <div class="setting-desc">Safari → Paylaş → Ana Ekrana Ekle. Web Push için iOS 16.4+.</div>
+          <div class="setting-desc" data-i18n="iosInstallDesc">Safari → Paylaş → Ana Ekrana Ekle. Web Push için iOS 16.4+.</div>
         </div>
       </div>
       <div class="setting-row">
         <div>
           <div class="setting-title">Android</div>
-          <div class="setting-desc">Chrome → Uygulamayı yükle / Ana ekrana ekle → bildirim izni ver.</div>
+          <div class="setting-desc" data-i18n="androidInstallDesc">Chrome → Uygulamayı yükle / Ana ekrana ekle → bildirim izni ver.</div>
         </div>
       </div>
     </div>
 
     <div class="card">
       <h3>Gizlilik ve veriler</h3>
-      <p class="note">Hesap açılmaz. Bu cihaz için rastgele kimlik oluşturulur. İlaç programı ve push aboneliği yalnızca hatırlatma amacıyla kullanılır. Özel takvim ve sağlık ölçüm kayıtları bu cihazda saklanır.</p>
+      <p class="note" data-i18n="privacyDesc">Hesap açılmaz. Bu cihaz için rastgele kimlik oluşturulur. İlaç programı ve push aboneliği yalnızca hatırlatma amacıyla kullanılır. Özel takvim ve sağlık ölçüm kayıtları bu cihazda saklanır.</p>
       <button class="btn danger" onclick="deleteMyData()" data-i18n="deleteAllData">Tüm verilerimi sil</button>
     </div>
 
@@ -632,7 +632,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
   </section>
 </main>
 
-<nav class="bottom-nav" aria-label="Alt menü">
+<nav class="bottom-nav" data-i18n-aria-label="bottomNavAria" aria-label="Alt menü">
   <button class="nav-btn active" data-nav="today" onclick="showTab('today')"><span>●</span><span data-i18n="tabToday">Bugün</span></button>
   <button class="nav-btn" data-nav="health" onclick="showTab('health')"><span>♥</span><span data-i18n="tabHealth">Sağlık</span></button>
   <button class="nav-btn" data-nav="add" onclick="showTab('add')"><span>＋</span><span data-i18n="tabAdd">Ekle</span></button>
@@ -654,11 +654,11 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     </div>
 
     <label for="profileFullName" data-i18n="fullName">Ad soyad</label>
-    <input class="field" id="profileFullName" placeholder="Ad soyad">
+    <input class="field" id="profileFullName" placeholder="Ad soyad" data-i18n-placeholder="fullNamePh">
 
     <label for="profileBloodType" data-i18n="bloodGroup">Kan grubu</label>
     <select class="field" id="profileBloodType">
-      <option value="">Seçiniz</option>
+      <option value="" data-i18n="selectOption">Seçiniz</option>
       <option value="A+">A Rh+</option>
       <option value="A-">A Rh-</option>
       <option value="B+">B Rh+</option>
@@ -676,55 +676,55 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     <input class="field" id="profilePhone" type="tel" placeholder="05xx xxx xx xx">
 
     <label for="profileEmergency" data-i18n="optionalEmergencyContact">Acil durum kişisi (isteğe bağlı)</label>
-    <input class="field" id="profileEmergency" placeholder="Ad soyad / telefon">
+    <input class="field" id="profileEmergency" placeholder="Ad soyad / telefon" data-i18n-placeholder="emergencyContactPh">
 
     <label for="profileNote" data-i18n="optionalProfileNote">Profil notu (isteğe bağlı)</label>
-    <textarea class="field" id="profileNote" rows="2" placeholder="Alerji, önemli not vb."></textarea>
+    <textarea class="field" id="profileNote" rows="2" placeholder="Alerji, önemli not vb." data-i18n-placeholder="profileNotePh"></textarea>
 
     <div class="actions">
       <button class="btn" onclick="saveProfile()" data-i18n="saveProfile">Profili kaydet</button>
       <button class="btn secondary" onclick="closeProfileModal()" data-i18n="cancel">Vazgeç</button>
     </div>
-    <p class="note" style="margin-bottom:0">Profil bilgileri ve fotoğraf yalnızca bu cihazda saklanır.</p>
+    <p class="note" style="margin-bottom:0" data-i18n="profileLocalOnly">Profil bilgileri ve fotoğraf yalnızca bu cihazda saklanır.</p>
   </div>
 </div>
 
 <div id="editModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="editTitle">
   <div class="modal-card">
-    <h3 id="editTitle">İlacı düzenle</h3>
+    <h3 id="editTitle" data-i18n="editMedicine">İlacı düzenle</h3>
     <input type="hidden" id="editId">
 
-    <label for="editName">İlaç adı</label>
-    <input class="field" id="editName" placeholder="İlaç adı">
+    <label for="editName" data-i18n="medicineName">İlaç adı</label>
+    <input class="field" id="editName" placeholder="İlaç adı" data-i18n-placeholder="medicineName">
 
-    <label for="editTime">İlaç saati</label>
+    <label for="editTime" data-i18n="medicineTime">İlaç saati</label>
     <input class="field" id="editTime" type="time">
 
     <label>Hangi günler?</label>
     <div id="editDays" class="days">
-      <label class="daycheck"><input type="checkbox" value="1">Pzt</label>
-      <label class="daycheck"><input type="checkbox" value="2">Sal</label>
-      <label class="daycheck"><input type="checkbox" value="3">Çar</label>
-      <label class="daycheck"><input type="checkbox" value="4">Per</label>
-      <label class="daycheck"><input type="checkbox" value="5">Cum</label>
-      <label class="daycheck"><input type="checkbox" value="6">Cmt</label>
-      <label class="daycheck"><input type="checkbox" value="0">Paz</label>
+      <label class="daycheck"><input type="checkbox" value="1"><span data-day-short="1">Pzt</span></label>
+      <label class="daycheck"><input type="checkbox" value="2"><span data-day-short="2">Sal</span></label>
+      <label class="daycheck"><input type="checkbox" value="3"><span data-day-short="3">Çar</span></label>
+      <label class="daycheck"><input type="checkbox" value="4"><span data-day-short="4">Per</span></label>
+      <label class="daycheck"><input type="checkbox" value="5"><span data-day-short="5">Cum</span></label>
+      <label class="daycheck"><input type="checkbox" value="6"><span data-day-short="6">Cmt</span></label>
+      <label class="daycheck"><input type="checkbox" value="0"><span data-day-short="0">Paz</span></label>
     </div>
 
     <div class="date-grid">
       <div>
-        <label for="editStartDate">Başlangıç</label>
+        <label for="editStartDate" data-i18n="startDate">Başlangıç</label>
         <input class="field" id="editStartDate" type="date">
       </div>
       <div>
-        <label for="editEndDate">Bitiş</label>
+        <label for="editEndDate" data-i18n="endDateShort">Bitiş</label>
         <input class="field" id="editEndDate" type="date">
       </div>
     </div>
 
     <div class="actions">
-      <button class="btn" onclick="saveEdit()">Kaydet</button>
-      <button class="btn secondary" onclick="closeEdit()">Vazgeç</button>
+      <button class="btn" onclick="saveEdit()" data-i18n="save">Kaydet</button>
+      <button class="btn secondary" onclick="closeEdit()" data-i18n="cancel">Vazgeç</button>
     </div>
   </div>
 </div>
@@ -759,6 +759,10 @@ const I18N = {
     profileInfo:"Profil bilgileri", choosePhoto:"Fotoğraf seç", removePhoto:"Fotoğrafı kaldır", fullName:"Ad soyad", optionalPhone:"Telefon (isteğe bağlı)", optionalEmergencyContact:"Acil durum kişisi (isteğe bağlı)", optionalProfileNote:"Profil notu (isteğe bağlı)", saveProfile:"Profili kaydet", cancel:"Vazgeç",
     emptyMedicineDay:"Bu gün için ilaç kaydı yok.", emptyHealth:"Henüz sağlık ölçümü eklenmedi.", noRecords:"Kayıt bulunmuyor.", selectedDate:"Seçilen tarih", noDateRecords:"Bu tarihte kayıt yok.", noCustomCategory:"Henüz özel başlık eklenmedi.",
     bp:"Tansiyon", bloodSugar:"Kan şekeri", daysEvery:"Her gün", daysWeekdays:"Hafta içi", daysWeekend:"Hafta sonu", dayNames:["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"],
+    languageSelectAria:"Dil seçimi", themeToggleAria:"Tema değiştir", mainSectionsAria:"Ana bölümler", bottomNavAria:"Alt menü", previousMonthAria:"Önceki ay", nextMonthAria:"Sonraki ay", installTitle:"Telefona yükleme", iosInstallDesc:"Safari → Paylaş → Ana Ekrana Ekle. Web Push için iOS 16.4+.", androidInstallDesc:"Chrome → Uygulamayı yükle / Ana ekrana ekle → bildirim izni ver.", privacyTitle:"Gizlilik & Veriler", privacyDesc:"Hesap açılmaz. Bu cihaz için rastgele kimlik oluşturulur. İlaç programı ve push aboneliği yalnızca hatırlatma amacıyla kullanılır. Özel takvim ve sağlık ölçüm kayıtları bu cihazda saklanır.", selectOption:"Seçiniz", fullNamePh:"Ad soyad", emergencyContactPh:"Ad soyad / telefon", profileNotePh:"Alerji, önemli not vb.", profileLocalOnly:"Profil bilgileri ve fotoğraf yalnızca bu cihazda saklanır.", editMedicine:"İlacı düzenle", endDateShort:"Bitiş", save:"Kaydet", systolicPh:"örn. 120", diastolicPh:"örn. 80", pulsePh:"atım/dk", customHealthNamePh:"örn. Bel çevresi", customHealthValuePh:"örn. 82 cm", optionalNotePh:"İsteğe bağlı not",
+    imageOnly:"Lütfen bir resim dosyası seç.", imageTooLarge:"Fotoğraf çok büyük. 8 MB'dan küçük bir fotoğraf seç.", imageReadError:"Fotoğraf okunamadı.", imageSaveError:"Profil fotoğrafı cihazda saklanamadı. Daha küçük bir fotoğraf deneyebilirsin.", medicineRequired:"İlaç adı, saati ve en az bir gün seçin.", invalidDateRange:"Bitiş tarihi başlangıç tarihinden önce olamaz.", confirmDeleteMedicine:"Bu ilaç kaydını silmek istiyor musunuz?", healthDateTimeRequired:"Tarih ve saat seçmelisin.", healthValueInvalid:"Ölçüm değerlerinden biri geçerli aralıkta değil.", healthValueRequired:"En az bir ölçüm değeri gir.", bloodPressurePairRequired:"Tansiyon için büyük ve küçük tansiyonu birlikte gir.", confirmDeleteHealth:"Bu sağlık ölçümü silinsin mi?", lastMeasurementEmpty:"Son kayıtta gösterilecek ölçüm yok.", categoryExists:"Bu başlık zaten mevcut.", categoryInUse:"Bu başlık altında kayıt olduğu için önce o kayıtları silmelisin.", eventRequired:"Tarih, başlık ve alt başlık seçmelisin.", confirmDeleteEvent:"Bu özel gün kaydı silinsin mi?",
+    notificationsUnsupported:"Bu tarayıcı bildirimleri desteklemiyor.", notificationPermissionDenied:"Bildirim izni verilmedi.", notificationFailed:"Bildirim açılamadı", notificationSetup:"Bildirim kurulumu", serviceWorkerStep:"Servis çalışanı", preparingNotifications:"Bildirim sistemi hazırlanıyor...", publicKeyMissing:"Public key bulunamadı.", pushSubscriptionStep:"Push aboneliği", savingSubscriptionStep:"Aboneliği kaydetme", notificationsReady:"Bildirimler ve ilaç saatleri hazır.", notificationsScheduleRetry:"Bildirimler hazır; ilaç saatleri yeniden eşitlenecek.", testSending:"Test bildirimi gönderiliyor...", testSent:"Test bildirimi gönderildi. Telefonunu kontrol et.", testFailed:"Test bildirimi gönderilemedi", scheduledTestSetting:"2 dakika sonrası için zamanlı test kuruluyor...", scheduledTestSet:"Zamanlı test kuruldu. Uygulamayı kapat; yaklaşık 2-3 dakika içinde bildirim gelmeli.", scheduledTestFailed:"Zamanlı test kurulamadı", confirmDeleteAll:"Bu cihazdaki ilaçlar, takvim kayıtları, geçmiş işaretleri, sağlık ölçümleri, profil ve bildirim kaydı silinsin mi?", dataDeleted:"Bu cihazın ilaç, takvim, sağlık, profil ve bildirim verileri silindi.", enableNotificationsHint:"Bildirim almak için Bildirimleri etkinleştir'e dokun.", notificationSystemFailed:"Bildirim sistemi hazırlanamadı",
+    categoryLabels:{"Aşı":"Aşı","Rutin Tedavi":"Rutin Tedavi","Kontrol":"Kontrol","Tahlil":"Tahlil","Doktor Randevusu":"Doktor Randevusu","Diğer":"Diğer"},
     aboutHtml:'<p><strong>Sağlığın, cebinde.</strong></p><p>Sağlık Cepte; ilaçlarını, sağlık ölçümlerini ve önemli sağlık tarihlerini tek bir yerde düzenli şekilde takip edebilmen için tasarlandı.</p><p>İlaç saatlerini planlayabilir, tansiyon ve nabız gibi ölçümlerini kaydedebilir, aşı ve kontrol tarihlerini takvimine ekleyebilir, profil ve acil durum bilgilerini saklayabilirsin.</p><p>Amacımız sağlık bilgilerini daha ulaşılabilir, düzenli ve takip edilebilir hale getirmek.</p><p>Uygulama tıbbi değerlendirme veya tedavi önerisi yerine geçmez. İlaç kullanımı ve sağlık kararlarında doktor veya eczacı önerilerini dikkate al.</p>'
   },
   en: {
@@ -785,6 +789,10 @@ const I18N = {
     profileInfo:"Profile information", choosePhoto:"Choose photo", removePhoto:"Remove photo", fullName:"Full name", optionalPhone:"Phone (optional)", optionalEmergencyContact:"Emergency contact (optional)", optionalProfileNote:"Profile note (optional)", saveProfile:"Save profile", cancel:"Cancel",
     emptyMedicineDay:"No medication scheduled for this day.", emptyHealth:"No health measurement has been added yet.", noRecords:"No records found.", selectedDate:"Selected date", noDateRecords:"No records on this date.", noCustomCategory:"No custom category added yet.",
     bp:"Blood pressure", bloodSugar:"Blood glucose", daysEvery:"Every day", daysWeekdays:"Weekdays", daysWeekend:"Weekend", dayNames:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+    languageSelectAria:"Language selection", themeToggleAria:"Change theme", mainSectionsAria:"Main sections", bottomNavAria:"Bottom navigation", previousMonthAria:"Previous month", nextMonthAria:"Next month", installTitle:"Install on phone", iosInstallDesc:"Safari → Share → Add to Home Screen. iOS 16.4+ is required for Web Push.", androidInstallDesc:"Chrome → Install app / Add to Home screen → allow notifications.", privacyTitle:"Privacy & Data", privacyDesc:"No account is created. A random identifier is generated for this device. Medication schedules and push subscriptions are used only for reminders. Special calendar entries and health measurements are stored on this device.", selectOption:"Select", fullNamePh:"Full name", emergencyContactPh:"Name / phone", profileNotePh:"Allergy, important note, etc.", profileLocalOnly:"Profile information and photo are stored only on this device.", editMedicine:"Edit medicine", endDateShort:"End date", save:"Save", systolicPh:"e.g. 120", diastolicPh:"e.g. 80", pulsePh:"beats/min", customHealthNamePh:"e.g. Waist circumference", customHealthValuePh:"e.g. 82 cm", optionalNotePh:"Optional note",
+    imageOnly:"Please select an image file.", imageTooLarge:"The photo is too large. Choose a photo smaller than 8 MB.", imageReadError:"The photo could not be read.", imageSaveError:"The profile photo could not be stored on this device. Try a smaller photo.", medicineRequired:"Enter a medicine name, time and select at least one day.", invalidDateRange:"The end date cannot be earlier than the start date.", confirmDeleteMedicine:"Do you want to delete this medicine entry?", healthDateTimeRequired:"Select a date and time.", healthValueInvalid:"One of the measurement values is outside the valid range.", healthValueRequired:"Enter at least one measurement value.", bloodPressurePairRequired:"Enter both systolic and diastolic blood pressure.", confirmDeleteHealth:"Delete this health measurement?", lastMeasurementEmpty:"There is no measurement to show in the latest entry.", categoryExists:"This category already exists.", categoryInUse:"This category is in use. Delete its entries first.", eventRequired:"Select a date, category and subtitle.", confirmDeleteEvent:"Delete this special-day entry?",
+    notificationsUnsupported:"This browser does not support notifications.", notificationPermissionDenied:"Notification permission was not granted.", notificationFailed:"Notifications could not be enabled", notificationSetup:"Notification setup", serviceWorkerStep:"Service worker", preparingNotifications:"Preparing notification system...", publicKeyMissing:"Public key not found.", pushSubscriptionStep:"Push subscription", savingSubscriptionStep:"Saving subscription", notificationsReady:"Notifications and medication times are ready.", notificationsScheduleRetry:"Notifications are ready; medication times will be synced again.", testSending:"Sending test notification...", testSent:"Test notification sent. Check your phone.", testFailed:"Test notification could not be sent", scheduledTestSetting:"Scheduling a test for 2 minutes from now...", scheduledTestSet:"Scheduled test set. Close the app; the notification should arrive in about 2–3 minutes.", scheduledTestFailed:"Scheduled test could not be set", confirmDeleteAll:"Delete medications, calendar entries, history, health measurements, profile and notification data from this device?", dataDeleted:"Medication, calendar, health, profile and notification data on this device were deleted.", enableNotificationsHint:"Tap Enable notifications to receive notifications.", notificationSystemFailed:"Notification system could not be prepared",
+    categoryLabels:{"Aşı":"Vaccine","Rutin Tedavi":"Routine Treatment","Kontrol":"Check-up","Tahlil":"Test","Doktor Randevusu":"Doctor Appointment","Diğer":"Other"},
     aboutHtml:'<p><strong>Your health, in your pocket.</strong></p><p>Sağlık Cepte is designed to help you keep your medications, health measurements and important health dates organized in one place.</p><p>You can plan medication times, record measurements such as blood pressure and pulse, add vaccine and check-up dates to your calendar, and keep profile and emergency information.</p><p>Our aim is to make personal health information more accessible, organized and easier to follow.</p><p>This app does not replace medical evaluation or treatment advice. Follow the recommendations of your doctor or pharmacist when making medication and health decisions.</p>'
   },
   de: {
@@ -811,6 +819,10 @@ const I18N = {
     profileInfo:"Profilinformationen", choosePhoto:"Foto auswählen", removePhoto:"Foto entfernen", fullName:"Vor- und Nachname", optionalPhone:"Telefon (optional)", optionalEmergencyContact:"Notfallkontakt (optional)", optionalProfileNote:"Profilnotiz (optional)", saveProfile:"Profil speichern", cancel:"Abbrechen",
     emptyMedicineDay:"Für diesen Tag sind keine Medikamente eingetragen.", emptyHealth:"Noch keine Gesundheitsmessung hinzugefügt.", noRecords:"Keine Einträge gefunden.", selectedDate:"Ausgewähltes Datum", noDateRecords:"Für dieses Datum gibt es keine Einträge.", noCustomCategory:"Noch keine eigene Kategorie hinzugefügt.",
     bp:"Blutdruck", bloodSugar:"Blutzucker", daysEvery:"Jeden Tag", daysWeekdays:"Werktage", daysWeekend:"Wochenende", dayNames:["So","Mo","Di","Mi","Do","Fr","Sa"],
+    languageSelectAria:"Sprachauswahl", themeToggleAria:"Design ändern", mainSectionsAria:"Hauptbereiche", bottomNavAria:"Untere Navigation", previousMonthAria:"Vorheriger Monat", nextMonthAria:"Nächster Monat", installTitle:"Auf dem Smartphone installieren", iosInstallDesc:"Safari → Teilen → Zum Home-Bildschirm. Für Web Push ist iOS 16.4+ erforderlich.", androidInstallDesc:"Chrome → App installieren / Zum Startbildschirm hinzufügen → Benachrichtigungen erlauben.", privacyTitle:"Datenschutz & Daten", privacyDesc:"Es wird kein Konto erstellt. Für dieses Gerät wird eine zufällige Kennung erzeugt. Medikamentenpläne und Push-Abonnements werden nur für Erinnerungen verwendet. Besondere Kalendereinträge und Gesundheitsmessungen werden auf diesem Gerät gespeichert.", selectOption:"Auswählen", fullNamePh:"Vor- und Nachname", emergencyContactPh:"Name / Telefon", profileNotePh:"Allergie, wichtiger Hinweis usw.", profileLocalOnly:"Profilinformationen und Foto werden nur auf diesem Gerät gespeichert.", editMedicine:"Medikament bearbeiten", endDateShort:"Enddatum", save:"Speichern", systolicPh:"z. B. 120", diastolicPh:"z. B. 80", pulsePh:"Schläge/Min.", customHealthNamePh:"z. B. Taillenumfang", customHealthValuePh:"z. B. 82 cm", optionalNotePh:"Optionale Notiz",
+    imageOnly:"Bitte wähle eine Bilddatei aus.", imageTooLarge:"Das Foto ist zu groß. Wähle ein Foto unter 8 MB.", imageReadError:"Das Foto konnte nicht gelesen werden.", imageSaveError:"Das Profilfoto konnte auf diesem Gerät nicht gespeichert werden. Versuche ein kleineres Foto.", medicineRequired:"Gib Medikamentenname und Uhrzeit ein und wähle mindestens einen Tag.", invalidDateRange:"Das Enddatum darf nicht vor dem Startdatum liegen.", confirmDeleteMedicine:"Möchtest du diesen Medikamenteneintrag löschen?", healthDateTimeRequired:"Wähle Datum und Uhrzeit.", healthValueInvalid:"Einer der Messwerte liegt außerhalb des gültigen Bereichs.", healthValueRequired:"Gib mindestens einen Messwert ein.", bloodPressurePairRequired:"Gib systolischen und diastolischen Blutdruck gemeinsam ein.", confirmDeleteHealth:"Diese Gesundheitsmessung löschen?", lastMeasurementEmpty:"Im letzten Eintrag gibt es keinen anzeigbaren Messwert.", categoryExists:"Diese Kategorie existiert bereits.", categoryInUse:"Diese Kategorie wird verwendet. Lösche zuerst die zugehörigen Einträge.", eventRequired:"Wähle Datum, Kategorie und Untertitel.", confirmDeleteEvent:"Diesen besonderen Termin löschen?",
+    notificationsUnsupported:"Dieser Browser unterstützt keine Benachrichtigungen.", notificationPermissionDenied:"Die Berechtigung für Benachrichtigungen wurde nicht erteilt.", notificationFailed:"Benachrichtigungen konnten nicht aktiviert werden", notificationSetup:"Benachrichtigungseinrichtung", serviceWorkerStep:"Service Worker", preparingNotifications:"Benachrichtigungssystem wird vorbereitet...", publicKeyMissing:"Öffentlicher Schlüssel wurde nicht gefunden.", pushSubscriptionStep:"Push-Abonnement", savingSubscriptionStep:"Abonnement wird gespeichert", notificationsReady:"Benachrichtigungen und Medikamentenzeiten sind bereit.", notificationsScheduleRetry:"Benachrichtigungen sind bereit; Medikamentenzeiten werden erneut synchronisiert.", testSending:"Testbenachrichtigung wird gesendet...", testSent:"Testbenachrichtigung gesendet. Prüfe dein Smartphone.", testFailed:"Testbenachrichtigung konnte nicht gesendet werden", scheduledTestSetting:"Zeitgesteuerter Test für in 2 Minuten wird eingerichtet...", scheduledTestSet:"Zeitgesteuerter Test eingerichtet. Schließe die App; die Benachrichtigung sollte in etwa 2–3 Minuten eintreffen.", scheduledTestFailed:"Zeitgesteuerter Test konnte nicht eingerichtet werden", confirmDeleteAll:"Medikamente, Kalendereinträge, Verlauf, Gesundheitsmessungen, Profil- und Benachrichtigungsdaten auf diesem Gerät löschen?", dataDeleted:"Medikamenten-, Kalender-, Gesundheits-, Profil- und Benachrichtigungsdaten auf diesem Gerät wurden gelöscht.", enableNotificationsHint:"Tippe auf Benachrichtigungen aktivieren, um Benachrichtigungen zu erhalten.", notificationSystemFailed:"Benachrichtigungssystem konnte nicht vorbereitet werden",
+    categoryLabels:{"Aşı":"Impfung","Rutin Tedavi":"Routinebehandlung","Kontrol":"Kontrolle","Tahlil":"Untersuchung","Doktor Randevusu":"Arzttermin","Diğer":"Sonstiges"},
     aboutHtml:'<p><strong>Deine Gesundheit – immer dabei.</strong></p><p>Sağlık Cepte wurde entwickelt, damit du Medikamente, Gesundheitswerte und wichtige Gesundheitstermine übersichtlich an einem Ort verfolgen kannst.</p><p>Du kannst Medikamentenzeiten planen, Werte wie Blutdruck und Puls erfassen, Impf- und Kontrolltermine in den Kalender eintragen sowie Profil- und Notfallinformationen speichern.</p><p>Unser Ziel ist es, persönliche Gesundheitsinformationen leichter zugänglich, übersichtlich und einfacher nachverfolgbar zu machen.</p><p>Die App ersetzt keine medizinische Beurteilung oder Behandlungsempfehlung. Bei Medikamenten und gesundheitlichen Entscheidungen solltest du den Empfehlungen deines Arztes oder Apothekers folgen.</p>'
   }
 };
@@ -838,6 +850,13 @@ function setLanguage(lang) {
     const key = el.dataset.i18nPlaceholder;
     if (I18N[lang]?.[key] != null) el.placeholder = I18N[lang][key];
   });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach(el => {
+    const key = el.dataset.i18nAriaLabel;
+    if (I18N[lang]?.[key] != null) el.setAttribute("aria-label", I18N[lang][key]);
+  });
+  const dayNames = I18N[lang].dayNames;
+  document.querySelectorAll("[data-day-short]").forEach(el => el.textContent = dayNames[Number(el.dataset.dayShort)]);
+  document.querySelectorAll("[data-cal-day]").forEach(el => el.textContent = dayNames[Number(el.dataset.calDay)]);
   const about = document.getElementById("aboutText");
   if (about) about.innerHTML = I18N[lang].aboutHtml;
   renderProfile();
@@ -963,11 +982,11 @@ function handleProfilePhoto(event) {
   const file = event.target.files?.[0];
   if (!file) return;
   if (!file.type.startsWith("image/")) {
-    alert("Lütfen bir resim dosyası seç.");
+    alert(t("imageOnly"));
     return;
   }
   if (file.size > 8 * 1024 * 1024) {
-    alert("Fotoğraf çok büyük. 8 MB'dan küçük bir fotoğraf seç.");
+    alert(t("imageTooLarge"));
     return;
   }
 
@@ -991,7 +1010,7 @@ function handleProfilePhoto(event) {
       pendingProfilePhoto = canvas.toDataURL("image/jpeg", .82);
       renderProfilePhotoPreview();
     };
-    img.onerror = () => alert("Fotoğraf okunamadı.");
+    img.onerror = () => alert(t("imageReadError"));
     img.src = reader.result;
   };
   reader.readAsDataURL(file);
@@ -1017,7 +1036,7 @@ function saveProfile() {
   try {
     localStorage.setItem("profileData", JSON.stringify(profileData));
   } catch {
-    alert("Profil fotoğrafı cihazda saklanamadı. Daha küçük bir fotoğraf deneyebilirsin.");
+    alert(t("imageSaveError"));
     return;
   }
 
@@ -1212,11 +1231,11 @@ async function saveEdit() {
   const endDate = document.getElementById("editEndDate").value;
 
   if (!name || !time || !days.length) {
-    alert("İlaç adı, saati ve en az bir gün seçin.");
+    alert(t("medicineRequired"));
     return;
   }
   if (startDate && endDate && endDate < startDate) {
-    alert("Bitiş tarihi başlangıç tarihinden önce olamaz.");
+    alert(t("invalidDateRange"));
     return;
   }
 
@@ -1247,11 +1266,11 @@ async function addMed() {
   const endDate = document.getElementById("endDate").value;
 
   if (!name || !time || !days.length) {
-    alert("İlaç adı, saati ve en az bir gün seçin.");
+    alert(t("medicineRequired"));
     return;
   }
   if (startDate && endDate && endDate < startDate) {
-    alert("Bitiş tarihi başlangıç tarihinden önce olamaz.");
+    alert(t("invalidDateRange"));
     return;
   }
 
@@ -1264,7 +1283,7 @@ async function addMed() {
 }
 
 async function removeMed(id) {
-  if (!confirm("Bu ilaç kaydını silmek istiyor musunuz?")) return;
+  if (!confirm(t("confirmDeleteMedicine"))) return;
   meds = meds.filter(m => m.id !== id);
   save();
   render();
@@ -1316,21 +1335,21 @@ function addHealthEntry() {
   const note = document.getElementById("healthNote").value.trim().slice(0,500);
 
   if (!date || !time) {
-    alert("Tarih ve saat seçmelisin.");
+    alert(t("healthDateTimeRequired"));
     return;
   }
   if ([sys,dia,pulse,spo2,temp,glucose,weight].some(v => v === null)) {
-    alert("Ölçüm değerlerinden biri geçerli aralıkta değil.");
+    alert(t("healthValueInvalid"));
     return;
   }
   const hasStandard = [sys,dia,pulse,spo2,temp,glucose,weight].some(v => v !== "");
   const hasCustom = customName && customValue;
   if (!hasStandard && !hasCustom) {
-    alert("En az bir ölçüm değeri gir.");
+    alert(t("healthValueRequired"));
     return;
   }
   if ((sys === "") !== (dia === "")) {
-    alert("Tansiyon için büyük ve küçük tansiyonu birlikte gir.");
+    alert(t("bloodPressurePairRequired"));
     return;
   }
 
@@ -1349,7 +1368,7 @@ function addHealthEntry() {
 }
 
 function removeHealthEntry(id) {
-  if (!confirm("Bu sağlık ölçümü silinsin mi?")) return;
+  if (!confirm(t("confirmDeleteHealth"))) return;
   healthEntries = healthEntries.filter(e => String(e.id) !== String(id));
   saveHealthEntries();
   renderHealth();
@@ -1389,7 +1408,7 @@ function renderHealth() {
     latestBox.innerHTML = stats.slice(0,6).map(s =>
       '<div class="health-stat"><div class="label">' + safe(s[0]) + '</div><div class="value">' +
       safe(s[1]) + ' <span style="font-size:11px;color:var(--muted)">' + safe(s[2]) + '</span></div></div>'
-    ).join("") || '<div class="empty" style="grid-column:1/-1">Son kayıtta gösterilecek ölçüm yok.</div>';
+    ).join("") || '<div class="empty" style="grid-column:1/-1">' + safe(t("lastMeasurementEmpty")) + '</div>';
   }
 
   const history = document.getElementById("healthHistory");
@@ -1477,7 +1496,7 @@ function renderSpecialCategories() {
     .filter((v, idx, arr) => v && arr.indexOf(v) === idx);
 
   select.innerHTML = all.map(cat =>
-    '<option value="' + safe(cat) + '">' + safe(cat) + '</option>'
+    '<option value="' + safe(cat) + '">' + safe(t("categoryLabels")[cat] || cat) + '</option>'
   ).join("");
 
   if (all.includes(current)) select.value = current;
@@ -1500,7 +1519,7 @@ function addSpecialCategory() {
     .map(v => v.toLocaleLowerCase("tr-TR"));
 
   if (all.includes(value.toLocaleLowerCase("tr-TR"))) {
-    alert("Bu başlık zaten mevcut.");
+    alert(t("categoryExists"));
     return;
   }
 
@@ -1513,7 +1532,7 @@ function addSpecialCategory() {
 
 function removeSpecialCategory(category) {
   if (specialEvents.some(e => e.category === category)) {
-    alert("Bu başlık altında kayıt olduğu için önce o kayıtları silmelisin.");
+    alert(t("categoryInUse"));
     return;
   }
   customSpecialCategories = customSpecialCategories.filter(c => c !== category);
@@ -1528,7 +1547,7 @@ function addSpecialEvent() {
   const note = document.getElementById("specialNote").value.trim();
 
   if (!selectedSpecialDate || !category || !title) {
-    alert("Tarih, başlık ve alt başlık seçmelisin.");
+    alert(t("eventRequired"));
     return;
   }
 
@@ -1551,7 +1570,7 @@ function addSpecialEvent() {
 }
 
 function removeSpecialEvent(id) {
-  if (!confirm("Bu özel gün kaydı silinsin mi?")) return;
+  if (!confirm(t("confirmDeleteEvent"))) return;
   specialEvents = specialEvents.filter(e => String(e.id) !== String(id));
   saveSpecialData();
   renderCalendar();
@@ -1650,22 +1669,22 @@ async function registerServiceWorker() {
 async function enableNotifications() {
   const status = document.getElementById("notificationStatus");
   try {
-    if (!("Notification" in window)) throw new Error("Bu tarayıcı bildirimleri desteklemiyor.");
+    if (!("Notification" in window)) throw new Error(t("notificationsUnsupported"));
     const permission = await Notification.requestPermission();
-    if (permission !== "granted") throw new Error("Bildirim izni verilmedi.");
+    if (permission !== "granted") throw new Error(t("notificationPermissionDenied"));
     await subscribeToPush();
   } catch (error) {
-    status.textContent = "Bildirim açılamadı: " + (error.message || String(error));
+    status.textContent = t("notificationFailed") + ": " + (error.message || String(error));
   }
 }
 
 async function subscribeToPush() {
   const status = document.getElementById("notificationStatus");
-  let step = "Bildirim kurulumu";
+  let step = t("notificationSetup");
 
   try {
-    step = "Servis çalışanı";
-    status.textContent = "Bildirim sistemi hazırlanıyor...";
+    step = t("serviceWorkerStep");
+    status.textContent = t("preparingNotifications");
     const registration = await registerServiceWorker();
     if (!registration.pushManager) throw new Error("Bu ortam Web Push desteklemiyor.");
 
@@ -1673,10 +1692,10 @@ async function subscribeToPush() {
     const keyResponse = await fetch(PUSH_SERVER + "/vapid-public-key", { cache: "no-store" });
     if (!keyResponse.ok) throw new Error("Sunucu HTTP " + keyResponse.status);
     const { publicKey } = await keyResponse.json();
-    if (!publicKey) throw new Error("Public key bulunamadı.");
+    if (!publicKey) throw new Error(t("publicKeyMissing"));
     const applicationServerKey = base64UrlToBytes(publicKey);
 
-    step = "Push aboneliği";
+    step = t("pushSubscriptionStep");
     let subscription = await registration.pushManager.getSubscription();
 
     if (subscription) {
@@ -1696,7 +1715,7 @@ async function subscribeToPush() {
       });
     }
 
-    step = "Aboneliği kaydetme";
+    step = t("savingSubscriptionStep");
     const response = await fetch(PUSH_SERVER + "/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1710,8 +1729,8 @@ async function subscribeToPush() {
 
     const scheduleOk = await syncSchedule();
     status.textContent = scheduleOk
-      ? "Bildirimler ve ilaç saatleri hazır."
-      : "Bildirimler hazır; ilaç saatleri yeniden eşitlenecek.";
+      ? t("notificationsReady")
+      : t("notificationsScheduleRetry");
 
     return true;
   } catch (error) {
@@ -1729,6 +1748,7 @@ async function syncSchedule() {
       body: JSON.stringify({
         clientId: getClientId(),
         timeZone,
+        lang: currentLanguage(),
         meds: meds.map(m => ({
           time: m.time,
           name: m.name,
@@ -1747,25 +1767,25 @@ async function syncSchedule() {
 async function sendTestNotification() {
   const status = document.getElementById("notificationStatus");
   try {
-    status.textContent = "Test bildirimi gönderiliyor...";
+    status.textContent = t("testSending");
     const response = await fetch(PUSH_SERVER + "/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ clientId: getClientId() })
+      body: JSON.stringify({ clientId: getClientId(), lang: currentLanguage() })
     });
 
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
-    status.textContent = "Test bildirimi gönderildi. Telefonunu kontrol et.";
+    status.textContent = t("testSent");
   } catch (error) {
-    status.textContent = "Test bildirimi gönderilemedi: " + (error.message || String(error));
+    status.textContent = t("testFailed") + ": " + (error.message || String(error));
   }
 }
 
 async function sendScheduledTest() {
   const status = document.getElementById("notificationStatus");
   try {
-    status.textContent = "2 dakika sonrası için zamanlı test kuruluyor...";
+    status.textContent = t("scheduledTestSetting");
     const response = await fetch(PUSH_SERVER + "/scheduled-test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1775,14 +1795,14 @@ async function sendScheduledTest() {
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
 
-    status.textContent = "Zamanlı test kuruldu. Uygulamayı kapat; yaklaşık 2-3 dakika içinde bildirim gelmeli.";
+    status.textContent = t("scheduledTestSet");
   } catch (error) {
-    status.textContent = "Zamanlı test kurulamadı: " + (error.message || String(error));
+    status.textContent = t("scheduledTestFailed") + ": " + (error.message || String(error));
   }
 }
 
 async function deleteMyData() {
-  if (!confirm("Bu cihazdaki ilaçlar, takvim kayıtları, geçmiş işaretleri ve bildirim kaydı silinsin mi?")) return;
+  if (!confirm(t("confirmDeleteAll"))) return;
 
   const status = document.getElementById("notificationStatus");
 
@@ -1826,7 +1846,7 @@ async function deleteMyData() {
     renderHealth();
     renderProfile();
 
-    status.textContent = "Bu cihazın ilaç, takvim ve bildirim verileri silindi.";
+    status.textContent = t("dataDeleted");
   } catch (error) {
     status.textContent = "Veriler silinemedi: " + (error.message || String(error));
   }
@@ -1849,11 +1869,11 @@ window.addEventListener("load", async () => {
       await subscribeToPush();
     } else {
       document.getElementById("notificationStatus").textContent =
-        "Bildirim almak için Bildirimleri etkinleştir'e dokun.";
+        t("enableNotificationsHint");
     }
   } catch (error) {
     document.getElementById("notificationStatus").textContent =
-      "Bildirim sistemi hazırlanamadı: " + (error.message || String(error));
+      t("notificationSystemFailed") + ": " + (error.message || String(error));
   }
 });
 </script>
