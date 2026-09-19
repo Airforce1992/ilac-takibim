@@ -10,19 +10,6 @@
 <meta name="apple-mobile-web-app-title" content="Sağlık Cepte">
 <link rel="manifest" href="./manifest.webmanifest">
 <title>Sağlık Cepte</title>
-<script>
-(function () {
-  try {
-    const url = new URL(window.location.href);
-    const fresh = Number(url.searchParams.get("_fresh") || 0);
-    const now = Date.now();
-    if (!fresh || now - fresh > 300000) {
-      url.searchParams.set("_fresh", String(now));
-      window.location.replace(url.toString());
-    }
-  } catch {}
-})();
-</script>
 <style>
 :root{
   --bg:#f5f6f8;
@@ -392,7 +379,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       </div>
       <div class="status-box">
         <div class="status-dot"></div>
-        <div id="notificationStatus" class="status">Bildirim durumu kontrol ediliyor...</div>
+        <div id="notificationStatus" class="status" data-i18n="notificationChecking">Bildirim durumu kontrol ediliyor...</div>
       </div>
       <button id="notificationButton" class="btn yellow" onclick="enableNotifications()" data-i18n="enableNotifications">Bildirimleri etkinleştir</button>
     </div>
@@ -596,7 +583,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     </div>
 
     <div class="card">
-      <h3>Telefona kurulum</h3>
+      <h3 data-i18n="installTitle">Telefona kurulum</h3>
       <div class="setting-row">
         <div>
           <div class="setting-title">iPhone</div>
@@ -612,7 +599,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     </div>
 
     <div class="card">
-      <h3>Gizlilik ve veriler</h3>
+      <h3 data-i18n="privacyTitle">Gizlilik ve veriler</h3>
       <p class="note" data-i18n="privacyDesc">Hesap açılmaz. Bu cihaz için rastgele kimlik oluşturulur. İlaç programı ve push aboneliği yalnızca hatırlatma amacıyla kullanılır. Özel takvim ve sağlık ölçüm kayıtları bu cihazda saklanır.</p>
       <button class="btn danger" onclick="deleteMyData()" data-i18n="deleteAllData">Tüm verilerimi sil</button>
     </div>
@@ -700,7 +687,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     <label for="editTime" data-i18n="medicineTime">İlaç saati</label>
     <input class="field" id="editTime" type="time">
 
-    <label>Hangi günler?</label>
+    <label data-i18n="whichDays">Hangi günler?</label>
     <div id="editDays" class="days">
       <label class="daycheck"><input type="checkbox" value="1"><span data-day-short="1">Pzt</span></label>
       <label class="daycheck"><input type="checkbox" value="2"><span data-day-short="2">Sal</span></label>
@@ -763,6 +750,7 @@ const I18N = {
     imageOnly:"Lütfen bir resim dosyası seç.", imageTooLarge:"Fotoğraf çok büyük. 8 MB'dan küçük bir fotoğraf seç.", imageReadError:"Fotoğraf okunamadı.", imageSaveError:"Profil fotoğrafı cihazda saklanamadı. Daha küçük bir fotoğraf deneyebilirsin.", medicineRequired:"İlaç adı, saati ve en az bir gün seçin.", invalidDateRange:"Bitiş tarihi başlangıç tarihinden önce olamaz.", confirmDeleteMedicine:"Bu ilaç kaydını silmek istiyor musunuz?", healthDateTimeRequired:"Tarih ve saat seçmelisin.", healthValueInvalid:"Ölçüm değerlerinden biri geçerli aralıkta değil.", healthValueRequired:"En az bir ölçüm değeri gir.", bloodPressurePairRequired:"Tansiyon için büyük ve küçük tansiyonu birlikte gir.", confirmDeleteHealth:"Bu sağlık ölçümü silinsin mi?", lastMeasurementEmpty:"Son kayıtta gösterilecek ölçüm yok.", categoryExists:"Bu başlık zaten mevcut.", categoryInUse:"Bu başlık altında kayıt olduğu için önce o kayıtları silmelisin.", eventRequired:"Tarih, başlık ve alt başlık seçmelisin.", confirmDeleteEvent:"Bu özel gün kaydı silinsin mi?",
     notificationsUnsupported:"Bu tarayıcı bildirimleri desteklemiyor.", notificationPermissionDenied:"Bildirim izni verilmedi.", notificationFailed:"Bildirim açılamadı", notificationSetup:"Bildirim kurulumu", serviceWorkerStep:"Servis çalışanı", preparingNotifications:"Bildirim sistemi hazırlanıyor...", publicKeyMissing:"Public key bulunamadı.", pushSubscriptionStep:"Push aboneliği", savingSubscriptionStep:"Aboneliği kaydetme", notificationsReady:"Bildirimler ve ilaç saatleri hazır.", notificationsScheduleRetry:"Bildirimler hazır; ilaç saatleri yeniden eşitlenecek.", testSending:"Test bildirimi gönderiliyor...", testSent:"Test bildirimi gönderildi. Telefonunu kontrol et.", testFailed:"Test bildirimi gönderilemedi", scheduledTestSetting:"2 dakika sonrası için zamanlı test kuruluyor...", scheduledTestSet:"Zamanlı test kuruldu. Uygulamayı kapat; yaklaşık 2-3 dakika içinde bildirim gelmeli.", scheduledTestFailed:"Zamanlı test kurulamadı", confirmDeleteAll:"Bu cihazdaki ilaçlar, takvim kayıtları, geçmiş işaretleri, sağlık ölçümleri, profil ve bildirim kaydı silinsin mi?", dataDeleted:"Bu cihazın ilaç, takvim, sağlık, profil ve bildirim verileri silindi.", enableNotificationsHint:"Bildirim almak için Bildirimleri etkinleştir'e dokun.", notificationSystemFailed:"Bildirim sistemi hazırlanamadı",
     categoryLabels:{"Aşı":"Aşı","Rutin Tedavi":"Rutin Tedavi","Kontrol":"Kontrol","Tahlil":"Tahlil","Doktor Randevusu":"Doktor Randevusu","Diğer":"Diğer"},
+    notificationChecking:"Bildirim durumu kontrol ediliyor...", profilePhotoAlt:"Profil fotoğrafı", selectedProfilePhotoAlt:"Seçilen profil fotoğrafı", editMedicineAria:"ilacını düzenle", serviceWorkerUnsupported:"Service Worker desteklenmiyor.", webPushUnsupported:"Bu ortam Web Push desteklemiyor.", publicKeyStep:"Public key", serverHttp:"Sunucu HTTP", dataDeleteFailed:"Veriler silinemedi",
     aboutHtml:'<p><strong>Sağlığın, cebinde.</strong></p><p>Sağlık Cepte; ilaçlarını, sağlık ölçümlerini ve önemli sağlık tarihlerini tek bir yerde düzenli şekilde takip edebilmen için tasarlandı.</p><p>İlaç saatlerini planlayabilir, tansiyon ve nabız gibi ölçümlerini kaydedebilir, aşı ve kontrol tarihlerini takvimine ekleyebilir, profil ve acil durum bilgilerini saklayabilirsin.</p><p>Amacımız sağlık bilgilerini daha ulaşılabilir, düzenli ve takip edilebilir hale getirmek.</p><p>Uygulama tıbbi değerlendirme veya tedavi önerisi yerine geçmez. İlaç kullanımı ve sağlık kararlarında doktor veya eczacı önerilerini dikkate al.</p>'
   },
   en: {
@@ -793,6 +781,7 @@ const I18N = {
     imageOnly:"Please select an image file.", imageTooLarge:"The photo is too large. Choose a photo smaller than 8 MB.", imageReadError:"The photo could not be read.", imageSaveError:"The profile photo could not be stored on this device. Try a smaller photo.", medicineRequired:"Enter a medicine name, time and select at least one day.", invalidDateRange:"The end date cannot be earlier than the start date.", confirmDeleteMedicine:"Do you want to delete this medicine entry?", healthDateTimeRequired:"Select a date and time.", healthValueInvalid:"One of the measurement values is outside the valid range.", healthValueRequired:"Enter at least one measurement value.", bloodPressurePairRequired:"Enter both systolic and diastolic blood pressure.", confirmDeleteHealth:"Delete this health measurement?", lastMeasurementEmpty:"There is no measurement to show in the latest entry.", categoryExists:"This category already exists.", categoryInUse:"This category is in use. Delete its entries first.", eventRequired:"Select a date, category and subtitle.", confirmDeleteEvent:"Delete this special-day entry?",
     notificationsUnsupported:"This browser does not support notifications.", notificationPermissionDenied:"Notification permission was not granted.", notificationFailed:"Notifications could not be enabled", notificationSetup:"Notification setup", serviceWorkerStep:"Service worker", preparingNotifications:"Preparing notification system...", publicKeyMissing:"Public key not found.", pushSubscriptionStep:"Push subscription", savingSubscriptionStep:"Saving subscription", notificationsReady:"Notifications and medication times are ready.", notificationsScheduleRetry:"Notifications are ready; medication times will be synced again.", testSending:"Sending test notification...", testSent:"Test notification sent. Check your phone.", testFailed:"Test notification could not be sent", scheduledTestSetting:"Scheduling a test for 2 minutes from now...", scheduledTestSet:"Scheduled test set. Close the app; the notification should arrive in about 2–3 minutes.", scheduledTestFailed:"Scheduled test could not be set", confirmDeleteAll:"Delete medications, calendar entries, history, health measurements, profile and notification data from this device?", dataDeleted:"Medication, calendar, health, profile and notification data on this device were deleted.", enableNotificationsHint:"Tap Enable notifications to receive notifications.", notificationSystemFailed:"Notification system could not be prepared",
     categoryLabels:{"Aşı":"Vaccine","Rutin Tedavi":"Routine Treatment","Kontrol":"Check-up","Tahlil":"Test","Doktor Randevusu":"Doctor Appointment","Diğer":"Other"},
+    notificationChecking:"Checking notification status...", profilePhotoAlt:"Profile photo", selectedProfilePhotoAlt:"Selected profile photo", editMedicineAria:"edit medicine", serviceWorkerUnsupported:"Service Worker is not supported.", webPushUnsupported:"Web Push is not supported in this environment.", publicKeyStep:"Public key", serverHttp:"Server HTTP", dataDeleteFailed:"Data could not be deleted",
     aboutHtml:'<p><strong>Your health, in your pocket.</strong></p><p>Sağlık Cepte is designed to help you keep your medications, health measurements and important health dates organized in one place.</p><p>You can plan medication times, record measurements such as blood pressure and pulse, add vaccine and check-up dates to your calendar, and keep profile and emergency information.</p><p>Our aim is to make personal health information more accessible, organized and easier to follow.</p><p>This app does not replace medical evaluation or treatment advice. Follow the recommendations of your doctor or pharmacist when making medication and health decisions.</p>'
   },
   de: {
@@ -823,6 +812,7 @@ const I18N = {
     imageOnly:"Bitte wähle eine Bilddatei aus.", imageTooLarge:"Das Foto ist zu groß. Wähle ein Foto unter 8 MB.", imageReadError:"Das Foto konnte nicht gelesen werden.", imageSaveError:"Das Profilfoto konnte auf diesem Gerät nicht gespeichert werden. Versuche ein kleineres Foto.", medicineRequired:"Gib Medikamentenname und Uhrzeit ein und wähle mindestens einen Tag.", invalidDateRange:"Das Enddatum darf nicht vor dem Startdatum liegen.", confirmDeleteMedicine:"Möchtest du diesen Medikamenteneintrag löschen?", healthDateTimeRequired:"Wähle Datum und Uhrzeit.", healthValueInvalid:"Einer der Messwerte liegt außerhalb des gültigen Bereichs.", healthValueRequired:"Gib mindestens einen Messwert ein.", bloodPressurePairRequired:"Gib systolischen und diastolischen Blutdruck gemeinsam ein.", confirmDeleteHealth:"Diese Gesundheitsmessung löschen?", lastMeasurementEmpty:"Im letzten Eintrag gibt es keinen anzeigbaren Messwert.", categoryExists:"Diese Kategorie existiert bereits.", categoryInUse:"Diese Kategorie wird verwendet. Lösche zuerst die zugehörigen Einträge.", eventRequired:"Wähle Datum, Kategorie und Untertitel.", confirmDeleteEvent:"Diesen besonderen Termin löschen?",
     notificationsUnsupported:"Dieser Browser unterstützt keine Benachrichtigungen.", notificationPermissionDenied:"Die Berechtigung für Benachrichtigungen wurde nicht erteilt.", notificationFailed:"Benachrichtigungen konnten nicht aktiviert werden", notificationSetup:"Benachrichtigungseinrichtung", serviceWorkerStep:"Service Worker", preparingNotifications:"Benachrichtigungssystem wird vorbereitet...", publicKeyMissing:"Öffentlicher Schlüssel wurde nicht gefunden.", pushSubscriptionStep:"Push-Abonnement", savingSubscriptionStep:"Abonnement wird gespeichert", notificationsReady:"Benachrichtigungen und Medikamentenzeiten sind bereit.", notificationsScheduleRetry:"Benachrichtigungen sind bereit; Medikamentenzeiten werden erneut synchronisiert.", testSending:"Testbenachrichtigung wird gesendet...", testSent:"Testbenachrichtigung gesendet. Prüfe dein Smartphone.", testFailed:"Testbenachrichtigung konnte nicht gesendet werden", scheduledTestSetting:"Zeitgesteuerter Test für in 2 Minuten wird eingerichtet...", scheduledTestSet:"Zeitgesteuerter Test eingerichtet. Schließe die App; die Benachrichtigung sollte in etwa 2–3 Minuten eintreffen.", scheduledTestFailed:"Zeitgesteuerter Test konnte nicht eingerichtet werden", confirmDeleteAll:"Medikamente, Kalendereinträge, Verlauf, Gesundheitsmessungen, Profil- und Benachrichtigungsdaten auf diesem Gerät löschen?", dataDeleted:"Medikamenten-, Kalender-, Gesundheits-, Profil- und Benachrichtigungsdaten auf diesem Gerät wurden gelöscht.", enableNotificationsHint:"Tippe auf Benachrichtigungen aktivieren, um Benachrichtigungen zu erhalten.", notificationSystemFailed:"Benachrichtigungssystem konnte nicht vorbereitet werden",
     categoryLabels:{"Aşı":"Impfung","Rutin Tedavi":"Routinebehandlung","Kontrol":"Kontrolle","Tahlil":"Untersuchung","Doktor Randevusu":"Arzttermin","Diğer":"Sonstiges"},
+    notificationChecking:"Benachrichtigungsstatus wird geprüft...", profilePhotoAlt:"Profilfoto", selectedProfilePhotoAlt:"Ausgewähltes Profilfoto", editMedicineAria:"Medikament bearbeiten", serviceWorkerUnsupported:"Service Worker wird nicht unterstützt.", webPushUnsupported:"Web Push wird in dieser Umgebung nicht unterstützt.", publicKeyStep:"Öffentlicher Schlüssel", serverHttp:"Server HTTP", dataDeleteFailed:"Daten konnten nicht gelöscht werden",
     aboutHtml:'<p><strong>Deine Gesundheit – immer dabei.</strong></p><p>Sağlık Cepte wurde entwickelt, damit du Medikamente, Gesundheitswerte und wichtige Gesundheitstermine übersichtlich an einem Ort verfolgen kannst.</p><p>Du kannst Medikamentenzeiten planen, Werte wie Blutdruck und Puls erfassen, Impf- und Kontrolltermine in den Kalender eintragen sowie Profil- und Notfallinformationen speichern.</p><p>Unser Ziel ist es, persönliche Gesundheitsinformationen leichter zugänglich, übersichtlich und einfacher nachverfolgbar zu machen.</p><p>Die App ersetzt keine medizinische Beurteilung oder Behandlungsempfehlung. Bei Medikamenten und gesundheitlichen Entscheidungen solltest du den Empfehlungen deines Arztes oder Apothekers folgen.</p>'
   }
 };
@@ -862,6 +852,7 @@ function setLanguage(lang) {
   renderProfile();
   render();
   renderHealth();
+  renderSpecialCategories();
   renderCalendar();
   renderSpecialEvents();
 }
@@ -934,7 +925,7 @@ function profileInitials(name) {
 
 function profilePhotoMarkup(photo, name) {
   return photo
-    ? '<img src="' + photo + '" alt="Profil fotoğrafı">'
+    ? '<img src="' + photo + '" alt="' + safe(t("profilePhotoAlt")) + '">'
     : '<div class="profile-avatar-fallback">' + safe(profileInitials(name)) + '</div>';
 }
 
@@ -974,7 +965,7 @@ function renderProfilePhotoPreview() {
   const name = document.getElementById("profileFullName")?.value || profileData.fullName || "";
   document.getElementById("profilePhotoPreview").innerHTML =
     pendingProfilePhoto
-      ? '<img src="' + pendingProfilePhoto + '" alt="Seçilen profil fotoğrafı">'
+      ? '<img src="' + pendingProfilePhoto + '" alt="' + safe(t("selectedProfilePhotoAlt")) + '">'
       : '<div class="profile-avatar-fallback">' + safe(profileInitials(name)) + '</div>';
 }
 
@@ -1641,7 +1632,7 @@ function renderSpecialEvents() {
   list.innerHTML = events.map(e =>
     '<div class="event-card">' +
       '<div class="event-top"><div style="min-width:0;flex:1">' +
-        '<span class="event-type">' + safe(e.category) + '</span>' +
+        '<span class="event-type">' + safe(t("categoryLabels")[e.category] || e.category) + '</span>' +
         '<div class="event-title">' + safe(e.title) + '</div>' +
         (e.time ? '<div class="medmeta">' + safe(e.time) + '</div>' : '') +
         (e.note ? '<div class="event-note">' + safe(e.note) + '</div>' : '') +
@@ -1659,7 +1650,7 @@ function base64UrlToBytes(value) {
 }
 
 async function registerServiceWorker() {
-  if (!("serviceWorker" in navigator)) throw new Error("Service Worker desteklenmiyor.");
+  if (!("serviceWorker" in navigator)) throw new Error(t("serviceWorkerUnsupported"));
   const registration = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
   await registration.update().catch(() => {});
   await navigator.serviceWorker.ready;
@@ -1686,11 +1677,11 @@ async function subscribeToPush() {
     step = t("serviceWorkerStep");
     status.textContent = t("preparingNotifications");
     const registration = await registerServiceWorker();
-    if (!registration.pushManager) throw new Error("Bu ortam Web Push desteklemiyor.");
+    if (!registration.pushManager) throw new Error(t("webPushUnsupported"));
 
-    step = "Public key";
+    step = t("publicKeyStep");
     const keyResponse = await fetch(PUSH_SERVER + "/vapid-public-key", { cache: "no-store" });
-    if (!keyResponse.ok) throw new Error("Sunucu HTTP " + keyResponse.status);
+    if (!keyResponse.ok) throw new Error(t("serverHttp") + " " + keyResponse.status);
     const { publicKey } = await keyResponse.json();
     if (!publicKey) throw new Error(t("publicKeyMissing"));
     const applicationServerKey = base64UrlToBytes(publicKey);
@@ -1721,11 +1712,12 @@ async function subscribeToPush() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         clientId: getClientId(),
+        lang: currentLanguage(),
         subscription
       })
     });
 
-    if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
+    if (!response.ok) throw new Error(t("serverHttp") + " " + response.status);
 
     const scheduleOk = await syncSchedule();
     status.textContent = scheduleOk
@@ -1775,7 +1767,7 @@ async function sendTestNotification() {
     });
 
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
+    if (!response.ok) throw new Error(data.error || (t("serverHttp") + " " + response.status));
     status.textContent = t("testSent");
   } catch (error) {
     status.textContent = t("testFailed") + ": " + (error.message || String(error));
@@ -1789,11 +1781,11 @@ async function sendScheduledTest() {
     const response = await fetch(PUSH_SERVER + "/scheduled-test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ clientId: getClientId() })
+      body: JSON.stringify({ clientId: getClientId(), lang: currentLanguage() })
     });
 
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
+    if (!response.ok) throw new Error(data.error || (t("serverHttp") + " " + response.status));
 
     status.textContent = t("scheduledTestSet");
   } catch (error) {
@@ -1816,10 +1808,10 @@ async function deleteMyData() {
     const response = await fetch(PUSH_SERVER + "/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ clientId })
+      body: JSON.stringify({ clientId, lang: currentLanguage() })
     });
 
-    if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
+    if (!response.ok) throw new Error(t("serverHttp") + " " + response.status);
 
     localStorage.removeItem("meds");
     localStorage.removeItem("records");
@@ -1848,7 +1840,7 @@ async function deleteMyData() {
 
     status.textContent = t("dataDeleted");
   } catch (error) {
-    status.textContent = "Veriler silinemedi: " + (error.message || String(error));
+    status.textContent = t("dataDeleteFailed") + ": " + (error.message || String(error));
   }
 }
 
