@@ -69,7 +69,7 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
 </div>
 <p class="note">
 İlaçlarınızı yalnızca doktorunuzun güncel reçetesine göre kullanın.
-Otomatik ilaç hatırlatmaları henüz etkin değil; mevcut telefon alarmlarınızı kullanmaya devam edin.
+Otomatik hatırlatmalar ilaç saatlerinize göre gönderilir. İlk normal bildirimi doğrulayana kadar mevcut telefon alarmlarınızı kullanmaya devam edin.
 </p>
 </main>
 <script>
@@ -167,6 +167,7 @@ let time=document.getElementById("time").value;
 if(!name||!time){alert("İlaç adı ve saatini girin.");return}
 meds.push({id:Date.now(),name,time});
 save();
+syncSchedule();
 document.getElementById("name").value="";
 render();
 }
@@ -174,6 +175,7 @@ function removeMed(id){
 if(!confirm("Bu ilaç kaydını silmek istiyor musunuz?"))return;
 meds=meds.filter(m=>m.id!==id);
 save();
+syncSchedule();
 render();
 }
 function goToday(){
@@ -302,9 +304,29 @@ async function subscribeToPush() {
       body: JSON.stringify(subscription)
     });
     if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
-    status.textContent = "✅ Push aboneliği sunucuya kaydedildi. Test bildirimi henüz gönderilmedi.";
+    await syncSchedule();
+    status.textContent = "✅ Push aboneliği ve ilaç saatleri sunucuya kaydedildi.";
   } catch (error) {
     status.textContent = "❌ " + step + ": " + (error.message || String(error));
+  }
+}
+
+async function syncSchedule() {
+  try {
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Istanbul";
+    const response = await fetch(PUSH_SERVER + "/schedule", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        timeZone,
+        meds: meds.map(m => ({ time: m.time, name: m.name }))
+      })
+    });
+    if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
+    return true;
+  } catch (error) {
+    console.error("Saatler sunucuya kaydedilemedi:", error);
+    return false;
   }
 }
 
@@ -321,7 +343,12 @@ async function sendTestNotification() {
   }
 }
 
-window.addEventListener("load", registerServiceWorker);
+window.addEventListener("load", async () => {
+  await registerServiceWorker();
+  if (Notification.permission === "granted") {
+    await syncSchedule();
+  }
+});
 </script>
 </body>
 </html>
