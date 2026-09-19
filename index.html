@@ -207,6 +207,38 @@ render();
     status.textContent = "Bildirim izni alınamadı: " + error.message;
   }
 }
+async function registerServiceWorker() {
+  const status = document.getElementById("notificationStatus");
+
+  if (!("serviceWorker" in navigator)) {
+    status.textContent = "Service Worker desteklenmiyor.";
+    return;
+  }
+
+  try {
+    const registration =
+      await navigator.serviceWorker.register("./sw.js");
+
+    await navigator.serviceWorker.ready;
+
+    console.log(
+      "Service Worker hazır:",
+      registration.scope
+    );
+
+    if (Notification.permission === "granted") {
+      status.textContent =
+        "✅ Bildirim izni verildi ve bildirim sistemi hazır.";
+    }
+  } catch (error) {
+    console.error(error);
+
+    status.textContent =
+      "❌ Bildirim sistemi başlatılamadı: " + error.message;
+  }
+}
+
+window.addEventListener("load", registerServiceWorker);
 </script>
 </body>
 </html>
