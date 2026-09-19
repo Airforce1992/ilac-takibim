@@ -115,6 +115,23 @@ export default {
       }
     }
 
+    if (url.pathname === "/scheduled-test" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      const clientId = body?.clientId;
+      if (!validClientId(clientId)) return json({ ok: false, error: "Geçersiz istemci" }, 400);
+
+      const raw = await env.PUSH_KV.get(`subscription:${clientId}`);
+      if (!raw) return json({ ok: false, error: "Önce bildirimleri etkinleştirin" }, 404);
+
+      const dueAt = Date.now() + 120000;
+      await env.PUSH_KV.put(
+        `scheduled-test:${clientId}`,
+        JSON.stringify({ dueAt }),
+        { expirationTtl: 600 }
+      );
+      return json({ ok: true, dueAt });
+    }
+
     if (url.pathname === "/delete" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
       const clientId = body?.clientId;
@@ -130,6 +147,43 @@ export default {
 
   async scheduled(controller, env, ctx) {
     ctx.waitUntil((async () => {
+      const nowMs = controller.scheduledTime;
+      let testCursor;
+      do {
+        const testPage = await env.PUSH_KV.list({ prefix: "scheduled-test:", cursor: testCursor, limit: 250 });
+        testCursor = testPage.list_complete ? undefined : testPage.cursor;
+
+        for (const item of testPage.keys) {
+          const clientId = item.name.slice("scheduled-test:".length);
+          if (!validClientId(clientId)) continue;
+
+          const testRaw = await env.PUSH_KV.get(item.name);
+          if (!testRaw) continue;
+          const test = JSON.parse(testRaw);
+          if (!test?.dueAt || test.dueAt > nowMs) continue;
+
+          const subscriptionRaw = await env.PUSH_KV.get(`subscription:${clientId}`);
+          if (!subscriptionRaw) {
+            await env.PUSH_KV.delete(item.name);
+            continue;
+          }
+
+          try {
+            await sendPush(env, JSON.parse(subscriptionRaw), {
+              title: "⏰ İlaç Takibim",
+              body: "Zamanlı bildirim testi başarılı.",
+              tag: `scheduled-test-${clientId}`
+            });
+            await env.PUSH_KV.delete(item.name);
+          } catch (error) {
+            if (error?.statusCode === 404 || error?.statusCode === 410) {
+              await removeClient(env, clientId);
+              await env.PUSH_KV.delete(item.name);
+            }
+          }
+        }
+      } while (testCursor);
+
       let cursor;
       do {
         const page = await env.PUSH_KV.list({ prefix: "schedule:", cursor, limit: 250 });
