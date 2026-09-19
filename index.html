@@ -195,8 +195,13 @@ render();
     const permission = await Notification.requestPermission();
 
     if (permission === "granted") {
-      status.textContent =
-        "Bildirim izni verildi. Zamanlanmış bildirim hizmeti henüz kurulmadı.";
+
+  status.textContent =
+    "Bildirim izni verildi. Bildirim sistemi hazırlanıyor...";
+
+  await registerServiceWorker();
+
+}
     } else if (permission === "denied") {
       status.textContent =
         "Bildirim izni reddedildi. iPhone ayarlarından izin vermen gerekiyor.";
