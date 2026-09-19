@@ -13,5 +13,10 @@
       "binding": "PUSH_KV",
       "id": "fc29a13f60a34e0c926d2a6ec15fa58d"
     }
-  ]
+  ],
+  "triggers": {
+    "crons": [
+      "* * * * *"
+    ]
+  }
 }
