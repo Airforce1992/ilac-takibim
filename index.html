@@ -53,7 +53,13 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
 .modal-backdrop.open{display:flex}
 .modal-card{background:white;width:min(460px,100%);border-radius:18px;padding:20px;box-shadow:0 12px 40px #0003}
 .modal-card h3{margin-top:0}
+.days{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 14px}
+.daycheck{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid #d7e5e1;border-radius:10px;padding:9px 6px;background:#f8fbfa;font-size:14px}
+.daycheck input{width:18px;height:18px;accent-color:#137c70}
+.date-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.medmeta{display:block;font-size:12px;color:#667;margin-top:3px}
 .note{font-size:13px;color:#667;line-height:1.45}
+@media(max-width:380px){.days{grid-template-columns:repeat(2,1fr)}.date-grid{grid-template-columns:1fr}}
 .status{line-height:1.4}
 .empty{text-align:center;color:#667;padding:12px}
 </style>
@@ -94,6 +100,20 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
     <input class="field" id="editName" placeholder="İlaç adı">
     <label for="editTime">İlaç saati</label>
     <input class="field" id="editTime" type="time">
+    <label>Hangi günler?</label>
+    <div id="editDays" class="days">
+      <label class="daycheck"><input type="checkbox" value="1">Pzt</label>
+      <label class="daycheck"><input type="checkbox" value="2">Sal</label>
+      <label class="daycheck"><input type="checkbox" value="3">Çar</label>
+      <label class="daycheck"><input type="checkbox" value="4">Per</label>
+      <label class="daycheck"><input type="checkbox" value="5">Cum</label>
+      <label class="daycheck"><input type="checkbox" value="6">Cmt</label>
+      <label class="daycheck"><input type="checkbox" value="0">Paz</label>
+    </div>
+    <div class="date-grid">
+      <div><label for="editStartDate">Başlangıç</label><input class="field" id="editStartDate" type="date"></div>
+      <div><label for="editEndDate">Bitiş (isteğe bağlı)</label><input class="field" id="editEndDate" type="date"></div>
+    </div>
     <div class="actions">
       <button onclick="saveEdit()">Değişiklikleri kaydet</button>
       <button class="secondary" onclick="closeEdit()">Vazgeç</button>
@@ -106,6 +126,20 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
   <input class="field" id="name" placeholder="İlaç adı">
   <label for="time">İlaç saati</label>
   <input class="field" id="time" type="time" value="08:00">
+  <label>Hangi günler?</label>
+  <div id="addDays" class="days">
+    <label class="daycheck"><input type="checkbox" value="1" checked>Pzt</label>
+    <label class="daycheck"><input type="checkbox" value="2" checked>Sal</label>
+    <label class="daycheck"><input type="checkbox" value="3" checked>Çar</label>
+    <label class="daycheck"><input type="checkbox" value="4" checked>Per</label>
+    <label class="daycheck"><input type="checkbox" value="5" checked>Cum</label>
+    <label class="daycheck"><input type="checkbox" value="6" checked>Cmt</label>
+    <label class="daycheck"><input type="checkbox" value="0" checked>Paz</label>
+  </div>
+  <div class="date-grid">
+    <div><label for="startDate">Başlangıç</label><input class="field" id="startDate" type="date"></div>
+    <div><label for="endDate">Bitiş (isteğe bağlı)</label><input class="field" id="endDate" type="date"></div>
+  </div>
   <button onclick="addMed()">İlaç ekle</button>
 </div>
 
@@ -160,7 +194,17 @@ try {
 }
 if (!meds) {
   meds = [];
-  localStorage.setItem("meds", "[]");
+}
+let migrated = false;
+meds = meds.map(m => {
+  const copy = { ...m };
+  if (!Array.isArray(copy.days) || !copy.days.length) { copy.days = [0,1,2,3,4,5,6]; migrated = true; }
+  if (typeof copy.startDate !== "string") { copy.startDate = ""; migrated = true; }
+  if (typeof copy.endDate !== "string") { copy.endDate = ""; migrated = true; }
+  return copy;
+});
+if (migrated || !localStorage.getItem("meds")) {
+  localStorage.setItem("meds", JSON.stringify(meds));
 }
 
 const dateInput = document.getElementById("date");
@@ -172,6 +216,7 @@ function localDate(d = new Date()) {
   return y + "-" + m + "-" + day;
 }
 dateInput.value = localDate();
+document.getElementById("startDate").value = localDate();
 
 function save() {
   localStorage.setItem("meds", JSON.stringify(meds));
@@ -188,6 +233,38 @@ function safe(t) {
   })[c]);
 }
 
+const DAY_NAMES = ["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
+
+function getSelectedDays(containerId) {
+  return [...document.querySelectorAll("#" + containerId + " input[type=checkbox]:checked")]
+    .map(el => Number(el.value))
+    .filter(n => Number.isInteger(n) && n >= 0 && n <= 6);
+}
+
+function setSelectedDays(containerId, days) {
+  const selected = new Set(Array.isArray(days) && days.length ? days : [0,1,2,3,4,5,6]);
+  document.querySelectorAll("#" + containerId + " input[type=checkbox]").forEach(el => {
+    el.checked = selected.has(Number(el.value));
+  });
+}
+
+function medAppliesToDate(med, day) {
+  const weekday = new Date(day + "T12:00:00").getDay();
+  const days = Array.isArray(med.days) && med.days.length ? med.days : [0,1,2,3,4,5,6];
+  if (!days.includes(weekday)) return false;
+  if (med.startDate && day < med.startDate) return false;
+  if (med.endDate && day > med.endDate) return false;
+  return true;
+}
+
+function daysLabel(days) {
+  const d = Array.isArray(days) && days.length ? days : [0,1,2,3,4,5,6];
+  if (d.length === 7) return "Her gün";
+  if (d.length === 5 && [1,2,3,4,5].every(x => d.includes(x))) return "Hafta içi";
+  if (d.length === 2 && [0,6].every(x => d.includes(x))) return "Hafta sonu";
+  return [1,2,3,4,5,6,0].filter(x => d.includes(x)).map(x => DAY_NAMES[x]).join(", ");
+}
+
 function toggle(id, checked) {
   const all = getRecords();
   const day = dateInput.value;
@@ -200,7 +277,8 @@ function toggle(id, checked) {
 function render() {
   const day = dateInput.value;
   const records = getRecords()[day] || {};
-  const sorted = [...meds].sort((a,b) => a.time.localeCompare(b.time));
+  const todaysMeds = meds.filter(m => medAppliesToDate(m, day));
+  const sorted = [...todaysMeds].sort((a,b) => a.time.localeCompare(b.time));
   const groups = {};
 
   sorted.forEach(m => {
@@ -216,7 +294,7 @@ function render() {
       html += '<div class="med">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") +
         ' onchange="toggle(' + JSON.stringify(m.id) + ',this.checked)">' +
-        '<button class="editable ' + (checked ? "done" : "") + '" style="flex:1" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name) + ' ilacını düzenle">' + safe(m.name) + '</button>' +
+        '<button class="editable ' + (checked ? "done" : "") + '" style="flex:1" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name) + ' ilacını düzenle">' + safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span></button>' +
         '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.time) + ' saatini düzenle">' + safe(m.time) + ' ✏️</button>' +
         '<button class="delete" onclick="removeMed(' + JSON.stringify(m.id) + ')">×</button>' +
         '</div>';
@@ -227,10 +305,10 @@ function render() {
   document.getElementById("schedule").innerHTML = html ||
     '<div class="card empty">Henüz ilaç eklenmedi. Aşağıdan ilk ilacını ekleyebilirsin.</div>';
 
-  const done = meds.filter(m => records[m.id] === true).length;
-  document.getElementById("count").textContent = done + " / " + meds.length;
+  const done = todaysMeds.filter(m => records[m.id] === true).length;
+  document.getElementById("count").textContent = done + " / " + todaysMeds.length;
   document.getElementById("bar").style.width =
-    (meds.length ? done / meds.length * 100 : 0) + "%";
+    (todaysMeds.length ? done / todaysMeds.length * 100 : 0) + "%";
 
   document.getElementById("today").textContent =
     new Date(day + "T12:00:00").toLocaleDateString("tr-TR", {
@@ -244,6 +322,9 @@ function openEdit(id) {
   document.getElementById("editId").value = med.id;
   document.getElementById("editName").value = med.name;
   document.getElementById("editTime").value = med.time;
+  setSelectedDays("editDays", med.days);
+  document.getElementById("editStartDate").value = med.startDate || "";
+  document.getElementById("editEndDate").value = med.endDate || "";
   document.getElementById("editModal").classList.add("open");
   setTimeout(() => document.getElementById("editName").focus(), 50);
 }
@@ -256,14 +337,24 @@ async function saveEdit() {
   const id = document.getElementById("editId").value;
   const name = document.getElementById("editName").value.trim();
   const time = document.getElementById("editTime").value;
-  if (!name || !time) {
-    alert("İlaç adı ve saatini girin.");
+  const days = getSelectedDays("editDays");
+  const startDate = document.getElementById("editStartDate").value;
+  const endDate = document.getElementById("editEndDate").value;
+  if (!name || !time || !days.length) {
+    alert("İlaç adı, saati ve en az bir gün seçin.");
+    return;
+  }
+  if (startDate && endDate && endDate < startDate) {
+    alert("Bitiş tarihi başlangıç tarihinden önce olamaz.");
     return;
   }
   const med = meds.find(m => String(m.id) === String(id));
   if (!med) return;
   med.name = name;
   med.time = time;
+  med.days = days;
+  med.startDate = startDate;
+  med.endDate = endDate;
   save();
   render();
   closeEdit();
@@ -277,14 +368,22 @@ document.getElementById("editModal").addEventListener("click", event => {
 async function addMed() {
   const name = document.getElementById("name").value.trim();
   const time = document.getElementById("time").value;
-  if (!name || !time) {
-    alert("İlaç adı ve saatini girin.");
+  const days = getSelectedDays("addDays");
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+  if (!name || !time || !days.length) {
+    alert("İlaç adı, saati ve en az bir gün seçin.");
     return;
   }
-  meds.push({ id: Date.now(), name, time });
+  if (startDate && endDate && endDate < startDate) {
+    alert("Bitiş tarihi başlangıç tarihinden önce olamaz.");
+    return;
+  }
+  meds.push({ id: Date.now(), name, time, days, startDate, endDate });
   save();
   render();
   document.getElementById("name").value = "";
+  document.getElementById("endDate").value = "";
   await syncSchedule();
 }
 
@@ -393,7 +492,13 @@ async function syncSchedule() {
       body: JSON.stringify({
         clientId: getClientId(),
         timeZone,
-        meds: meds.map(m => ({ time: m.time, name: m.name }))
+        meds: meds.map(m => ({
+          time: m.time,
+          name: m.name,
+          days: Array.isArray(m.days) && m.days.length ? m.days : [0,1,2,3,4,5,6],
+          startDate: m.startDate || "",
+          endDate: m.endDate || ""
+        }))
       })
     });
     return response.ok;
