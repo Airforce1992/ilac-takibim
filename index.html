@@ -210,6 +210,13 @@ html[data-theme="dark"] .view-mode-switch button.active{color:#14213d}
 .period-dose-name.taken{text-decoration:line-through;color:var(--muted)}
 .period-dose-time{font-size:13px;font-weight:800;color:var(--accent);white-space:nowrap}
 .period-dose-state{font-size:11px;color:var(--muted);margin-top:3px}
+.period-dose-state.taken{color:var(--success)}
+.period-dose-state.overdue{color:var(--danger)}
+.period-dose-state.waiting{color:var(--muted)}
+.med-dose-status{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-top:4px}
+.med-dose-status.taken{color:var(--success)}
+.med-dose-status.overdue{color:var(--danger)}
+.med-dose-status.waiting{color:var(--muted)}
 .period-detail-empty{padding:12px 14px;color:var(--muted);font-size:13px}
 .period-detail-head button{border:0;background:none;color:var(--accent);font-weight:800;padding:3px 0;text-align:left}
 .period-title{font-weight:850;font-size:14px;margin:0 0 12px}
@@ -774,7 +781,7 @@ const I18N = {
     tabToday:"Bugün", tabHealth:"Sağlık", tabAdd:"Ekle", tabCalendar:"Takvim", tabSettings:"Ayarlar",
     createProfile:"Profilini oluştur", edit:"Düzenle", todayPlan:"Bugünkü planın",
     notificationStatusTitle:"Bildirim durumu", enableNotifications:"Bildirimleri etkinleştir",
-    viewDay:"Görüntülenecek gün", today:"Bugün", viewModeAria:"Görünüm seçimi", viewDaily:"Günlük", viewWeekly:"Haftalık", viewMonthly:"Aylık", doseTaken:"Alındı", dosePending:"Alınmadı", markDose:"dozunu işaretle", previousPeriod:"Önceki", nextPeriod:"Sonraki", dailyDetail:"Günlük ayrıntı", periodNoMeds:"Bu dönemde planlanmış ilaç yok.",
+    viewDay:"Görüntülenecek gün", today:"Bugün", viewModeAria:"Görünüm seçimi", viewDaily:"Günlük", viewWeekly:"Haftalık", viewMonthly:"Aylık", doseTaken:"Alındı", dosePending:"Alınmadı", doseOverdue:"Saati geçti — işaretlenmedi", doseUpcoming:"Saati gelmedi", markDose:"dozunu işaretle", previousPeriod:"Önceki", nextPeriod:"Sonraki", dailyDetail:"Günlük ayrıntı", periodNoMeds:"Bu dönemde planlanmış ilaç yok.",
     healthMeasurements:"Sağlık Ölçümlerim", healthMeasurementsDesc:"Tansiyon, nabız ve diğer kişisel ölçümlerini tarih-saat ile kaydet.",
     addMeasurement:"Yeni ölçüm ekle", measurementHistory:"Geçmiş ölçümler",
     manualAdd:"Manuel Ekle", manualAddDesc:"Eklemek istediğin kayıt türünü seç.",
@@ -805,7 +812,7 @@ const I18N = {
     tabToday:"Today", tabHealth:"Health", tabAdd:"Add", tabCalendar:"Calendar", tabSettings:"Settings",
     createProfile:"Create your profile", edit:"Edit", todayPlan:"Today's plan",
     notificationStatusTitle:"Notification status", enableNotifications:"Enable notifications",
-    viewDay:"Day to display", today:"Today", viewModeAria:"View selection", viewDaily:"Daily", viewWeekly:"Weekly", viewMonthly:"Monthly", doseTaken:"Taken", dosePending:"Not taken", markDose:"mark dose", previousPeriod:"Previous", nextPeriod:"Next", dailyDetail:"Daily details", periodNoMeds:"No medication scheduled for this period.",
+    viewDay:"Day to display", today:"Today", viewModeAria:"View selection", viewDaily:"Daily", viewWeekly:"Weekly", viewMonthly:"Monthly", doseTaken:"Taken", dosePending:"Not taken", doseOverdue:"Time passed — not marked", doseUpcoming:"Not due yet", markDose:"mark dose", previousPeriod:"Previous", nextPeriod:"Next", dailyDetail:"Daily details", periodNoMeds:"No medication scheduled for this period.",
     healthMeasurements:"My Health Measurements", healthMeasurementsDesc:"Record blood pressure, pulse and other personal measurements with date and time.",
     addMeasurement:"Add new measurement", measurementHistory:"Measurement history",
     manualAdd:"Manual Add", manualAddDesc:"Choose the type of record you want to add.",
@@ -836,7 +843,7 @@ const I18N = {
     tabToday:"Heute", tabHealth:"Gesundheit", tabAdd:"Hinzufügen", tabCalendar:"Kalender", tabSettings:"Einstellungen",
     createProfile:"Profil erstellen", edit:"Bearbeiten", todayPlan:"Dein heutiger Plan",
     notificationStatusTitle:"Benachrichtigungsstatus", enableNotifications:"Benachrichtigungen aktivieren",
-    viewDay:"Angezeigter Tag", today:"Heute", viewModeAria:"Ansicht auswählen", viewDaily:"Täglich", viewWeekly:"Wöchentlich", viewMonthly:"Monatlich", doseTaken:"Eingenommen", dosePending:"Nicht eingenommen", markDose:"Dosis markieren", previousPeriod:"Zurück", nextPeriod:"Weiter", dailyDetail:"Tagesdetails", periodNoMeds:"Für diesen Zeitraum sind keine Medikamente eingetragen.",
+    viewDay:"Angezeigter Tag", today:"Heute", viewModeAria:"Ansicht auswählen", viewDaily:"Täglich", viewWeekly:"Wöchentlich", viewMonthly:"Monatlich", doseTaken:"Eingenommen", dosePending:"Nicht eingenommen", doseOverdue:"Uhrzeit vorbei — nicht markiert", doseUpcoming:"Noch nicht fällig", markDose:"Dosis markieren", previousPeriod:"Zurück", nextPeriod:"Weiter", dailyDetail:"Tagesdetails", periodNoMeds:"Für diesen Zeitraum sind keine Medikamente eingetragen.",
     healthMeasurements:"Meine Gesundheitswerte", healthMeasurementsDesc:"Erfasse Blutdruck, Puls und weitere persönliche Messwerte mit Datum und Uhrzeit.",
     addMeasurement:"Neue Messung hinzufügen", measurementHistory:"Messverlauf",
     manualAdd:"Manuell hinzufügen", manualAddDesc:"Wähle aus, welche Art von Eintrag du hinzufügen möchtest.",
@@ -1306,6 +1313,18 @@ function medicationOccurrences(day) {
     .sort((a,b) => a.time.localeCompare(b.time) || a.med.name.localeCompare(b.med.name));
 }
 
+function doseState(day, time, checked) {
+  if (checked) return {label:t("doseTaken"), kind:"taken"};
+  const now = new Date();
+  const today = localDate(now);
+  const currentTime = String(now.getHours()).padStart(2,"0") + ":" +
+    String(now.getMinutes()).padStart(2,"0");
+  if (day < today || (day === today && time < currentTime)) {
+    return {label:t("doseOverdue"), kind:"overdue"};
+  }
+  return {label:t("doseUpcoming"), kind:"waiting"};
+}
+
 function medicationDone(occurrences, records) {
   return occurrences.filter(o =>
     records[o.key] === true || (medTimes(o.med).length === 1 && records[o.med.id] === true)
@@ -1348,11 +1367,11 @@ function render() {
         const checked=records[o.key] === true || (medTimes(o.med).length===1 && records[o.med.id]===true);
         const key=JSON.stringify(o.key);
         const date=JSON.stringify(s.date);
-        const state=checked?t("doseTaken"):t("dosePending");
+        const state=doseState(s.date,o.time,checked);
         return '<label class="period-dose">' +
           '<input type="checkbox" '+(checked?'checked ':'')+
           'aria-label="'+safe(o.med.name+" "+o.time+" "+t("markDose"))+'" onchange="toggleDose('+date+','+key+',this.checked)">' +
-          '<span><span class="period-dose-name'+(checked?' taken':'')+'">'+safe(o.med.name)+'</span><span class="period-dose-state">'+safe(state)+'</span></span>' +
+          '<span><span class="period-dose-name'+(checked?' taken':'')+'">'+safe(o.med.name)+'</span><span class="period-dose-state '+state.kind+'">'+safe(state.label)+'</span></span>' +
           '<span class="period-dose-time">'+safe(o.time)+'</span></label>';
       }).join(""):'<div class="period-detail-empty">'+safe(t("emptyMedicineDay"))+'</div>';
       return '<section class="period-detail'+(s.date===day?' active':'')+'"><div class="period-detail-head">'+
@@ -1382,11 +1401,12 @@ function render() {
     items.forEach(o => {
       const m = o.med;
       const checked = records[o.key] === true || (medTimes(m).length === 1 && records[m.id] === true);
+      const state = doseState(day,o.time,checked);
       html += '<div class="med">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") +
         ' onchange="toggle(' + JSON.stringify(o.key) + ',this.checked)">' +
         '<button class="med-name ' + (checked ? "done" : "") + '" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name + " " + t("editMedicineAria")) + '">' +
-          safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span></button>' +
+          safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span><span class="med-dose-status ' + state.kind + '">' + safe(state.label) + '</span></button>' +
         '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')">' + safe(o.time) + '</button>' +
         '<button class="delete" onclick="removeMed(' + JSON.stringify(m.id) + ')">×</button>' +
         '</div>';
