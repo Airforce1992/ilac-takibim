@@ -178,6 +178,35 @@ dateInput.value=localDate();
 render();
 }
 render();
+  async function enableNotifications() {
+  const status = document.getElementById("notificationStatus");
+
+  if (!("Notification" in window)) {
+    status.textContent = "Bu ortam bildirimleri desteklemiyor.";
+    return;
+  }
+
+  if (!("serviceWorker" in navigator)) {
+    status.textContent = "Bu ortam service worker desteklemiyor.";
+    return;
+  }
+
+  try {
+    const permission = await Notification.requestPermission();
+
+    if (permission === "granted") {
+      status.textContent =
+        "Bildirim izni verildi. Zamanlanmış bildirim hizmeti henüz kurulmadı.";
+    } else if (permission === "denied") {
+      status.textContent =
+        "Bildirim izni reddedildi. iPhone ayarlarından izin vermen gerekiyor.";
+    } else {
+      status.textContent = "Bildirim izni verilmedi.";
+    }
+  } catch (error) {
+    status.textContent = "Bildirim izni alınamadı: " + error.message;
+  }
+}
 </script>
 </body>
 </html>
