@@ -40,7 +40,7 @@ button{border:0;background:#137c70;color:white;padding:13px;border-radius:11px;f
 button.secondary{background:#eef6f4;color:#137c70}
 button.danger{background:#fff0f0;color:#b7352a}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
-input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px;max-width:100%}
+input,select,textarea{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px;max-width:100%;font-family:inherit}
 .field{width:100%;margin:5px 0 12px}
 .progress{height:10px;background:#dce9e5;border-radius:10px;overflow:hidden}
 .bar{height:100%;background:#27a68e;width:0%}
@@ -62,6 +62,30 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
 @media(max-width:380px){.days{grid-template-columns:repeat(2,1fr)}.date-grid{grid-template-columns:1fr}}
 .status{line-height:1.4}
 .empty{text-align:center;color:#667;padding:12px}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.calendar-title{font-weight:700;font-size:18px;text-align:center;flex:1}
+.calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.calendar-weekdays div{text-align:center;font-size:12px;color:#667;padding:4px 0;font-weight:600}
+.calday{position:relative;min-height:42px;border:1px solid #e2ece9;background:#fff;color:#203c38;border-radius:10px;padding:6px 2px;font-size:14px}
+.calday.other{opacity:.35}
+.calday.today{border-color:#137c70;font-weight:700}
+.calday.selected{background:#137c70;color:white;border-color:#137c70}
+.calday.has-event::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#d98b2b;bottom:4px;left:50%;transform:translateX(-50%)}
+.calday.selected.has-event::after{background:white}
+.special-form{margin-top:16px;padding-top:14px;border-top:1px solid #edf2f0}
+.event-list{display:grid;gap:10px;margin-top:12px}
+.event-card{border:1px solid #e2ece9;border-radius:12px;padding:12px;background:#fbfdfc}
+.event-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.event-type{display:inline-block;background:#eef6f4;color:#137c70;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:600;margin-bottom:6px}
+.event-title{font-weight:700}
+.event-note{font-size:13px;color:#667;margin-top:6px;white-space:pre-wrap}
+.category-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.category-tools .field{margin:5px 0}
+.custom-cats{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
+.cat-chip{display:flex;align-items:center;gap:4px;background:#f2f6f5;border:1px solid #dfeae7;border-radius:999px;padding:5px 8px;font-size:12px}
+.cat-chip button{background:transparent;color:#b7352a;padding:0 2px;font-size:14px}
+.section-subtitle{margin:14px 0 6px;font-size:14px;font-weight:700;color:#345}
+
 </style>
 </head>
 <body>
@@ -147,6 +171,50 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
   <h3>📅 Geçmiş günler</h3>
   <input class="field" type="date" id="date" onchange="render()">
   <button class="secondary" onclick="goToday()">Bugüne dön</button>
+</div>
+
+<div class="card">
+  <h3>🗓️ Özel Günler & Takvim</h3>
+  <p class="note">Aşı, rutin tedavi, kontrol, tahlil veya kendi oluşturduğun başlıkları seçtiğin tarihe ekleyebilirsin.</p>
+
+  <div class="calendar-head">
+    <button class="secondary" onclick="changeCalendarMonth(-1)" aria-label="Önceki ay">‹</button>
+    <div class="calendar-title" id="calendarTitle"></div>
+    <button class="secondary" onclick="changeCalendarMonth(1)" aria-label="Sonraki ay">›</button>
+  </div>
+
+  <div class="calendar-weekdays">
+    <div>Pzt</div><div>Sal</div><div>Çar</div><div>Per</div><div>Cum</div><div>Cmt</div><div>Paz</div>
+  </div>
+  <div id="calendarGrid" class="calendar-grid"></div>
+
+  <div class="special-form">
+    <div class="section-subtitle" id="specialSelectedLabel">Seçilen tarih</div>
+
+    <label for="specialCategory">Başlık</label>
+    <select class="field" id="specialCategory"></select>
+
+    <label for="specialTitle">Alt başlık / işlem</label>
+    <input class="field" id="specialTitle" placeholder="Örn. Tetanoz aşısı, kan tahlili, fizik tedavi">
+
+    <label for="specialTime">Saat (isteğe bağlı)</label>
+    <input class="field" id="specialTime" type="time">
+
+    <label for="specialNote">Not (isteğe bağlı)</label>
+    <textarea class="field" id="specialNote" rows="3" placeholder="Doktor, hastane, doz, hazırlık notu vb."></textarea>
+
+    <button onclick="addSpecialEvent()">Bu tarihe ekle</button>
+
+    <div class="section-subtitle">Kendi başlığını ekle</div>
+    <div class="category-tools">
+      <input class="field" id="newSpecialCategory" placeholder="Örn. Diş Tedavisi" style="flex:1">
+      <button class="secondary" onclick="addSpecialCategory()">Başlık ekle</button>
+    </div>
+    <div id="customCategoryList" class="custom-cats"></div>
+
+    <div class="section-subtitle">Seçilen tarihteki kayıtlar</div>
+    <div id="specialEventList" class="event-list"></div>
+  </div>
 </div>
 
 <div class="card">
@@ -400,6 +468,198 @@ function goToday() {
   render();
 }
 
+const DEFAULT_SPECIAL_CATEGORIES = [
+  "Aşı",
+  "Rutin Tedavi",
+  "Kontrol",
+  "Tahlil",
+  "Doktor Randevusu",
+  "Diğer"
+];
+
+let specialEvents;
+try {
+  specialEvents = JSON.parse(localStorage.getItem("specialEvents"));
+  if (!Array.isArray(specialEvents)) specialEvents = [];
+} catch {
+  specialEvents = [];
+}
+
+let customSpecialCategories;
+try {
+  customSpecialCategories = JSON.parse(localStorage.getItem("customSpecialCategories"));
+  if (!Array.isArray(customSpecialCategories)) customSpecialCategories = [];
+} catch {
+  customSpecialCategories = [];
+}
+
+let selectedSpecialDate = localDate();
+let calendarCursor = new Date();
+calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth(), 1);
+
+function saveSpecialData() {
+  localStorage.setItem("specialEvents", JSON.stringify(specialEvents));
+  localStorage.setItem("customSpecialCategories", JSON.stringify(customSpecialCategories));
+}
+
+function formatTrDate(day) {
+  return new Date(day + "T12:00:00").toLocaleDateString("tr-TR", {
+    day:"numeric", month:"long", year:"numeric", weekday:"long"
+  });
+}
+
+function renderSpecialCategories() {
+  const select = document.getElementById("specialCategory");
+  const current = select.value;
+  const all = [...DEFAULT_SPECIAL_CATEGORIES, ...customSpecialCategories]
+    .filter((v, i, arr) => v && arr.indexOf(v) === i);
+  select.innerHTML = all.map(cat => '<option value="' + safe(cat) + '">' + safe(cat) + '</option>').join("");
+  if (all.includes(current)) select.value = current;
+
+  const list = document.getElementById("customCategoryList");
+  list.innerHTML = customSpecialCategories.length
+    ? customSpecialCategories.map(cat =>
+        '<span class="cat-chip">' + safe(cat) +
+        '<button type="button" onclick="removeSpecialCategory(' + JSON.stringify(cat) + ')" aria-label="' + safe(cat) + ' başlığını sil">×</button></span>'
+      ).join("")
+    : '<span class="note">Henüz özel başlık eklenmedi.</span>';
+}
+
+function addSpecialCategory() {
+  const input = document.getElementById("newSpecialCategory");
+  const value = input.value.trim();
+  if (!value) return;
+  const all = [...DEFAULT_SPECIAL_CATEGORIES, ...customSpecialCategories].map(v => v.toLocaleLowerCase("tr-TR"));
+  if (all.includes(value.toLocaleLowerCase("tr-TR"))) {
+    alert("Bu başlık zaten mevcut.");
+    return;
+  }
+  customSpecialCategories.push(value.slice(0, 60));
+  input.value = "";
+  saveSpecialData();
+  renderSpecialCategories();
+  document.getElementById("specialCategory").value = value.slice(0, 60);
+}
+
+function removeSpecialCategory(category) {
+  if (specialEvents.some(e => e.category === category)) {
+    alert("Bu başlık altında kayıt olduğu için önce o kayıtları silmelisin.");
+    return;
+  }
+  customSpecialCategories = customSpecialCategories.filter(c => c !== category);
+  saveSpecialData();
+  renderSpecialCategories();
+}
+
+function addSpecialEvent() {
+  const category = document.getElementById("specialCategory").value;
+  const title = document.getElementById("specialTitle").value.trim();
+  const time = document.getElementById("specialTime").value;
+  const note = document.getElementById("specialNote").value.trim();
+
+  if (!selectedSpecialDate || !category || !title) {
+    alert("Tarih, başlık ve alt başlık seçmelisin.");
+    return;
+  }
+
+  specialEvents.push({
+    id: Date.now(),
+    date: selectedSpecialDate,
+    category,
+    title: title.slice(0, 120),
+    time,
+    note: note.slice(0, 500)
+  });
+
+  document.getElementById("specialTitle").value = "";
+  document.getElementById("specialTime").value = "";
+  document.getElementById("specialNote").value = "";
+  saveSpecialData();
+  renderCalendar();
+  renderSpecialEvents();
+}
+
+function removeSpecialEvent(id) {
+  if (!confirm("Bu özel gün kaydı silinsin mi?")) return;
+  specialEvents = specialEvents.filter(e => String(e.id) !== String(id));
+  saveSpecialData();
+  renderCalendar();
+  renderSpecialEvents();
+}
+
+function selectSpecialDate(day) {
+  selectedSpecialDate = day;
+  const d = new Date(day + "T12:00:00");
+  calendarCursor = new Date(d.getFullYear(), d.getMonth(), 1);
+  renderCalendar();
+  renderSpecialEvents();
+}
+
+function changeCalendarMonth(offset) {
+  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() + offset, 1);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const title = document.getElementById("calendarTitle");
+  const grid = document.getElementById("calendarGrid");
+  title.textContent = calendarCursor.toLocaleDateString("tr-TR", { month:"long", year:"numeric" });
+
+  const y = calendarCursor.getFullYear();
+  const m = calendarCursor.getMonth();
+  const first = new Date(y, m, 1);
+  const mondayIndex = (first.getDay() + 6) % 7;
+  const start = new Date(y, m, 1 - mondayIndex);
+  const today = localDate();
+
+  let html = "";
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+    const key = localDate(d);
+    const other = d.getMonth() !== m;
+    const hasEvent = specialEvents.some(e => e.date === key);
+    const classes = [
+      "calday",
+      other ? "other" : "",
+      key === today ? "today" : "",
+      key === selectedSpecialDate ? "selected" : "",
+      hasEvent ? "has-event" : ""
+    ].filter(Boolean).join(" ");
+
+    html += '<button type="button" class="' + classes + '" onclick="selectSpecialDate(' +
+      JSON.stringify(key) + ')" aria-label="' + safe(formatTrDate(key)) + '">' + d.getDate() + '</button>';
+  }
+  grid.innerHTML = html;
+}
+
+function renderSpecialEvents() {
+  document.getElementById("specialSelectedLabel").textContent =
+    "Seçilen tarih: " + formatTrDate(selectedSpecialDate);
+
+  const events = specialEvents
+    .filter(e => e.date === selectedSpecialDate)
+    .sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99"));
+
+  const list = document.getElementById("specialEventList");
+  if (!events.length) {
+    list.innerHTML = '<div class="empty">Bu tarihte kayıt yok.</div>';
+    return;
+  }
+
+  list.innerHTML = events.map(e =>
+    '<div class="event-card">' +
+      '<div class="event-top"><div style="min-width:0;flex:1">' +
+        '<span class="event-type">' + safe(e.category) + '</span>' +
+        '<div class="event-title">' + safe(e.title) + '</div>' +
+        (e.time ? '<div class="medmeta">⏰ ' + safe(e.time) + '</div>' : '') +
+        (e.note ? '<div class="event-note">' + safe(e.note) + '</div>' : '') +
+      '</div>' +
+      '<button class="delete" onclick="removeSpecialEvent(' + JSON.stringify(e.id) + ')">×</button>' +
+      '</div>' +
+    '</div>'
+  ).join("");
+}
+
 function base64UrlToBytes(value) {
   const padding = "=".repeat((4 - value.length % 4) % 4);
   const binary = atob((value + padding).replace(/-/g, "+").replace(/_/g, "/"));
@@ -560,9 +820,17 @@ async function deleteMyData() {
     localStorage.removeItem("meds");
     localStorage.removeItem("records");
     localStorage.removeItem("clientId");
+    localStorage.removeItem("specialEvents");
+    localStorage.removeItem("customSpecialCategories");
     meds = [];
+    specialEvents = [];
+    customSpecialCategories = [];
     save();
+    saveSpecialData();
     render();
+    renderSpecialCategories();
+    renderCalendar();
+    renderSpecialEvents();
     status.textContent = "✅ Bu cihazın ilaç ve bildirim verileri silindi.";
   } catch (error) {
     status.textContent = "❌ Veriler silinemedi: " + (error.message || String(error));
@@ -570,6 +838,9 @@ async function deleteMyData() {
 }
 
 render();
+renderSpecialCategories();
+renderCalendar();
+renderSpecialEvents();
 
 window.addEventListener("load", async () => {
   try {
