@@ -66,7 +66,7 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
 </div>
 <p class="note">
 İlaçlarınızı yalnızca doktorunuzun güncel reçetesine göre kullanın.
-Bu sürüm otomatik telefon bildirimi göndermez.
+Otomatik ilaç hatırlatmaları henüz etkin değil; mevcut telefon alarmlarınızı kullanmaya devam edin.
 </p>
 </main>
 <script>
@@ -200,6 +200,7 @@ render();
     "Bildirim izni verildi. Bildirim sistemi hazırlanıyor...";
 
   await registerServiceWorker();
+  await subscribeToPush();
 
     } else if (permission === "denied") {
       status.textContent =
@@ -239,6 +240,54 @@ async function registerServiceWorker() {
 
     status.textContent =
       "❌ Bildirim sistemi başlatılamadı: " + error.message;
+  }
+}
+
+const PUSH_SERVER = "https://ilac-takibim-push.almanpazari.workers.dev";
+
+function base64UrlToBytes(value) {
+  const padding = "=".repeat((4 - value.length % 4) % 4);
+  const binary = atob((value + padding).replace(/-/g, "+").replace(/_/g, "/"));
+  return Uint8Array.from(binary, character => character.charCodeAt(0));
+}
+
+async function subscribeToPush() {
+  const status = document.getElementById("notificationStatus");
+  try {
+    if (Notification.permission !== "granted") {
+      status.textContent = "Önce bildirim izni vermelisin.";
+      return;
+    }
+    const registration = await navigator.serviceWorker.ready;
+    if (!registration.pushManager) throw new Error("Bu ortam Web Push desteklemiyor.");
+    const keyResponse = await fetch(PUSH_SERVER + "/vapid-public-key");
+    if (!keyResponse.ok) throw new Error("Bildirim sunucusuna ulaşılamadı.");
+    const { publicKey } = await keyResponse.json();
+    if (!publicKey) throw new Error("Sunucuda public key bulunamadı.");
+    const applicationServerKey = base64UrlToBytes(publicKey);
+    let subscription = await registration.pushManager.getSubscription();
+    if (subscription) {
+      const existingKey = subscription.options?.applicationServerKey;
+      if (!existingKey || Array.from(new Uint8Array(existingKey)).some((v, i) => v !== applicationServerKey[i])) {
+        await subscription.unsubscribe();
+        subscription = null;
+      }
+    }
+    if (!subscription) {
+      subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey
+      });
+    }
+    const response = await fetch(PUSH_SERVER + "/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(subscription)
+    });
+    if (!response.ok) throw new Error("Abonelik sunucuya kaydedilemedi (" + response.status + ").");
+    status.textContent = "✅ Push aboneliğin sunucuya kaydedildi. Test bildirimi henüz gönderilmedi.";
+  } catch (error) {
+    status.textContent = "❌ Push aboneliği kurulamadı: " + error.message;
   }
 }
 
