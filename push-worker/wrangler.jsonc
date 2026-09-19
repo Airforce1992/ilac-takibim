@@ -3,5 +3,9 @@
   "name": "ilac-takibim-push",
   "main": "src/worker.js",
   "compatibility_date": "2026-09-19",
-  "workers_dev": true
+  "workers_dev": true,
+  "vars": {
+    "VAPID_PUBLIC_KEY": "BDhBI8TGsriIlHhc7Vxb2fEKq_VgG5i4ENmkhdKbWtu-GkPx-LfmT2U4SVHsBgYI96jATeXVknjqzrg-v3LmY7c",
+    "VAPID_SUBJECT": "mailto:almanpazari@gmail.com"
+  }
 }
