@@ -1,0 +1,19 @@
+{
+  "name": "İlaç Takibim",
+  "short_name": "İlaç Takibim",
+  "description": "Kişisel ilaç takip ve hatırlatma uygulaması",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f6f5",
+  "theme_color": "#137c70",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
