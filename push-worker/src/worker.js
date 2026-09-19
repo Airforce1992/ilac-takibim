@@ -1,5 +1,40 @@
 import webpush from "web-push";
 
+const PUSH_TEXT = {
+  tr: {
+    invalidClient: "Geçersiz istemci",
+    invalidSubscription: "Geçersiz istemci veya abonelik",
+    enableFirst: "Önce bildirimleri etkinleştirin",
+    testBody: "Test bildirimi başarıyla ulaştı.",
+    scheduledTestBody: "Zamanlı bildirim testi başarılı.",
+    medSuffix: "alma saatin geldi."
+  },
+  en: {
+    invalidClient: "Invalid client",
+    invalidSubscription: "Invalid client or subscription",
+    enableFirst: "Enable notifications first",
+    testBody: "The test notification arrived successfully.",
+    scheduledTestBody: "Scheduled notification test successful.",
+    medSuffix: "It is time to take your medication."
+  },
+  de: {
+    invalidClient: "Ungültiger Client",
+    invalidSubscription: "Ungültiger Client oder ungültiges Abonnement",
+    enableFirst: "Aktiviere zuerst die Benachrichtigungen",
+    testBody: "Die Testbenachrichtigung wurde erfolgreich zugestellt.",
+    scheduledTestBody: "Der zeitgesteuerte Benachrichtigungstest war erfolgreich.",
+    medSuffix: "Es ist Zeit, dein Medikament einzunehmen."
+  }
+};
+
+function normalizeLang(value) {
+  return ["tr","en","de"].includes(value) ? value : "tr";
+}
+
+function pushText(lang, key) {
+  return PUSH_TEXT[normalizeLang(lang)][key] || PUSH_TEXT.tr[key] || key;
+}
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "https://airforce1992.github.io",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -69,8 +104,9 @@ export default {
       const body = await request.json();
       const clientId = body?.clientId;
       const subscription = body?.subscription;
+      const lang = normalizeLang(body?.lang);
       if (!validClientId(clientId) || !subscription?.endpoint) {
-        return json({ ok: false, error: "Geçersiz istemci veya abonelik" }, 400);
+        return json({ ok: false, error: pushText(lang, "invalidSubscription") }, 400);
       }
       await env.PUSH_KV.put(`subscription:${clientId}`, JSON.stringify(subscription));
       return json({ ok: true });
@@ -79,9 +115,10 @@ export default {
     if (url.pathname === "/schedule" && request.method === "POST") {
       const body = await request.json();
       const clientId = body?.clientId;
-      if (!validClientId(clientId)) return json({ ok: false, error: "Geçersiz istemci" }, 400);
+      if (!validClientId(clientId)) return json({ ok: false, error: pushText(normalizeLang(body?.lang), "invalidClient") }, 400);
 
       const timeZone = String(body?.timeZone || "Europe/Istanbul").slice(0, 80);
+      const lang = normalizeLang(body?.lang);
       const meds = Array.isArray(body?.meds) ? body.meds
         .filter(m => /^([01]\d|2[0-3]):[0-5]\d$/.test(String(m?.time || "")) && String(m?.name || "").trim())
         .slice(0, 100)
@@ -98,7 +135,7 @@ export default {
 
       await env.PUSH_KV.put(
         `schedule:${clientId}`,
-        JSON.stringify({ timeZone, meds, updatedAt: Date.now() })
+        JSON.stringify({ timeZone, lang, meds, updatedAt: Date.now() })
       );
       return json({ ok: true, count: meds.length });
     }
@@ -115,7 +152,7 @@ export default {
       try {
         await sendPush(env, subscription, {
           title: "💊 Sağlık Cepte",
-          body: "Test bildirimi başarıyla ulaştı.",
+          body: pushText(lang, "testBody"),
           tag: "ilac-takibim-test"
         });
         return json({ ok: true });
@@ -138,7 +175,7 @@ export default {
       const dueAt = Date.now() + 120000;
       await env.PUSH_KV.put(
         `scheduled-test:${clientId}`,
-        JSON.stringify({ dueAt }),
+        JSON.stringify({ dueAt, lang }),
         { expirationTtl: 600 }
       );
       return json({ ok: true, dueAt });
@@ -183,7 +220,7 @@ export default {
           try {
             await sendPush(env, JSON.parse(subscriptionRaw), {
               title: "⏰ Sağlık Cepte",
-              body: "Zamanlı bildirim testi başarılı.",
+              body: pushText(test.lang, "scheduledTestBody"),
               tag: `scheduled-test-${clientId}`
             });
             await env.PUSH_KV.delete(item.name);
@@ -214,6 +251,7 @@ export default {
           const subscription = JSON.parse(subscriptionRaw);
           const schedule = JSON.parse(scheduleRaw);
           const timeZone = schedule.timeZone || "Europe/Istanbul";
+          const lang = normalizeLang(schedule.lang);
           const meds = Array.isArray(schedule.meds) ? schedule.meds : [];
           if (!meds.length) continue;
 
@@ -237,9 +275,17 @@ export default {
           if (await env.PUSH_KV.get(sentKey)) continue;
 
           const names = due.map(m => m.name);
-          const body = names.length === 1
-            ? `${names[0]} alma saatin geldi.`
-            : `${names.join(", ")} alma saatin geldi.`;
+          const body = lang === "en"
+            ? (names.length === 1
+                ? `It is time to take ${names[0]}.`
+                : `It is time to take: ${names.join(", ")}.`)
+            : lang === "de"
+              ? (names.length === 1
+                  ? `Es ist Zeit, ${names[0]} einzunehmen.`
+                  : `Es ist Zeit, diese Medikamente einzunehmen: ${names.join(", ")}.`)
+              : (names.length === 1
+                  ? `${names[0]} alma saatin geldi.`
+                  : `${names.join(", ")} alma saatin geldi.`);
 
           try {
             await sendPush(env, subscription, {
