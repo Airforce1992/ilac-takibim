@@ -534,6 +534,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
         <select id="languageSelect" class="language-select" onchange="setLanguage(this.value)">
           <option value="tr">Türkçe</option>
           <option value="en">English</option>
+          <option value="de">Deutsch</option>
         </select>
       </div>
     </div>
@@ -735,6 +736,22 @@ const I18N = {
     medicalDisclaimer:"Use medications only according to the current instructions of your doctor or pharmacist. Keep your existing phone alarms active until you verify the first regular scheduled notification.",
     bloodGroup:"Blood type", birthDate:"Birth date", noData:"—",
     aboutHtml:'<p><strong>Your health, in your pocket.</strong></p><p>Sağlık Cepte is designed to help you keep your medications, health measurements and important health dates organized in one place.</p><p>You can plan medication times, record measurements such as blood pressure and pulse, add vaccine and check-up dates to your calendar, and keep profile and emergency information.</p><p>Our aim is to make personal health information more accessible, organized and easier to follow.</p><p>This app does not replace medical evaluation or treatment advice. Follow the recommendations of your doctor or pharmacist when making medication and health decisions.</p>'
+  },
+  de: {
+    brandSubtitle:"Dein persönlicher Medikamenten- und Gesundheitskalender",
+    tabToday:"Heute", tabHealth:"Gesundheit", tabAdd:"Hinzufügen", tabCalendar:"Kalender", tabSettings:"Einstellungen",
+    createProfile:"Profil erstellen", edit:"Bearbeiten", todayPlan:"Dein heutiger Plan",
+    notificationStatusTitle:"Benachrichtigungsstatus", enableNotifications:"Benachrichtigungen aktivieren",
+    viewDay:"Angezeigter Tag", today:"Heute",
+    healthMeasurements:"Meine Gesundheitswerte", healthMeasurementsDesc:"Erfasse Blutdruck, Puls und weitere persönliche Messwerte mit Datum und Uhrzeit.",
+    addMeasurement:"Neue Messung hinzufügen", measurementHistory:"Messverlauf",
+    manualAdd:"Manuell hinzufügen", manualAddDesc:"Wähle aus, welche Art von Eintrag du hinzufügen möchtest.",
+    specialDaysCalendar:"Besondere Termine & Kalender", specialDaysDesc:"Plane Impfungen, Routinebehandlungen, Kontrollen und eigene Gesundheitskategorien.",
+    languageTitle:"Sprache", appLanguage:"App-Sprache", appLanguageDesc:"Wähle die Sprache der Benutzeroberfläche.",
+    aboutTitle:"Über die App", deleteAllData:"Alle meine Daten löschen",
+    medicalDisclaimer:"Verwende Medikamente ausschließlich nach den aktuellen Anweisungen deines Arztes oder Apothekers. Lass bestehende Handy-Wecker aktiviert, bis du die erste reguläre zeitgesteuerte Benachrichtigung erfolgreich überprüft hast.",
+    bloodGroup:"Blutgruppe", birthDate:"Geburtsdatum", noData:"—",
+    aboutHtml:'<p><strong>Deine Gesundheit – immer dabei.</strong></p><p>Sağlık Cepte wurde entwickelt, damit du Medikamente, Gesundheitswerte und wichtige Gesundheitstermine übersichtlich an einem Ort verfolgen kannst.</p><p>Du kannst Medikamentenzeiten planen, Werte wie Blutdruck und Puls erfassen, Impf- und Kontrolltermine in den Kalender eintragen sowie Profil- und Notfallinformationen speichern.</p><p>Unser Ziel ist es, persönliche Gesundheitsinformationen leichter zugänglich, übersichtlich und einfacher nachverfolgbar zu machen.</p><p>Die App ersetzt keine medizinische Beurteilung oder Behandlungsempfehlung. Bei Medikamenten und gesundheitlichen Entscheidungen solltest du den Empfehlungen deines Arztes oder Apothekers folgen.</p>'
   }
 };
 
@@ -844,7 +861,7 @@ function renderProfile() {
   document.getElementById("profileBlood").textContent =
     t("bloodGroup") + ": " + (profileData.bloodType || t("noData"));
 
-  const locale = currentLanguage() === "en" ? "en-US" : "tr-TR";
+  const locale = currentLanguage() === "en" ? "en-US" : currentLanguage() === "de" ? "de-DE" : "tr-TR";
   document.getElementById("profileBirth").textContent = profileData.birthDate
     ? t("birthDate") + ": " + new Date(profileData.birthDate + "T12:00:00").toLocaleDateString(locale)
     : t("birthDate") + ": " + t("noData");
@@ -1094,7 +1111,7 @@ function render() {
     (todaysMeds.length ? done / todaysMeds.length * 100 : 0) + "%";
 
   document.getElementById("today").textContent =
-    new Date(day + "T12:00:00").toLocaleDateString(currentLanguage() === "en" ? "en-US" : "tr-TR", {
+    new Date(day + "T12:00:00").toLocaleDateString(currentLanguage() === "en" ? "en-US" : currentLanguage() === "de" ? "de-DE" : "tr-TR", {
       day:"numeric", month:"long", year:"numeric", weekday:"long"
     });
 }
@@ -1376,7 +1393,7 @@ function saveSpecialData() {
 }
 
 function formatTrDate(day) {
-  const locale = currentLanguage() === "en" ? "en-US" : "tr-TR";
+  const locale = currentLanguage() === "en" ? "en-US" : currentLanguage() === "de" ? "de-DE" : "tr-TR";
   return new Date(day + "T12:00:00").toLocaleDateString(locale, {
     day:"numeric", month:"long", year:"numeric", weekday:"long"
   });
@@ -1486,7 +1503,7 @@ function changeCalendarMonth(offset) {
 function renderCalendar() {
   const title = document.getElementById("calendarTitle");
   const grid = document.getElementById("calendarGrid");
-  title.textContent = calendarCursor.toLocaleDateString(currentLanguage() === "en" ? "en-US" : "tr-TR", { month:"long", year:"numeric" });
+  title.textContent = calendarCursor.toLocaleDateString(currentLanguage() === "en" ? "en-US" : currentLanguage() === "de" ? "de-DE" : "tr-TR", { month:"long", year:"numeric" });
 
   const y = calendarCursor.getFullYear();
   const m = calendarCursor.getMonth();
