@@ -45,7 +45,7 @@ function render(){
  }
  root.innerHTML='<div class="card-head"><h3>'+esc(t.title)+'</h3><span style="font-size:26px">⌚</span></div><p class="note">'+esc(t.intro)+'</p>'+
  '<div class="sc-device-note">'+esc(t.notConnected)+' · '+esc(t[pref.device])+'<br>'+esc(t.last)+': '+esc(data.date?date(data.date):t.never)+'</div>'+
- (opened?body+'<div class="sc-device-actions">'+btn("close",t.close)+'</div>':btn("choose",t.open,false));
+ (opened?body+'<div class="sc-device-actions">'+btn("close",t.close)+'</div>':btn("choose",t.open||t.choose,false));
 }
 root.addEventListener("click",event=>{
  const d=event.target.closest("[data-device]");
