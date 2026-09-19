@@ -5,13 +5,13 @@ self.addEventListener("push", event => {
   } catch {
     data = {
       title: "Sağlık Cepte",
-      body: event.data ? event.data.text() : "İlaç hatırlatıcın var."
+      body: event.data ? event.data.text() : "Sağlık Cepte"
     };
   }
 
   const title = data.title || "Sağlık Cepte";
   const options = {
-    body: data.body || "İlaç hatırlatıcın var.",
+    body: data.body || "Sağlık Cepte",
     tag: data.tag || "ilac-hatirlatma",
     renotify: true,
     data: { url: "./" }
