@@ -227,6 +227,21 @@ html[data-theme="dark"] .calday.selected.has-event::after{background:#14213d}
 .custom-cats{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
 .cat-chip{display:flex;align-items:center;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:5px 8px;font-size:11px}
 .cat-chip button{border:0;background:transparent;color:var(--danger);padding:0 2px}
+.profile-card{display:flex;align-items:center;gap:14px}
+.profile-avatar{width:68px;height:68px;border-radius:20px;overflow:hidden;background:var(--yellow-soft);border:1px solid var(--border);display:grid;place-items:center;flex:0 0 auto}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-avatar-fallback{font-size:26px;font-weight:900;color:var(--accent)}
+.profile-main{min-width:0;flex:1}
+.profile-name{font-size:18px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profile-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.profile-chip{background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:6px 9px;font-size:12px;font-weight:800}
+.blood-chip{background:var(--yellow-soft);color:var(--text)}
+.profile-edit{flex:0 0 auto}
+.photo-picker{display:flex;align-items:center;gap:12px;margin:8px 0 14px}
+.photo-preview{width:84px;height:84px;border-radius:22px;overflow:hidden;background:var(--yellow-soft);border:1px solid var(--border);display:grid;place-items:center}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+.file-input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+
 .health-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .health-stat{background:var(--surface-2);border:1px solid var(--border);border-radius:15px;padding:13px}
 .health-stat .label{font-size:11px;color:var(--muted);font-weight:700}
@@ -299,6 +314,20 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
   </div>
 
   <section id="panel-today" class="panel active">
+    <div class="card">
+      <div class="profile-card">
+        <div class="profile-avatar" id="profileAvatar"></div>
+        <div class="profile-main">
+          <div class="profile-name" id="profileName">Profilini oluştur</div>
+          <div class="profile-meta">
+            <span class="profile-chip blood-chip" id="profileBlood">Kan grubu: —</span>
+            <span class="profile-chip" id="profileBirth">Doğum tarihi: —</span>
+          </div>
+        </div>
+        <button class="btn secondary small profile-edit" onclick="openProfileModal()">Düzenle</button>
+      </div>
+    </div>
+
     <div class="hero">
       <div class="hero-row">
         <div>
@@ -553,6 +582,55 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
   <button class="nav-btn" data-nav="settings" onclick="showTab('settings')"><span>⚙</span>Ayarlar</button>
 </nav>
 
+<div id="profileModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+  <div class="modal-card">
+    <h3 id="profileModalTitle">Profil bilgileri</h3>
+
+    <div class="photo-picker">
+      <div class="photo-preview" id="profilePhotoPreview"></div>
+      <div>
+        <input class="file-input" id="profilePhotoInput" type="file" accept="image/*" onchange="handleProfilePhoto(event)">
+        <button class="btn secondary" type="button" onclick="document.getElementById('profilePhotoInput').click()">Fotoğraf seç</button>
+        <button class="btn secondary small" type="button" onclick="removeProfilePhoto()" style="margin-top:7px">Fotoğrafı kaldır</button>
+      </div>
+    </div>
+
+    <label for="profileFullName">Ad soyad</label>
+    <input class="field" id="profileFullName" placeholder="Ad soyad">
+
+    <label for="profileBloodType">Kan grubu</label>
+    <select class="field" id="profileBloodType">
+      <option value="">Seçiniz</option>
+      <option value="A+">A Rh+</option>
+      <option value="A-">A Rh-</option>
+      <option value="B+">B Rh+</option>
+      <option value="B-">B Rh-</option>
+      <option value="AB+">AB Rh+</option>
+      <option value="AB-">AB Rh-</option>
+      <option value="0+">0 Rh+</option>
+      <option value="0-">0 Rh-</option>
+    </select>
+
+    <label for="profileBirthDate">Doğum tarihi</label>
+    <input class="field" id="profileBirthDate" type="date">
+
+    <label for="profilePhone">Telefon (isteğe bağlı)</label>
+    <input class="field" id="profilePhone" type="tel" placeholder="05xx xxx xx xx">
+
+    <label for="profileEmergency">Acil durum kişisi (isteğe bağlı)</label>
+    <input class="field" id="profileEmergency" placeholder="Ad soyad / telefon">
+
+    <label for="profileNote">Profil notu (isteğe bağlı)</label>
+    <textarea class="field" id="profileNote" rows="2" placeholder="Alerji, önemli not vb."></textarea>
+
+    <div class="actions">
+      <button class="btn" onclick="saveProfile()">Profili kaydet</button>
+      <button class="btn secondary" onclick="closeProfileModal()">Vazgeç</button>
+    </div>
+    <p class="note" style="margin-bottom:0">Profil bilgileri ve fotoğraf yalnızca bu cihazda saklanır.</p>
+  </div>
+</div>
+
 <div id="editModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="editTitle">
   <div class="modal-card">
     <h3 id="editTitle">İlacı düzenle</h3>
@@ -647,6 +725,138 @@ function showTab(name) {
   }
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+let profileData;
+try {
+  profileData = JSON.parse(localStorage.getItem("profileData")) || {};
+} catch {
+  profileData = {};
+}
+let pendingProfilePhoto = profileData.photo || "";
+
+function profileInitials(name) {
+  const parts = String(name || "").trim().split(/\s+/).filter(Boolean).slice(0,2);
+  return parts.length ? parts.map(p => p[0].toLocaleUpperCase("tr-TR")).join("") : "👤";
+}
+
+function profilePhotoMarkup(photo, name) {
+  return photo
+    ? '<img src="' + photo + '" alt="Profil fotoğrafı">'
+    : '<div class="profile-avatar-fallback">' + safe(profileInitials(name)) + '</div>';
+}
+
+function renderProfile() {
+  const name = (profileData.fullName || "").trim();
+  document.getElementById("profileName").textContent = name || "Profilini oluştur";
+  document.getElementById("profileBlood").textContent =
+    "Kan grubu: " + (profileData.bloodType || "—");
+
+  document.getElementById("profileBirth").textContent = profileData.birthDate
+    ? "Doğum: " + new Date(profileData.birthDate + "T12:00:00").toLocaleDateString("tr-TR")
+    : "Doğum tarihi: —";
+
+  document.getElementById("profileAvatar").innerHTML =
+    profilePhotoMarkup(profileData.photo || "", name);
+}
+
+function openProfileModal() {
+  pendingProfilePhoto = profileData.photo || "";
+  document.getElementById("profileFullName").value = profileData.fullName || "";
+  document.getElementById("profileBloodType").value = profileData.bloodType || "";
+  document.getElementById("profileBirthDate").value = profileData.birthDate || "";
+  document.getElementById("profilePhone").value = profileData.phone || "";
+  document.getElementById("profileEmergency").value = profileData.emergency || "";
+  document.getElementById("profileNote").value = profileData.note || "";
+  renderProfilePhotoPreview();
+  document.getElementById("profileModal").classList.add("open");
+}
+
+function closeProfileModal() {
+  pendingProfilePhoto = profileData.photo || "";
+  document.getElementById("profileModal").classList.remove("open");
+}
+
+function renderProfilePhotoPreview() {
+  const name = document.getElementById("profileFullName")?.value || profileData.fullName || "";
+  document.getElementById("profilePhotoPreview").innerHTML =
+    pendingProfilePhoto
+      ? '<img src="' + pendingProfilePhoto + '" alt="Seçilen profil fotoğrafı">'
+      : '<div class="profile-avatar-fallback">' + safe(profileInitials(name)) + '</div>';
+}
+
+function handleProfilePhoto(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    alert("Lütfen bir resim dosyası seç.");
+    return;
+  }
+  if (file.size > 8 * 1024 * 1024) {
+    alert("Fotoğraf çok büyük. 8 MB'dan küçük bir fotoğraf seç.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 512;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+
+      const scale = Math.max(size / img.width, size / img.height);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      const x = (size - w) / 2;
+      const y = (size - h) / 2;
+
+      ctx.drawImage(img, x, y, w, h);
+      pendingProfilePhoto = canvas.toDataURL("image/jpeg", .82);
+      renderProfilePhotoPreview();
+    };
+    img.onerror = () => alert("Fotoğraf okunamadı.");
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeProfilePhoto() {
+  pendingProfilePhoto = "";
+  document.getElementById("profilePhotoInput").value = "";
+  renderProfilePhotoPreview();
+}
+
+function saveProfile() {
+  profileData = {
+    fullName: document.getElementById("profileFullName").value.trim().slice(0,80),
+    bloodType: document.getElementById("profileBloodType").value,
+    birthDate: document.getElementById("profileBirthDate").value,
+    phone: document.getElementById("profilePhone").value.trim().slice(0,40),
+    emergency: document.getElementById("profileEmergency").value.trim().slice(0,120),
+    note: document.getElementById("profileNote").value.trim().slice(0,500),
+    photo: pendingProfilePhoto
+  };
+
+  try {
+    localStorage.setItem("profileData", JSON.stringify(profileData));
+  } catch {
+    alert("Profil fotoğrafı cihazda saklanamadı. Daha küçük bir fotoğraf deneyebilirsin.");
+    return;
+  }
+
+  renderProfile();
+  closeProfileModal();
+}
+
+document.getElementById("profileModal").addEventListener("click", event => {
+  if (event.target.id === "profileModal") closeProfileModal();
+});
+
+document.getElementById("profileFullName").addEventListener("input", () => {
+  if (!pendingProfilePhoto) renderProfilePhotoPreview();
+});
 
 function createClientId() {
   if (crypto.randomUUID) return crypto.randomUUID();
@@ -1414,11 +1624,14 @@ async function deleteMyData() {
     localStorage.removeItem("specialEvents");
     localStorage.removeItem("customSpecialCategories");
     localStorage.removeItem("healthEntries");
+    localStorage.removeItem("profileData");
 
     meds = [];
     specialEvents = [];
     customSpecialCategories = [];
     healthEntries = [];
+    profileData = {};
+    pendingProfilePhoto = "";
 
     save();
     saveSpecialData();
@@ -1428,6 +1641,7 @@ async function deleteMyData() {
     renderSpecialEvents();
     saveHealthEntries();
     renderHealth();
+    renderProfile();
 
     status.textContent = "Bu cihazın ilaç, takvim ve bildirim verileri silindi.";
   } catch (error) {
@@ -1441,6 +1655,7 @@ renderSpecialCategories();
 renderCalendar();
 renderSpecialEvents();
 renderHealth();
+renderProfile();
 
 window.addEventListener("load", async () => {
   try {
