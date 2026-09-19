@@ -7,5 +7,11 @@
   "vars": {
     "VAPID_PUBLIC_KEY": "BDhBI8TGsriIlHhc7Vxb2fEKq_VgG5i4ENmkhdKbWtu-GkPx-LfmT2U4SVHsBgYI96jATeXVknjqzrg-v3LmY7c",
     "VAPID_SUBJECT": "mailto:almanpazari@gmail.com"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "PUSH_KV",
+      "id": "fc29a13f60a34e0c926d2a6ec15fa58d"
+    }
+  ]
 }
