@@ -1,254 +1,232 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#137c70">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="İlaç Takibim">
+<link rel="manifest" href="./manifest.webmanifest">
 <title>İlaç Takibim</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f2f6f5;color:#203c38;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
-header{background:#137c70;color:white;padding:32px 20px 25px;border-radius:0 0 25px 25px}
+body{margin:0;background:#f2f6f5;color:#203c38;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+header{background:#137c70;color:white;padding:calc(28px + env(safe-area-inset-top)) 20px 25px;border-radius:0 0 25px 25px}
 h1{margin:0;font-size:27px}
-small{opacity:.8}
+header p{margin:8px 0}
+small{opacity:.85}
 main{max-width:550px;margin:auto;padding:18px}
 .card{background:white;border-radius:17px;padding:18px;margin-bottom:14px;box-shadow:0 3px 12px #00000008}
 .time{font-size:21px;font-weight:700;color:#137c70;margin-bottom:12px}
 .med{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #eee;font-size:17px}
 .med input{width:23px;height:23px;accent-color:#137c70}
 .done{text-decoration:line-through;color:#999}
-button{border:0;background:#137c70;color:white;padding:13px;border-radius:11px;font-size:15px}
+button{border:0;background:#137c70;color:white;padding:13px;border-radius:11px;font-size:15px;cursor:pointer}
+button.secondary{background:#eef6f4;color:#137c70}
+button.danger{background:#fff0f0;color:#b7352a}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
 input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px;max-width:100%}
 .field{width:100%;margin:5px 0 12px}
 .progress{height:10px;background:#dce9e5;border-radius:10px;overflow:hidden}
 .bar{height:100%;background:#27a68e;width:0%}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .delete{background:#fff0f0;color:#c0392b;padding:7px}
-.note{font-size:13px;color:#667}
+.note{font-size:13px;color:#667;line-height:1.45}
+.status{line-height:1.4}
+.empty{text-align:center;color:#667;padding:12px}
 </style>
 </head>
 <body>
 <header>
 <h1>💊 İlaç Takibim</h1>
-<p>Günlük ilaç takip uygulamam</p>
+<p>Kendi ilaç programını oluştur, saatinde hatırlat.</p>
 <small id="today"></small>
 </header>
+
 <main>
 <div class="card">
-<div class="row">
-<h3>Günlük ilerleme</h3>
-<strong id="count">0 / 0</strong>
+  <div class="row">
+    <h3>Günlük ilerleme</h3>
+    <strong id="count">0 / 0</strong>
+  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
 </div>
-<div class="progress"><div class="bar" id="bar"></div></div>
-</div>
-  <div class="card">
+
+<div class="card">
   <h3>🔔 Bildirimler</h3>
-  <p id="notificationStatus">Bildirim izni henüz kontrol edilmedi.</p>
-  <button id="notificationButton" onclick="enableNotifications()">
-    Bildirimleri etkinleştir
-  </button>
-  <button id="testNotificationButton" onclick="sendTestNotification()" style="margin-left:8px">
-    Test bildirimi gönder
-  </button>
+  <p id="notificationStatus" class="status">Bildirim durumu kontrol ediliyor...</p>
+  <div class="actions">
+    <button id="notificationButton" onclick="enableNotifications()">Bildirimleri etkinleştir</button>
+    <button class="secondary" onclick="sendTestNotification()">Test bildirimi gönder</button>
+  </div>
 </div>
+
 <div id="schedule"></div>
+
 <div class="card">
-<h3>➕ Yeni ilaç ekle</h3>
-<input class="field" id="name" placeholder="İlaç adı">
-<label>İlaç saati</label>
-<input class="field" id="time" type="time" value="08:00">
-<button onclick="addMed()">İlaç ekle</button>
+  <h3>➕ Yeni ilaç ekle</h3>
+  <input class="field" id="name" placeholder="İlaç adı">
+  <label for="time">İlaç saati</label>
+  <input class="field" id="time" type="time" value="08:00">
+  <button onclick="addMed()">İlaç ekle</button>
 </div>
+
 <div class="card">
-<h3>📅 Geçmiş günler</h3>
-<input class="field" type="date" id="date" onchange="render()">
-<button onclick="goToday()">Bugüne dön</button>
+  <h3>📅 Geçmiş günler</h3>
+  <input class="field" type="date" id="date" onchange="render()">
+  <button class="secondary" onclick="goToday()">Bugüne dön</button>
 </div>
+
+<div class="card">
+  <h3>📲 Telefona kurulum</h3>
+  <p class="note"><strong>iPhone:</strong> Safari → Paylaş → Ana Ekrana Ekle. Web Push için iOS 16.4 veya üzeri gerekir.</p>
+  <p class="note"><strong>Android:</strong> Chrome → menü → Ana ekrana ekle / Uygulamayı yükle. Bildirim iznini kabul et.</p>
+</div>
+
+<div class="card">
+  <h3>🔐 Gizlilik ve veriler</h3>
+  <p class="note">Hesap açılmaz. Bu cihaz için rastgele bir kimlik oluşturulur. İlaç adı, saat, saat dilimi ve push aboneliği yalnızca hatırlatma göndermek amacıyla bildirim sunucusunda saklanır.</p>
+  <button class="danger" onclick="deleteMyData()">Tüm verilerimi sil</button>
+</div>
+
 <p class="note">
-İlaçlarınızı yalnızca doktorunuzun güncel reçetesine göre kullanın.
-Otomatik hatırlatmalar ilaç saatlerinize göre gönderilir. İlk normal bildirimi doğrulayana kadar mevcut telefon alarmlarınızı kullanmaya devam edin.
+İlaçlarınızı yalnızca doktorunuzun veya eczacınızın güncel talimatına göre kullanın.
+İlk normal saatli bildirimin geldiğini doğrulayana kadar mevcut telefon alarmlarınızı açık tutun.
 </p>
 </main>
+
 <script>
-const defaults=[
-["08:00","Flagyl"],
-["08:00","Erdostin"],
-["08:00","Sinupret"],
-["12:00","Tavanic"],
-["16:00","Flagyl"],
-["16:00","Sinupret"],
-["21:00","Erdostin"],
-["21:00","Sinupret"],
-["00:00","Flagyl"]
-];
+const PUSH_SERVER = "https://ilac-takibim-push.almanpazari.workers.dev";
+
+function createClientId() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  const bytes = crypto.getRandomValues(new Uint8Array(24));
+  return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+}
+
+function getClientId() {
+  let id = localStorage.getItem("clientId");
+  if (!id) {
+    id = createClientId();
+    localStorage.setItem("clientId", id);
+  }
+  return id;
+}
 
 let meds;
-try{
-meds=JSON.parse(localStorage.getItem("meds"));
-if(!Array.isArray(meds))meds=null;
-}catch(e){meds=null}
-if(!meds){
-meds=defaults.map((m,i)=>({
-id:i+1,time:m[0],name:m[1]
-}));
-save();
+try {
+  meds = JSON.parse(localStorage.getItem("meds"));
+  if (!Array.isArray(meds)) meds = null;
+} catch {
+  meds = null;
+}
+if (!meds) {
+  meds = [];
+  localStorage.setItem("meds", "[]");
 }
 
-const dateInput=document.getElementById("date");
-function localDate(d=new Date()){
-let y=d.getFullYear();
-let m=String(d.getMonth()+1).padStart(2,"0");
-let day=String(d.getDate()).padStart(2,"0");
-return y+"-"+m+"-"+day;
-}
-dateInput.value=localDate();
+const dateInput = document.getElementById("date");
 
-function save(){
-localStorage.setItem("meds",JSON.stringify(meds));
+function localDate(d = new Date()) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return y + "-" + m + "-" + day;
 }
-function getRecords(){
-try{return JSON.parse(localStorage.getItem("records"))||{}}
-catch(e){return {}}
-}
-function safe(t){
-return String(t).replace(/[&<>"']/g,c=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",
-'"':"&quot;","'":"&#39;"
-})[c]);
-}
-function toggle(id,checked){
-let all=getRecords();
-let day=dateInput.value;
-if(!all[day])all[day]={};
-all[day][id]=checked;
-localStorage.setItem("records",JSON.stringify(all));
-render();
-}
-function render(){
-let day=dateInput.value;
-let records=getRecords()[day]||{};
-let sorted=[...meds].sort((a,b)=>a.time.localeCompare(b.time));
-let groups={};
-sorted.forEach(m=>{
-if(!groups[m.time])groups[m.time]=[];
-groups[m.time].push(m);
-});
-let html="";
-Object.entries(groups).forEach(([time,items])=>{
-html+='<div class="card"><div class="time">⏰ '+time+'</div>';
-items.forEach(m=>{
-let checked=records[m.id]===true;
-html+='<div class="med">'+
-'<input type="checkbox" '+(checked?"checked":"")+
-' onchange="toggle('+m.id+',this.checked)">'+
-'<span class="'+(checked?"done":"")+'" style="flex:1">'+safe(m.name)+'</span>'+
-'<button class="delete" onclick="removeMed('+m.id+')">×</button>'+
-'</div>';
-});
-html+='</div>';
-});
-document.getElementById("schedule").innerHTML=html||
-'<div class="card">Henüz ilaç eklenmedi.</div>';
-let done=meds.filter(m=>records[m.id]===true).length;
-document.getElementById("count").textContent=done+" / "+meds.length;
-document.getElementById("bar").style.width=
-(meds.length?done/meds.length*100:0)+"%";
-document.getElementById("today").textContent=
-new Date(day+"T12:00:00").toLocaleDateString("tr-TR",{
-day:"numeric",month:"long",year:"numeric",weekday:"long"
-});
-}
-function addMed(){
-let name=document.getElementById("name").value.trim();
-let time=document.getElementById("time").value;
-if(!name||!time){alert("İlaç adı ve saatini girin.");return}
-meds.push({id:Date.now(),name,time});
-save();
-syncSchedule();
-document.getElementById("name").value="";
-render();
-}
-function removeMed(id){
-if(!confirm("Bu ilaç kaydını silmek istiyor musunuz?"))return;
-meds=meds.filter(m=>m.id!==id);
-save();
-syncSchedule();
-render();
-}
-function goToday(){
-dateInput.value=localDate();
-render();
-}
-render();
-  async function enableNotifications() {
-  const status = document.getElementById("notificationStatus");
+dateInput.value = localDate();
 
-  if (!("Notification" in window)) {
-    status.textContent = "Bu ortam bildirimleri desteklemiyor.";
+function save() {
+  localStorage.setItem("meds", JSON.stringify(meds));
+}
+
+function getRecords() {
+  try { return JSON.parse(localStorage.getItem("records")) || {}; }
+  catch { return {}; }
+}
+
+function safe(t) {
+  return String(t).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+function toggle(id, checked) {
+  const all = getRecords();
+  const day = dateInput.value;
+  if (!all[day]) all[day] = {};
+  all[day][id] = checked;
+  localStorage.setItem("records", JSON.stringify(all));
+  render();
+}
+
+function render() {
+  const day = dateInput.value;
+  const records = getRecords()[day] || {};
+  const sorted = [...meds].sort((a,b) => a.time.localeCompare(b.time));
+  const groups = {};
+
+  sorted.forEach(m => {
+    if (!groups[m.time]) groups[m.time] = [];
+    groups[m.time].push(m);
+  });
+
+  let html = "";
+  Object.entries(groups).forEach(([time, items]) => {
+    html += '<div class="card"><div class="time">⏰ ' + safe(time) + '</div>';
+    items.forEach(m => {
+      const checked = records[m.id] === true;
+      html += '<div class="med">' +
+        '<input type="checkbox" ' + (checked ? "checked" : "") +
+        ' onchange="toggle(' + JSON.stringify(m.id) + ',this.checked)">' +
+        '<span class="' + (checked ? "done" : "") + '" style="flex:1">' + safe(m.name) + '</span>' +
+        '<button class="delete" onclick="removeMed(' + JSON.stringify(m.id) + ')">×</button>' +
+        '</div>';
+    });
+    html += "</div>";
+  });
+
+  document.getElementById("schedule").innerHTML = html ||
+    '<div class="card empty">Henüz ilaç eklenmedi. Aşağıdan ilk ilacını ekleyebilirsin.</div>';
+
+  const done = meds.filter(m => records[m.id] === true).length;
+  document.getElementById("count").textContent = done + " / " + meds.length;
+  document.getElementById("bar").style.width =
+    (meds.length ? done / meds.length * 100 : 0) + "%";
+
+  document.getElementById("today").textContent =
+    new Date(day + "T12:00:00").toLocaleDateString("tr-TR", {
+      day:"numeric", month:"long", year:"numeric", weekday:"long"
+    });
+}
+
+async function addMed() {
+  const name = document.getElementById("name").value.trim();
+  const time = document.getElementById("time").value;
+  if (!name || !time) {
+    alert("İlaç adı ve saatini girin.");
     return;
   }
-
-  if (!("serviceWorker" in navigator)) {
-    status.textContent = "Bu ortam service worker desteklemiyor.";
-    return;
-  }
-
-  try {
-    const permission = await Notification.requestPermission();
-
-    if (permission === "granted") {
-
-  status.textContent =
-    "Bildirim izni verildi. Bildirim sistemi hazırlanıyor...";
-
-  await registerServiceWorker();
-  await subscribeToPush();
-
-    } else if (permission === "denied") {
-      status.textContent =
-        "Bildirim izni reddedildi. iPhone ayarlarından izin vermen gerekiyor.";
-    } else {
-      status.textContent = "Bildirim izni verilmedi.";
-    }
-  } catch (error) {
-    status.textContent = "Bildirim izni alınamadı: " + error.message;
-  }
-}
-async function registerServiceWorker() {
-  const status = document.getElementById("notificationStatus");
-
-  if (!("serviceWorker" in navigator)) {
-    status.textContent = "Service Worker desteklenmiyor.";
-    return;
-  }
-
-  try {
-    const registration =
-      await navigator.serviceWorker.register("./sw.js");
-
-    await navigator.serviceWorker.ready;
-
-    console.log(
-      "Service Worker hazır:",
-      registration.scope
-    );
-
-    if (Notification.permission === "granted") {
-      status.textContent =
-        "✅ Bildirim izni verildi ve bildirim sistemi hazır.";
-    }
-  } catch (error) {
-    console.error(error);
-
-    status.textContent =
-      "❌ Bildirim sistemi başlatılamadı: " + error.message;
-  }
+  meds.push({ id: Date.now(), name, time });
+  save();
+  render();
+  document.getElementById("name").value = "";
+  await syncSchedule();
 }
 
-const PUSH_SERVER = "https://ilac-takibim-push.almanpazari.workers.dev";
+async function removeMed(id) {
+  if (!confirm("Bu ilaç kaydını silmek istiyor musunuz?")) return;
+  meds = meds.filter(m => m.id !== id);
+  save();
+  render();
+  await syncSchedule();
+}
+
+function goToday() {
+  dateInput.value = localDate();
+  render();
+}
 
 function base64UrlToBytes(value) {
   const padding = "=".repeat((4 - value.length % 4) % 4);
@@ -256,29 +234,42 @@ function base64UrlToBytes(value) {
   return Uint8Array.from(binary, character => character.charCodeAt(0));
 }
 
+async function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) throw new Error("Service Worker desteklenmiyor.");
+  const registration = await navigator.serviceWorker.register("./sw.js?v=5");
+  await navigator.serviceWorker.ready;
+  return registration;
+}
+
+async function enableNotifications() {
+  const status = document.getElementById("notificationStatus");
+  try {
+    if (!("Notification" in window)) throw new Error("Bu tarayıcı bildirimleri desteklemiyor.");
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") throw new Error("Bildirim izni verilmedi.");
+    await subscribeToPush();
+  } catch (error) {
+    status.textContent = "❌ " + (error.message || String(error));
+  }
+}
+
 async function subscribeToPush() {
   const status = document.getElementById("notificationStatus");
-  let step = "Bildirim izni";
+  let step = "Bildirim kurulumu";
   try {
-    if (Notification.permission !== "granted") {
-      status.textContent = "Önce bildirim izni vermelisin.";
-      return;
-    }
     step = "Servis çalışanı";
-    status.textContent = "⏳ 1/4 Servis çalışanı kontrol ediliyor...";
-    const registration = await navigator.serviceWorker.ready;
+    status.textContent = "⏳ Bildirim sistemi hazırlanıyor...";
+    const registration = await registerServiceWorker();
     if (!registration.pushManager) throw new Error("Bu ortam Web Push desteklemiyor.");
 
-    step = "Public key bağlantısı";
-    status.textContent = "⏳ 2/4 Public key alınıyor...";
+    step = "Public key";
     const keyResponse = await fetch(PUSH_SERVER + "/vapid-public-key", { cache: "no-store" });
     if (!keyResponse.ok) throw new Error("Sunucu HTTP " + keyResponse.status);
     const { publicKey } = await keyResponse.json();
-    if (!publicKey) throw new Error("Sunucuda public key bulunamadı.");
+    if (!publicKey) throw new Error("Public key bulunamadı.");
     const applicationServerKey = base64UrlToBytes(publicKey);
 
-    step = "iPhone push aboneliği";
-    status.textContent = "⏳ 3/4 iPhone push aboneliği oluşturuluyor...";
+    step = "Push aboneliği";
     let subscription = await registration.pushManager.getSubscription();
     if (subscription) {
       const existingKey = subscription.options?.applicationServerKey;
@@ -289,6 +280,7 @@ async function subscribeToPush() {
         subscription = null;
       }
     }
+
     if (!subscription) {
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
@@ -296,18 +288,25 @@ async function subscribeToPush() {
       });
     }
 
-    step = "Cloudflare abonelik kaydı";
-    status.textContent = "⏳ 4/4 Abonelik sunucuya kaydediliyor...";
+    step = "Aboneliği kaydetme";
     const response = await fetch(PUSH_SERVER + "/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(subscription)
+      body: JSON.stringify({
+        clientId: getClientId(),
+        subscription
+      })
     });
     if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
-    await syncSchedule();
-    status.textContent = "✅ Push aboneliği ve ilaç saatleri sunucuya kaydedildi.";
+
+    const scheduleOk = await syncSchedule();
+    status.textContent = scheduleOk
+      ? "✅ Bildirimler ve ilaç saatleri hazır."
+      : "✅ Bildirimler hazır; ilaç saatleri yeniden eşitlenecek.";
+    return true;
   } catch (error) {
     status.textContent = "❌ " + step + ": " + (error.message || String(error));
+    return false;
   }
 }
 
@@ -318,14 +317,13 @@ async function syncSchedule() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        clientId: getClientId(),
         timeZone,
         meds: meds.map(m => ({ time: m.time, name: m.name }))
       })
     });
-    if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
-    return true;
-  } catch (error) {
-    console.error("Saatler sunucuya kaydedilemedi:", error);
+    return response.ok;
+  } catch {
     return false;
   }
 }
@@ -334,19 +332,61 @@ async function sendTestNotification() {
   const status = document.getElementById("notificationStatus");
   try {
     status.textContent = "⏳ Test bildirimi gönderiliyor...";
-    const response = await fetch(PUSH_SERVER + "/test", { method: "POST" });
+    const response = await fetch(PUSH_SERVER + "/test", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clientId: getClientId() })
+    });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
-    status.textContent = "✅ Test bildirimi gönderildi. iPhone bildirimini kontrol et.";
+    status.textContent = "✅ Test bildirimi gönderildi.";
   } catch (error) {
     status.textContent = "❌ Test bildirimi gönderilemedi: " + (error.message || String(error));
   }
 }
 
+async function deleteMyData() {
+  if (!confirm("Bu cihazdaki ilaçlar, geçmiş işaretleri ve bildirim kaydı silinsin mi?")) return;
+  const status = document.getElementById("notificationStatus");
+  try {
+    const clientId = getClientId();
+    const registration = await navigator.serviceWorker.ready.catch(() => null);
+    const subscription = registration ? await registration.pushManager?.getSubscription() : null;
+    if (subscription) await subscription.unsubscribe();
+
+    const response = await fetch(PUSH_SERVER + "/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clientId })
+    });
+    if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
+
+    localStorage.removeItem("meds");
+    localStorage.removeItem("records");
+    localStorage.removeItem("clientId");
+    meds = [];
+    save();
+    render();
+    status.textContent = "✅ Bu cihazın ilaç ve bildirim verileri silindi.";
+  } catch (error) {
+    status.textContent = "❌ Veriler silinemedi: " + (error.message || String(error));
+  }
+}
+
+render();
+
 window.addEventListener("load", async () => {
-  await registerServiceWorker();
-  if (Notification.permission === "granted") {
-    await syncSchedule();
+  try {
+    await registerServiceWorker();
+    if ("Notification" in window && Notification.permission === "granted") {
+      await subscribeToPush();
+    } else {
+      document.getElementById("notificationStatus").textContent =
+        "Bildirim almak için Bildirimleri etkinleştir'e dokun.";
+    }
+  } catch (error) {
+    document.getElementById("notificationStatus").textContent =
+      "Bildirim sistemi hazırlanamadı: " + (error.message || String(error));
   }
 });
 </script>
