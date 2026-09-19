@@ -202,7 +202,13 @@ html[data-theme="dark"] .view-mode-switch button.active{color:#14213d}
 .period-detail.active{border-color:var(--accent)}
 .period-detail-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:var(--surface-2);border-bottom:1px solid var(--border)}
 .period-detail-date{font-weight:850;font-size:14px}
-.period-detail-count{white-space:nowrap;font-weight:850;font-size:13px;color:var(--muted)}
+.period-detail-count{font-weight:850;font-size:12px;color:var(--muted);text-align:right;line-height:1.5}
+.med-count-row{font-size:12px;color:var(--muted);margin-top:5px;font-weight:700}
+.med-count-row strong{color:var(--accent)}
+.med-dose-summary{font-size:13px;color:var(--muted);margin:2px 0 12px}
+.med-dose-summary strong{color:var(--accent)}
+.period-dose-state{display:block}
+.period-dose input[type=checkbox]{cursor:pointer}
 .period-dose{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 14px;border-top:1px solid var(--border)}
 .period-dose:first-child{border-top:0}
 .period-dose input[type=checkbox]{width:22px;height:22px;margin:0;accent-color:var(--yellow)}
@@ -781,7 +787,7 @@ const I18N = {
     tabToday:"Bugün", tabHealth:"Sağlık", tabAdd:"Ekle", tabCalendar:"Takvim", tabSettings:"Ayarlar",
     createProfile:"Profilini oluştur", edit:"Düzenle", todayPlan:"Bugünkü planın",
     notificationStatusTitle:"Bildirim durumu", enableNotifications:"Bildirimleri etkinleştir",
-    viewDay:"Görüntülenecek gün", today:"Bugün", viewModeAria:"Görünüm seçimi", viewDaily:"Günlük", viewWeekly:"Haftalık", viewMonthly:"Aylık", remainingDoses:"Kalan doz", takenDoses:"Alınan", doseTaken:"Alındı", dosePending:"Alınmadı", doseOverdue:"Saati geçti — işaretlenmedi", doseUpcoming:"Saati gelmedi", markDose:"dozunu işaretle", previousPeriod:"Önceki", nextPeriod:"Sonraki", dailyDetail:"Günlük ayrıntı", periodNoMeds:"Bu dönemde planlanmış ilaç yok.",
+    viewDay:"Görüntülenecek gün", today:"Bugün", viewModeAria:"Görünüm seçimi", viewDaily:"Günlük", viewWeekly:"Haftalık", viewMonthly:"Aylık", remainingDoses:"Kalan doz", doseProgress:"Alınan doz", medRemaining:"Bu ilaç için kalan doz", takenDoses:"Alınan", doseTaken:"Alındı", dosePending:"Alınmadı", doseOverdue:"Saati geçti — işaretlenmedi", doseUpcoming:"Saati gelmedi", markDose:"dozunu işaretle", previousPeriod:"Önceki", nextPeriod:"Sonraki", dailyDetail:"Günlük ayrıntı", periodNoMeds:"Bu dönemde planlanmış ilaç yok.",
     healthMeasurements:"Sağlık Ölçümlerim", healthMeasurementsDesc:"Tansiyon, nabız ve diğer kişisel ölçümlerini tarih-saat ile kaydet.",
     addMeasurement:"Yeni ölçüm ekle", measurementHistory:"Geçmiş ölçümler",
     manualAdd:"Manuel Ekle", manualAddDesc:"Eklemek istediğin kayıt türünü seç.",
@@ -804,7 +810,7 @@ const I18N = {
     imageOnly:"Lütfen bir resim dosyası seç.", imageTooLarge:"Fotoğraf çok büyük. 8 MB'dan küçük bir fotoğraf seç.", imageReadError:"Fotoğraf okunamadı.", imageSaveError:"Profil fotoğrafı cihazda saklanamadı. Daha küçük bir fotoğraf deneyebilirsin.", medicineRequired:"İlaç adı, saati ve en az bir gün seçin.", invalidDateRange:"Bitiş tarihi başlangıç tarihinden önce olamaz.", confirmDeleteMedicine:"Bu ilaç kaydını silmek istiyor musunuz?", healthDateTimeRequired:"Tarih ve saat seçmelisin.", healthValueInvalid:"Ölçüm değerlerinden biri geçerli aralıkta değil.", healthValueRequired:"En az bir ölçüm değeri gir.", bloodPressurePairRequired:"Tansiyon için büyük ve küçük tansiyonu birlikte gir.", confirmDeleteHealth:"Bu sağlık ölçümü silinsin mi?", lastMeasurementEmpty:"Son kayıtta gösterilecek ölçüm yok.", categoryExists:"Bu başlık zaten mevcut.", categoryInUse:"Bu başlık altında kayıt olduğu için önce o kayıtları silmelisin.", eventRequired:"Tarih, başlık ve alt başlık seçmelisin.", confirmDeleteEvent:"Bu özel gün kaydı silinsin mi?",
     notificationsUnsupported:"Bu tarayıcı bildirimleri desteklemiyor.", notificationPermissionDenied:"Bildirim izni verilmedi.", notificationFailed:"Bildirim açılamadı", notificationSetup:"Bildirim kurulumu", serviceWorkerStep:"Servis çalışanı", preparingNotifications:"Bildirim sistemi hazırlanıyor...", publicKeyMissing:"Public key bulunamadı.", pushSubscriptionStep:"Push aboneliği", savingSubscriptionStep:"Aboneliği kaydetme", notificationsReady:"Bildirimler ve ilaç saatleri hazır.", notificationsScheduleRetry:"Bildirimler hazır; ilaç saatleri yeniden eşitlenecek.", testSending:"Test bildirimi gönderiliyor...", testSent:"Test bildirimi gönderildi. Telefonunu kontrol et.", testFailed:"Test bildirimi gönderilemedi", scheduledTestSetting:"2 dakika sonrası için zamanlı test kuruluyor...", scheduledTestSet:"Zamanlı test kuruldu. Uygulamayı kapat; yaklaşık 2-3 dakika içinde bildirim gelmeli.", scheduledTestFailed:"Zamanlı test kurulamadı", confirmDeleteAll:"Bu cihazdaki ilaçlar, takvim kayıtları, geçmiş işaretleri, sağlık ölçümleri, profil ve bildirim kaydı silinsin mi?", dataDeleted:"Bu cihazın ilaç, takvim, sağlık, profil ve bildirim verileri silindi.", enableNotificationsHint:"Bildirim almak için Bildirimleri etkinleştir'e dokun.", notificationSystemFailed:"Bildirim sistemi hazırlanamadı",
     categoryLabels:{"Aşı":"Aşı","Rutin Tedavi":"Rutin Tedavi","Kontrol":"Kontrol","Tahlil":"Tahlil","Doktor Randevusu":"Doktor Randevusu","Diğer":"Diğer"},
-    notificationChecking:"Bildirim durumu kontrol ediliyor...", profilePhotoAlt:"Profil fotoğrafı", selectedProfilePhotoAlt:"Seçilen profil fotoğrafı", editMedicineAria:"ilacını düzenle", serviceWorkerUnsupported:"Service Worker desteklenmiyor.", webPushUnsupported:"Bu ortam Web Push desteklemiyor.", publicKeyStep:"Public key", serverHttp:"Sunucu HTTP", dataDeleteFailed:"Veriler silinemedi",
+    notificationChecking:"Bildirim durumu kontrol ediliyor...", profilePhotoAlt:"Profil fotoğrafı", selectedProfilePhotoAlt:"Seçilen profil fotoğrafı", editMedicineAria:"ilacını düzenle", serviceWorkerUnsupported:"Service Worker desteklenmiyor.", webPushUnsupported:"Bu ortam Web Push desteklemiyor.", publicKeyStep:"Public key", serverHttp:"Sunucu HTTP", dataDeleteFailed:"Veriler silinemedi", recordSaveFailed:"İlaç işareti kaydedilemedi. Lütfen depolama alanını kontrol et.",
     aboutHtml:'<p><strong>Sağlığın, cebinde.</strong></p><p>Sağlık Cepte; ilaçlarını, sağlık ölçümlerini ve önemli sağlık tarihlerini tek bir yerde düzenli şekilde takip edebilmen için tasarlandı.</p><p>İlaç saatlerini planlayabilir, tansiyon ve nabız gibi ölçümlerini kaydedebilir, aşı ve kontrol tarihlerini takvimine ekleyebilir, profil ve acil durum bilgilerini saklayabilirsin.</p><p>Amacımız sağlık bilgilerini daha ulaşılabilir, düzenli ve takip edilebilir hale getirmek.</p><p>Uygulama tıbbi değerlendirme veya tedavi önerisi yerine geçmez. İlaç kullanımı ve sağlık kararlarında doktor veya eczacı önerilerini dikkate al.</p>'
   },
   en: {
@@ -812,7 +818,7 @@ const I18N = {
     tabToday:"Today", tabHealth:"Health", tabAdd:"Add", tabCalendar:"Calendar", tabSettings:"Settings",
     createProfile:"Create your profile", edit:"Edit", todayPlan:"Today's plan",
     notificationStatusTitle:"Notification status", enableNotifications:"Enable notifications",
-    viewDay:"Day to display", today:"Today", viewModeAria:"View selection", viewDaily:"Daily", viewWeekly:"Weekly", viewMonthly:"Monthly", remainingDoses:"Remaining doses", takenDoses:"Taken", doseTaken:"Taken", dosePending:"Not taken", doseOverdue:"Time passed — not marked", doseUpcoming:"Not due yet", markDose:"mark dose", previousPeriod:"Previous", nextPeriod:"Next", dailyDetail:"Daily details", periodNoMeds:"No medication scheduled for this period.",
+    viewDay:"Day to display", today:"Today", viewModeAria:"View selection", viewDaily:"Daily", viewWeekly:"Weekly", viewMonthly:"Monthly", remainingDoses:"Remaining doses", doseProgress:"Doses taken", medRemaining:"Remaining doses for this medicine", takenDoses:"Taken", doseTaken:"Taken", dosePending:"Not taken", doseOverdue:"Time passed — not marked", doseUpcoming:"Not due yet", markDose:"mark dose", previousPeriod:"Previous", nextPeriod:"Next", dailyDetail:"Daily details", periodNoMeds:"No medication scheduled for this period.",
     healthMeasurements:"My Health Measurements", healthMeasurementsDesc:"Record blood pressure, pulse and other personal measurements with date and time.",
     addMeasurement:"Add new measurement", measurementHistory:"Measurement history",
     manualAdd:"Manual Add", manualAddDesc:"Choose the type of record you want to add.",
@@ -835,7 +841,7 @@ const I18N = {
     imageOnly:"Please select an image file.", imageTooLarge:"The photo is too large. Choose a photo smaller than 8 MB.", imageReadError:"The photo could not be read.", imageSaveError:"The profile photo could not be stored on this device. Try a smaller photo.", medicineRequired:"Enter a medicine name, time and select at least one day.", invalidDateRange:"The end date cannot be earlier than the start date.", confirmDeleteMedicine:"Do you want to delete this medicine entry?", healthDateTimeRequired:"Select a date and time.", healthValueInvalid:"One of the measurement values is outside the valid range.", healthValueRequired:"Enter at least one measurement value.", bloodPressurePairRequired:"Enter both systolic and diastolic blood pressure.", confirmDeleteHealth:"Delete this health measurement?", lastMeasurementEmpty:"There is no measurement to show in the latest entry.", categoryExists:"This category already exists.", categoryInUse:"This category is in use. Delete its entries first.", eventRequired:"Select a date, category and subtitle.", confirmDeleteEvent:"Delete this special-day entry?",
     notificationsUnsupported:"This browser does not support notifications.", notificationPermissionDenied:"Notification permission was not granted.", notificationFailed:"Notifications could not be enabled", notificationSetup:"Notification setup", serviceWorkerStep:"Service worker", preparingNotifications:"Preparing notification system...", publicKeyMissing:"Public key not found.", pushSubscriptionStep:"Push subscription", savingSubscriptionStep:"Saving subscription", notificationsReady:"Notifications and medication times are ready.", notificationsScheduleRetry:"Notifications are ready; medication times will be synced again.", testSending:"Sending test notification...", testSent:"Test notification sent. Check your phone.", testFailed:"Test notification could not be sent", scheduledTestSetting:"Scheduling a test for 2 minutes from now...", scheduledTestSet:"Scheduled test set. Close the app; the notification should arrive in about 2–3 minutes.", scheduledTestFailed:"Scheduled test could not be set", confirmDeleteAll:"Delete medications, calendar entries, history, health measurements, profile and notification data from this device?", dataDeleted:"Medication, calendar, health, profile and notification data on this device were deleted.", enableNotificationsHint:"Tap Enable notifications to receive notifications.", notificationSystemFailed:"Notification system could not be prepared",
     categoryLabels:{"Aşı":"Vaccine","Rutin Tedavi":"Routine Treatment","Kontrol":"Check-up","Tahlil":"Test","Doktor Randevusu":"Doctor Appointment","Diğer":"Other"},
-    notificationChecking:"Checking notification status...", profilePhotoAlt:"Profile photo", selectedProfilePhotoAlt:"Selected profile photo", editMedicineAria:"edit medicine", serviceWorkerUnsupported:"Service Worker is not supported.", webPushUnsupported:"Web Push is not supported in this environment.", publicKeyStep:"Public key", serverHttp:"Server HTTP", dataDeleteFailed:"Data could not be deleted",
+    notificationChecking:"Checking notification status...", profilePhotoAlt:"Profile photo", selectedProfilePhotoAlt:"Selected profile photo", editMedicineAria:"edit medicine", serviceWorkerUnsupported:"Service Worker is not supported.", webPushUnsupported:"Web Push is not supported in this environment.", publicKeyStep:"Public key", serverHttp:"Server HTTP", dataDeleteFailed:"Data could not be deleted", recordSaveFailed:"The dose mark could not be saved. Check device storage.",
     aboutHtml:'<p><strong>Your health, in your pocket.</strong></p><p>Sağlık Cepte is designed to help you keep your medications, health measurements and important health dates organized in one place.</p><p>You can plan medication times, record measurements such as blood pressure and pulse, add vaccine and check-up dates to your calendar, and keep profile and emergency information.</p><p>Our aim is to make personal health information more accessible, organized and easier to follow.</p><p>This app does not replace medical evaluation or treatment advice. Follow the recommendations of your doctor or pharmacist when making medication and health decisions.</p>'
   },
   de: {
@@ -843,7 +849,7 @@ const I18N = {
     tabToday:"Heute", tabHealth:"Gesundheit", tabAdd:"Hinzufügen", tabCalendar:"Kalender", tabSettings:"Einstellungen",
     createProfile:"Profil erstellen", edit:"Bearbeiten", todayPlan:"Dein heutiger Plan",
     notificationStatusTitle:"Benachrichtigungsstatus", enableNotifications:"Benachrichtigungen aktivieren",
-    viewDay:"Angezeigter Tag", today:"Heute", viewModeAria:"Ansicht auswählen", viewDaily:"Täglich", viewWeekly:"Wöchentlich", viewMonthly:"Monatlich", remainingDoses:"Verbleibende Dosen", takenDoses:"Eingenommen", doseTaken:"Eingenommen", dosePending:"Nicht eingenommen", doseOverdue:"Uhrzeit vorbei — nicht markiert", doseUpcoming:"Noch nicht fällig", markDose:"Dosis markieren", previousPeriod:"Zurück", nextPeriod:"Weiter", dailyDetail:"Tagesdetails", periodNoMeds:"Für diesen Zeitraum sind keine Medikamente eingetragen.",
+    viewDay:"Angezeigter Tag", today:"Heute", viewModeAria:"Ansicht auswählen", viewDaily:"Täglich", viewWeekly:"Wöchentlich", viewMonthly:"Monatlich", remainingDoses:"Verbleibende Dosen", doseProgress:"Eingenommene Dosen", medRemaining:"Verbleibende Dosen dieses Medikaments", takenDoses:"Eingenommen", doseTaken:"Eingenommen", dosePending:"Nicht eingenommen", doseOverdue:"Uhrzeit vorbei — nicht markiert", doseUpcoming:"Noch nicht fällig", markDose:"Dosis markieren", previousPeriod:"Zurück", nextPeriod:"Weiter", dailyDetail:"Tagesdetails", periodNoMeds:"Für diesen Zeitraum sind keine Medikamente eingetragen.",
     healthMeasurements:"Meine Gesundheitswerte", healthMeasurementsDesc:"Erfasse Blutdruck, Puls und weitere persönliche Messwerte mit Datum und Uhrzeit.",
     addMeasurement:"Neue Messung hinzufügen", measurementHistory:"Messverlauf",
     manualAdd:"Manuell hinzufügen", manualAddDesc:"Wähle aus, welche Art von Eintrag du hinzufügen möchtest.",
@@ -866,7 +872,7 @@ const I18N = {
     imageOnly:"Bitte wähle eine Bilddatei aus.", imageTooLarge:"Das Foto ist zu groß. Wähle ein Foto unter 8 MB.", imageReadError:"Das Foto konnte nicht gelesen werden.", imageSaveError:"Das Profilfoto konnte auf diesem Gerät nicht gespeichert werden. Versuche ein kleineres Foto.", medicineRequired:"Gib Medikamentenname und Uhrzeit ein und wähle mindestens einen Tag.", invalidDateRange:"Das Enddatum darf nicht vor dem Startdatum liegen.", confirmDeleteMedicine:"Möchtest du diesen Medikamenteneintrag löschen?", healthDateTimeRequired:"Wähle Datum und Uhrzeit.", healthValueInvalid:"Einer der Messwerte liegt außerhalb des gültigen Bereichs.", healthValueRequired:"Gib mindestens einen Messwert ein.", bloodPressurePairRequired:"Gib systolischen und diastolischen Blutdruck gemeinsam ein.", confirmDeleteHealth:"Diese Gesundheitsmessung löschen?", lastMeasurementEmpty:"Im letzten Eintrag gibt es keinen anzeigbaren Messwert.", categoryExists:"Diese Kategorie existiert bereits.", categoryInUse:"Diese Kategorie wird verwendet. Lösche zuerst die zugehörigen Einträge.", eventRequired:"Wähle Datum, Kategorie und Untertitel.", confirmDeleteEvent:"Diesen besonderen Termin löschen?",
     notificationsUnsupported:"Dieser Browser unterstützt keine Benachrichtigungen.", notificationPermissionDenied:"Die Berechtigung für Benachrichtigungen wurde nicht erteilt.", notificationFailed:"Benachrichtigungen konnten nicht aktiviert werden", notificationSetup:"Benachrichtigungseinrichtung", serviceWorkerStep:"Service Worker", preparingNotifications:"Benachrichtigungssystem wird vorbereitet...", publicKeyMissing:"Öffentlicher Schlüssel wurde nicht gefunden.", pushSubscriptionStep:"Push-Abonnement", savingSubscriptionStep:"Abonnement wird gespeichert", notificationsReady:"Benachrichtigungen und Medikamentenzeiten sind bereit.", notificationsScheduleRetry:"Benachrichtigungen sind bereit; Medikamentenzeiten werden erneut synchronisiert.", testSending:"Testbenachrichtigung wird gesendet...", testSent:"Testbenachrichtigung gesendet. Prüfe dein Smartphone.", testFailed:"Testbenachrichtigung konnte nicht gesendet werden", scheduledTestSetting:"Zeitgesteuerter Test für in 2 Minuten wird eingerichtet...", scheduledTestSet:"Zeitgesteuerter Test eingerichtet. Schließe die App; die Benachrichtigung sollte in etwa 2–3 Minuten eintreffen.", scheduledTestFailed:"Zeitgesteuerter Test konnte nicht eingerichtet werden", confirmDeleteAll:"Medikamente, Kalendereinträge, Verlauf, Gesundheitsmessungen, Profil- und Benachrichtigungsdaten auf diesem Gerät löschen?", dataDeleted:"Medikamenten-, Kalender-, Gesundheits-, Profil- und Benachrichtigungsdaten auf diesem Gerät wurden gelöscht.", enableNotificationsHint:"Tippe auf Benachrichtigungen aktivieren, um Benachrichtigungen zu erhalten.", notificationSystemFailed:"Benachrichtigungssystem konnte nicht vorbereitet werden",
     categoryLabels:{"Aşı":"Impfung","Rutin Tedavi":"Routinebehandlung","Kontrol":"Kontrolle","Tahlil":"Untersuchung","Doktor Randevusu":"Arzttermin","Diğer":"Sonstiges"},
-    notificationChecking:"Benachrichtigungsstatus wird geprüft...", profilePhotoAlt:"Profilfoto", selectedProfilePhotoAlt:"Ausgewähltes Profilfoto", editMedicineAria:"Medikament bearbeiten", serviceWorkerUnsupported:"Service Worker wird nicht unterstützt.", webPushUnsupported:"Web Push wird in dieser Umgebung nicht unterstützt.", publicKeyStep:"Öffentlicher Schlüssel", serverHttp:"Server HTTP", dataDeleteFailed:"Daten konnten nicht gelöscht werden",
+    notificationChecking:"Benachrichtigungsstatus wird geprüft...", profilePhotoAlt:"Profilfoto", selectedProfilePhotoAlt:"Ausgewähltes Profilfoto", editMedicineAria:"Medikament bearbeiten", serviceWorkerUnsupported:"Service Worker wird nicht unterstützt.", webPushUnsupported:"Web Push wird in dieser Umgebung nicht unterstützt.", publicKeyStep:"Öffentlicher Schlüssel", serverHttp:"Server HTTP", dataDeleteFailed:"Daten konnten nicht gelöscht werden", recordSaveFailed:"Die Dosismarkierung konnte nicht gespeichert werden. Prüfe den Gerätespeicher.",
     aboutHtml:'<p><strong>Deine Gesundheit – immer dabei.</strong></p><p>Sağlık Cepte wurde entwickelt, damit du Medikamente, Gesundheitswerte und wichtige Gesundheitstermine übersichtlich an einem Ort verfolgen kannst.</p><p>Du kannst Medikamentenzeiten planen, Werte wie Blutdruck und Puls erfassen, Impf- und Kontrolltermine in den Kalender eintragen sowie Profil- und Notfallinformationen speichern.</p><p>Unser Ziel ist es, persönliche Gesundheitsinformationen leichter zugänglich, übersichtlich und einfacher nachverfolgbar zu machen.</p><p>Die App ersetzt keine medizinische Beurteilung oder Behandlungsempfehlung. Bei Medikamenten und gesundheitlichen Entscheidungen solltest du den Empfehlungen deines Arztes oder Apothekers folgen.</p>'
   }
 };
@@ -1292,14 +1298,15 @@ function daysLabel(days) {
 function toggleDose(day, id, checked) {
   const all = getRecords();
   if (!all[day]) all[day] = {};
-  all[day][id] = checked;
-  // Legacy single-time records used only the medication ID.
-  // Clear that value when a dose is changed so unchecking works reliably.
   const original = meds.find(m => String(m.id) === String(id).split("@")[0]);
-  if (original && medTimes(original).length === 1) {
-    delete all[day][original.id];
+  // The per-time record always takes precedence over historical single-time marks.
+  if (original) delete all[day][original.id];
+  all[day][id] = Boolean(checked);
+  try {
+    localStorage.setItem("records", JSON.stringify(all));
+  } catch (error) {
+    alert(t("recordSaveFailed"));
   }
-  localStorage.setItem("records", JSON.stringify(all));
   render();
 }
 
@@ -1325,10 +1332,21 @@ function doseState(day, time, checked) {
   return {label:t("doseUpcoming"), kind:"waiting"};
 }
 
+function doseIsTaken(o, records) {
+  // An explicit per-dose unchecked mark overrides a migrated single-time record.
+  if (Object.prototype.hasOwnProperty.call(records, o.key)) return records[o.key] === true;
+  return medTimes(o.med).length === 1 && records[o.med.id] === true;
+}
+
 function medicationDone(occurrences, records) {
-  return occurrences.filter(o =>
-    records[o.key] === true || (medTimes(o.med).length === 1 && records[o.med.id] === true)
-  ).length;
+  return occurrences.filter(o => doseIsTaken(o, records)).length;
+}
+
+function remainingForMedicine(day, med, records) {
+  const occurrences = medAppliesToDate(med, day)
+    ? medTimes(med).map(time => ({med, time, key:String(med.id)+"@"+time}))
+    : [];
+  return occurrences.length - medicationDone(occurrences, records);
 }
 
 function render() {
@@ -1366,19 +1384,19 @@ function render() {
       const records=allRecords[s.date] || {};
       const dateText=new Date(s.date+"T12:00:00").toLocaleDateString(locale,{weekday:"long",day:"numeric",month:"long"});
       const doses=entries.length ? entries.map(o => {
-        const checked=records[o.key] === true || (medTimes(o.med).length===1 && records[o.med.id]===true);
+        const checked=doseIsTaken(o, records);
         const key=JSON.stringify(o.key);
         const date=JSON.stringify(s.date);
         const state=doseState(s.date,o.time,checked);
         return '<label class="period-dose">' +
           '<input type="checkbox" '+(checked?'checked ':'')+
           'aria-label="'+safe(o.med.name+" "+o.time+" "+t("markDose"))+'" onchange="toggleDose('+date+','+key+',this.checked)">' +
-          '<span><span class="period-dose-name'+(checked?' taken':'')+'">'+safe(o.med.name)+'</span><span class="period-dose-state '+state.kind+'">'+safe(state.label)+'</span></span>' +
+          '<span><span class="period-dose-name'+(checked?' taken':'')+'">'+safe(o.med.name)+'</span><span class="period-dose-state '+state.kind+'">'+safe(state.label)+'</span><span class="med-count-row">'+safe(t("medRemaining"))+': <strong>'+remainingForMedicine(s.date,o.med,records)+'</strong></span></span>' +
           '<span class="period-dose-time">'+safe(o.time)+'</span></label>';
       }).join(""):'<div class="period-detail-empty">'+safe(t("emptyMedicineDay"))+'</div>';
       return '<section class="period-detail'+(s.date===day?' active':'')+'"><div class="period-detail-head">'+
         '<div class="period-detail-date">'+safe(dateText)+'</div>'+
-        '<span class="period-detail-count">'+safe(t("remainingDoses"))+': '+(s.total-s.done)+'</span></div>'+
+        '<span class="period-detail-count">'+safe(t("doseProgress"))+': '+s.done+' / '+s.total+'<br>'+safe(t("remainingDoses"))+': '+(s.total-s.done)+'</span></div>'+
         '<div>'+doses+'</div></section>';
     }).join("");
     const navigation='<div class="period-nav"><button type="button" class="btn secondary small" onclick="changeViewPeriod(-1)">'+safe(t("previousPeriod"))+'</button><button type="button" class="btn secondary small" onclick="changeViewPeriod(1)">'+safe(t("nextPeriod"))+'</button></div>';
@@ -1397,18 +1415,20 @@ function render() {
     groups[o.time].push(o);
   });
 
-  let html = "";
+  let html = '<div class="card med-dose-summary">' + safe(t("doseProgress")) +
+    ': <strong>' + completed + ' / ' + total + '</strong> · ' +
+    safe(t("remainingDoses")) + ': <strong>' + (total - completed) + '</strong></div>';
   Object.entries(groups).forEach(([time, items]) => {
     html += '<div class="time-block"><div class="time-title">' + safe(time) + '</div>';
     items.forEach(o => {
       const m = o.med;
-      const checked = records[o.key] === true || (medTimes(m).length === 1 && records[m.id] === true);
+      const checked = doseIsTaken(o, records);
       const state = doseState(day,o.time,checked);
       html += '<div class="med">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") +
         ' onchange="toggle(' + JSON.stringify(o.key) + ',this.checked)">' +
         '<button class="med-name ' + (checked ? "done" : "") + '" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name + " " + t("editMedicineAria")) + '">' +
-          safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span><span class="med-dose-status ' + state.kind + '">' + safe(state.label) + '</span></button>' +
+          safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span><span class="med-dose-status ' + state.kind + '">' + safe(state.label) + '</span><span class="med-count-row">' + safe(t("medRemaining")) + ': <strong>' + remainingForMedicine(day,m,records) + '</strong></span></button>' +
         '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')">' + safe(o.time) + '</button>' +
         '<button class="delete" onclick="removeMed(' + JSON.stringify(m.id) + ')">×</button>' +
         '</div>';
@@ -1416,7 +1436,7 @@ function render() {
     html += "</div>";
   });
 
-  document.getElementById("schedule").innerHTML = html ||
+  document.getElementById("schedule").innerHTML = occurrences.length ? html :
     '<div class="card empty">' + safe(t("emptyMedicineDay")) + '</div>';
 
 
