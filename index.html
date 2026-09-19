@@ -197,6 +197,22 @@ html[data-theme="dark"] .view-mode-switch button.active{color:#14213d}
 .period-day-progress{height:5px;margin-top:9px;background:var(--border);border-radius:99px;overflow:hidden}
 .period-day-progress span{display:block;height:100%;background:var(--yellow)}
 .period-nav{display:flex;gap:8px;margin-top:12px}
+.period-list{display:grid;gap:12px}
+.period-detail{border:1px solid var(--border);background:var(--surface);border-radius:16px;overflow:hidden}
+.period-detail.active{border-color:var(--accent)}
+.period-detail-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:var(--surface-2);border-bottom:1px solid var(--border)}
+.period-detail-date{font-weight:850;font-size:14px}
+.period-detail-count{white-space:nowrap;font-weight:850;font-size:13px;color:var(--muted)}
+.period-dose{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 14px;border-top:1px solid var(--border)}
+.period-dose:first-child{border-top:0}
+.period-dose input[type=checkbox]{width:22px;height:22px;margin:0;accent-color:var(--yellow)}
+.period-dose-name{font-weight:700;overflow-wrap:anywhere}
+.period-dose-name.taken{text-decoration:line-through;color:var(--muted)}
+.period-dose-time{font-size:13px;font-weight:800;color:var(--accent);white-space:nowrap}
+.period-dose-state{font-size:11px;color:var(--muted);margin-top:3px}
+.period-detail-empty{padding:12px 14px;color:var(--muted);font-size:13px}
+.period-detail-head button{border:0;background:none;color:var(--accent);font-weight:800;padding:3px 0;text-align:left}
+.period-title{font-weight:850;font-size:14px;margin:0 0 12px}
 .period-nav button{flex:1}
 @media(min-width:580px){.period-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .modal-backdrop{
@@ -758,7 +774,7 @@ const I18N = {
     tabToday:"Bugün", tabHealth:"Sağlık", tabAdd:"Ekle", tabCalendar:"Takvim", tabSettings:"Ayarlar",
     createProfile:"Profilini oluştur", edit:"Düzenle", todayPlan:"Bugünkü planın",
     notificationStatusTitle:"Bildirim durumu", enableNotifications:"Bildirimleri etkinleştir",
-    viewDay:"Görüntülenecek gün", today:"Bugün", viewModeAria:"Görünüm seçimi", viewDaily:"Günlük", viewWeekly:"Haftalık", viewMonthly:"Aylık", previousPeriod:"Önceki", nextPeriod:"Sonraki", dailyDetail:"Günlük ayrıntı", periodNoMeds:"Bu dönemde planlanmış ilaç yok.",
+    viewDay:"Görüntülenecek gün", today:"Bugün", viewModeAria:"Görünüm seçimi", viewDaily:"Günlük", viewWeekly:"Haftalık", viewMonthly:"Aylık", doseTaken:"Alındı", dosePending:"Alınmadı", markDose:"dozunu işaretle", previousPeriod:"Önceki", nextPeriod:"Sonraki", dailyDetail:"Günlük ayrıntı", periodNoMeds:"Bu dönemde planlanmış ilaç yok.",
     healthMeasurements:"Sağlık Ölçümlerim", healthMeasurementsDesc:"Tansiyon, nabız ve diğer kişisel ölçümlerini tarih-saat ile kaydet.",
     addMeasurement:"Yeni ölçüm ekle", measurementHistory:"Geçmiş ölçümler",
     manualAdd:"Manuel Ekle", manualAddDesc:"Eklemek istediğin kayıt türünü seç.",
@@ -789,7 +805,7 @@ const I18N = {
     tabToday:"Today", tabHealth:"Health", tabAdd:"Add", tabCalendar:"Calendar", tabSettings:"Settings",
     createProfile:"Create your profile", edit:"Edit", todayPlan:"Today's plan",
     notificationStatusTitle:"Notification status", enableNotifications:"Enable notifications",
-    viewDay:"Day to display", today:"Today", viewModeAria:"View selection", viewDaily:"Daily", viewWeekly:"Weekly", viewMonthly:"Monthly", previousPeriod:"Previous", nextPeriod:"Next", dailyDetail:"Daily details", periodNoMeds:"No medication scheduled for this period.",
+    viewDay:"Day to display", today:"Today", viewModeAria:"View selection", viewDaily:"Daily", viewWeekly:"Weekly", viewMonthly:"Monthly", doseTaken:"Taken", dosePending:"Not taken", markDose:"mark dose", previousPeriod:"Previous", nextPeriod:"Next", dailyDetail:"Daily details", periodNoMeds:"No medication scheduled for this period.",
     healthMeasurements:"My Health Measurements", healthMeasurementsDesc:"Record blood pressure, pulse and other personal measurements with date and time.",
     addMeasurement:"Add new measurement", measurementHistory:"Measurement history",
     manualAdd:"Manual Add", manualAddDesc:"Choose the type of record you want to add.",
@@ -820,7 +836,7 @@ const I18N = {
     tabToday:"Heute", tabHealth:"Gesundheit", tabAdd:"Hinzufügen", tabCalendar:"Kalender", tabSettings:"Einstellungen",
     createProfile:"Profil erstellen", edit:"Bearbeiten", todayPlan:"Dein heutiger Plan",
     notificationStatusTitle:"Benachrichtigungsstatus", enableNotifications:"Benachrichtigungen aktivieren",
-    viewDay:"Angezeigter Tag", today:"Heute", viewModeAria:"Ansicht auswählen", viewDaily:"Täglich", viewWeekly:"Wöchentlich", viewMonthly:"Monatlich", previousPeriod:"Zurück", nextPeriod:"Weiter", dailyDetail:"Tagesdetails", periodNoMeds:"Für diesen Zeitraum sind keine Medikamente eingetragen.",
+    viewDay:"Angezeigter Tag", today:"Heute", viewModeAria:"Ansicht auswählen", viewDaily:"Täglich", viewWeekly:"Wöchentlich", viewMonthly:"Monatlich", doseTaken:"Eingenommen", dosePending:"Nicht eingenommen", markDose:"Dosis markieren", previousPeriod:"Zurück", nextPeriod:"Weiter", dailyDetail:"Tagesdetails", periodNoMeds:"Für diesen Zeitraum sind keine Medikamente eingetragen.",
     healthMeasurements:"Meine Gesundheitswerte", healthMeasurementsDesc:"Erfasse Blutdruck, Puls und weitere persönliche Messwerte mit Datum und Uhrzeit.",
     addMeasurement:"Neue Messung hinzufügen", measurementHistory:"Messverlauf",
     manualAdd:"Manuell hinzufügen", manualAddDesc:"Wähle aus, welche Art von Eintrag du hinzufügen möchtest.",
@@ -1266,13 +1282,22 @@ function daysLabel(days) {
   return [1,2,3,4,5,6,0].filter(x => d.includes(x)).map(x => names[x]).join(", ");
 }
 
-function toggle(id, checked) {
+function toggleDose(day, id, checked) {
   const all = getRecords();
-  const day = dateInput.value;
   if (!all[day]) all[day] = {};
   all[day][id] = checked;
+  // Legacy single-time records used only the medication ID.
+  // Clear that value when a dose is changed so unchecking works reliably.
+  const original = meds.find(m => String(m.id) === String(id).split("@")[0]);
+  if (original && medTimes(original).length === 1) {
+    delete all[day][original.id];
+  }
   localStorage.setItem("records", JSON.stringify(all));
   render();
+}
+
+function toggle(id, checked) {
+  toggleDose(dateInput.value, id, checked);
 }
 
 function medicationOccurrences(day) {
@@ -1313,19 +1338,32 @@ function render() {
     : new Date(day+"T12:00:00").toLocaleDateString(currentLanguage()==="en"?"en-US":currentLanguage()==="de"?"de-DE":"tr-TR",{month:"long",year:"numeric"});
 
   if (viewMode !== "day") {
-    const heading = '<div class="period-heading">' + safe(document.getElementById("today").textContent) + '</div>';
-    const cards=summaries.map(s => {
-      const weekday=new Date(s.date+"T12:00:00").toLocaleDateString(currentLanguage()==="en"?"en-US":currentLanguage()==="de"?"de-DE":"tr-TR",{weekday:"short",day:"numeric",month:"short"});
-      return '<button type="button" class="period-day'+(s.date===day?' selected':'')+'" onclick="showDateFromPeriod(' + JSON.stringify(s.date) + ')">' +
-        '<div class="period-day-name">' + safe(weekday) + '</div>' +
-        '<div class="period-day-count">' + s.done + ' / ' + s.total + '</div>' +
-        '<div class="period-day-progress"><span style="width:' + (s.total ? s.done/s.total*100:0) + '%"></span></div>' +
-        '</button>';
+    const locale=currentLanguage()==="en"?"en-US":currentLanguage()==="de"?"de-DE":"tr-TR";
+    const heading='<div class="period-title">'+safe(document.getElementById("today").textContent)+'</div>';
+    const sections=summaries.map(s => {
+      const entries=medicationOccurrences(s.date);
+      const records=allRecords[s.date] || {};
+      const dateText=new Date(s.date+"T12:00:00").toLocaleDateString(locale,{weekday:"long",day:"numeric",month:"long"});
+      const doses=entries.length ? entries.map(o => {
+        const checked=records[o.key] === true || (medTimes(o.med).length===1 && records[o.med.id]===true);
+        const key=JSON.stringify(o.key);
+        const date=JSON.stringify(s.date);
+        const state=checked?t("doseTaken"):t("dosePending");
+        return '<label class="period-dose">' +
+          '<input type="checkbox" '+(checked?'checked ':'')+
+          'aria-label="'+safe(o.med.name+" "+o.time+" "+t("markDose"))+'" onchange="toggleDose('+date+','+key+',this.checked)">' +
+          '<span><span class="period-dose-name'+(checked?' taken':'')+'">'+safe(o.med.name)+'</span><span class="period-dose-state">'+safe(state)+'</span></span>' +
+          '<span class="period-dose-time">'+safe(o.time)+'</span></label>';
+      }).join(""):'<div class="period-detail-empty">'+safe(t("emptyMedicineDay"))+'</div>';
+      return '<section class="period-detail'+(s.date===day?' active':'')+'"><div class="period-detail-head">'+
+        '<div class="period-detail-date">'+safe(dateText)+'</div>'+
+        '<span class="period-detail-count">'+s.done+' / '+s.total+'</span></div>'+
+        '<div>'+doses+'</div></section>';
     }).join("");
     const navigation='<div class="period-nav"><button type="button" class="btn secondary small" onclick="changeViewPeriod(-1)">'+safe(t("previousPeriod"))+'</button><button type="button" class="btn secondary small" onclick="changeViewPeriod(1)">'+safe(t("nextPeriod"))+'</button></div>';
     document.getElementById("schedule").innerHTML='<div class="card">'+heading+
-      (total ? '' : '<p class="note">'+safe(t("periodNoMeds"))+'</p>')+
-      '<div class="period-grid">'+cards+'</div>'+navigation+'</div>';
+      (total?'':'<p class="note">'+safe(t("periodNoMeds"))+'</p>')+
+      '<div class="period-list">'+sections+'</div>'+navigation+'</div>';
     return;
   }
 
