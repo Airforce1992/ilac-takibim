@@ -1,8 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="120" fill="#137c70"/>
-  <g transform="rotate(-35 256 256)">
-    <rect x="116" y="196" width="280" height="120" rx="60" fill="#ffffff"/>
-    <path d="M256 196h80a60 60 0 0 1 0 120h-80z" fill="#d9f3ed"/>
-    <path d="M256 196v120" stroke="#137c70" stroke-width="12"/>
+  <rect width="512" height="512" rx="120" fill="#f6f7fb"/>
+  <circle cx="256" cy="256" r="184" fill="#ffffff" stroke="#e7eaf1" stroke-width="10"/>
+  <g transform="rotate(-32 256 256)">
+    <defs>
+      <clipPath id="pill">
+        <rect x="106" y="196" width="300" height="120" rx="60"/>
+      </clipPath>
+    </defs>
+    <g clip-path="url(#pill)">
+      <rect x="106" y="196" width="150" height="120" fill="#f7c948"/>
+      <rect x="256" y="196" width="150" height="120" fill="#14213d"/>
+    </g>
+    <rect x="106" y="196" width="300" height="120" rx="60" fill="none" stroke="#14213d" stroke-width="10"/>
+    <path d="M256 198v116" stroke="#ffffff" stroke-width="8" opacity=".75"/>
   </g>
 </svg>
