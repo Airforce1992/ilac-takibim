@@ -143,10 +143,11 @@ export default {
     if (url.pathname === "/test" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
       const clientId = body?.clientId;
-      if (!validClientId(clientId)) return json({ ok: false, error: "Geçersiz istemci" }, 400);
+      const lang = normalizeLang(body?.lang);
+      if (!validClientId(clientId)) return json({ ok: false, error: pushText(lang, "invalidClient") }, 400);
 
       const raw = await env.PUSH_KV.get(`subscription:${clientId}`);
-      if (!raw) return json({ ok: false, error: "Önce bildirimleri etkinleştirin" }, 404);
+      if (!raw) return json({ ok: false, error: pushText(lang, "enableFirst") }, 404);
 
       const subscription = JSON.parse(raw);
       try {
@@ -167,10 +168,11 @@ export default {
     if (url.pathname === "/scheduled-test" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
       const clientId = body?.clientId;
-      if (!validClientId(clientId)) return json({ ok: false, error: "Geçersiz istemci" }, 400);
+      const lang = normalizeLang(body?.lang);
+      if (!validClientId(clientId)) return json({ ok: false, error: pushText(lang, "invalidClient") }, 400);
 
       const raw = await env.PUSH_KV.get(`subscription:${clientId}`);
-      if (!raw) return json({ ok: false, error: "Önce bildirimleri etkinleştirin" }, 404);
+      if (!raw) return json({ ok: false, error: pushText(lang, "enableFirst") }, 404);
 
       const dueAt = Date.now() + 120000;
       await env.PUSH_KV.put(
@@ -184,7 +186,8 @@ export default {
     if (url.pathname === "/delete" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
       const clientId = body?.clientId;
-      if (!validClientId(clientId)) return json({ ok: false, error: "Geçersiz istemci" }, 400);
+      const lang = normalizeLang(body?.lang);
+      if (!validClientId(clientId)) return json({ ok: false, error: pushText(lang, "invalidClient") }, 400);
       await removeClient(env, clientId);
       return json({ ok: true });
     }
