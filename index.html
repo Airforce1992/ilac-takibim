@@ -80,6 +80,7 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
   <div class="actions">
     <button id="notificationButton" onclick="enableNotifications()">Bildirimleri etkinleştir</button>
     <button class="secondary" onclick="sendTestNotification()">Test bildirimi gönder</button>
+    <button class="secondary" onclick="sendScheduledTest()">2 dk sonra test et</button>
   </div>
 </div>
 
@@ -415,6 +416,23 @@ async function sendTestNotification() {
     status.textContent = "✅ Test bildirimi gönderildi.";
   } catch (error) {
     status.textContent = "❌ Test bildirimi gönderilemedi: " + (error.message || String(error));
+  }
+}
+
+async function sendScheduledTest() {
+  const status = document.getElementById("notificationStatus");
+  try {
+    status.textContent = "⏳ 2 dakika sonrası için zamanlı test kuruluyor...";
+    const response = await fetch(PUSH_SERVER + "/scheduled-test", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clientId: getClientId() })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
+    status.textContent = "✅ Zamanlı test kuruldu. Uygulamayı kapat; yaklaşık 2-3 dakika içinde bildirim gelmeli.";
+  } catch (error) {
+    status.textContent = "❌ Zamanlı test kurulamadı: " + (error.message || String(error));
   }
 }
 
