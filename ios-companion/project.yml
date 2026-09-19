@@ -1,0 +1,26 @@
+name: SaglikCepteHealth
+options:
+  minimumXcodeGenVersion: 2.38.0
+settings:
+  base:
+    SWIFT_VERSION: 5.9
+    IPHONEOS_DEPLOYMENT_TARGET: 17.0
+targets:
+  SaglikCepteHealth:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.saglikcepte.health
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Sağlık Cepte"
+        INFOPLIST_KEY_NSHealthShareUsageDescription: "Sağlık Cepte, izin verdiğiniz Apple Sağlık ölçümlerini telefonunuzda görüntülemek için okuma erişimi ister."
+        CODE_SIGN_ENTITLEMENTS: HealthCompanion.entitlements
+        TARGETED_DEVICE_FAMILY: "1"
+    entitlements:
+      path: HealthCompanion.entitlements
+      properties:
+        com.apple.developer.healthkit: true
