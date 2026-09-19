@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#137c70">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="İlaç Takibim">
+<title>İlaç Takibim</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f2f6f5;color:#203c38;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
+header{background:#137c70;color:white;padding:32px 20px 25px;border-radius:0 0 25px 25px}
+h1{margin:0;font-size:27px}
+small{opacity:.8}
+main{max-width:550px;margin:auto;padding:18px}
+.card{background:white;border-radius:17px;padding:18px;margin-bottom:14px;box-shadow:0 3px 12px #00000008}
+.time{font-size:21px;font-weight:700;color:#137c70;margin-bottom:12px}
+.med{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #eee;font-size:17px}
+.med input{width:23px;height:23px;accent-color:#137c70}
+.done{text-decoration:line-through;color:#999}
+button{border:0;background:#137c70;color:white;padding:13px;border-radius:11px;font-size:15px}
+input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px;max-width:100%}
+.field{width:100%;margin:5px 0 12px}
+.progress{height:10px;background:#dce9e5;border-radius:10px;overflow:hidden}
+.bar{height:100%;background:#27a68e;width:0%}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.delete{background:#fff0f0;color:#c0392b;padding:7px}
+.note{font-size:13px;color:#667}
+</style>
+</head>
+<body>
+<header>
+<h1>💊 İlaç Takibim</h1>
+<p>Günlük ilaç takip uygulamam</p>
+<small id="today"></small>
+</header>
+<main>
+<div class="card">
+<div class="row">
+<h3>Günlük ilerleme</h3>
+<strong id="count">0 / 0</strong>
+</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+</div>
+<div id="schedule"></div>
+<div class="card">
+<h3>➕ Yeni ilaç ekle</h3>
+<input class="field" id="name" placeholder="İlaç adı">
+<label>İlaç saati</label>
+<input class="field" id="time" type="time" value="08:00">
+<button onclick="addMed()">İlaç ekle</button>
+</div>
+<div class="card">
+<h3>📅 Geçmiş günler</h3>
+<input class="field" type="date" id="date" onchange="render()">
+<button onclick="goToday()">Bugüne dön</button>
+</div>
+<p class="note">
+İlaçlarınızı yalnızca doktorunuzun güncel reçetesine göre kullanın.
+Bu sürüm otomatik telefon bildirimi göndermez.
+</p>
+</main>
+<script>
+const defaults=[
+["08:00","Flagyl"],
+["08:00","Erdostin"],
+["08:00","Sinupret"],
+["12:00","Tavanic"],
+["16:00","Flagyl"],
+["16:00","Sinupret"],
+["21:00","Erdostin"],
+["21:00","Sinupret"],
+["00:00","Flagyl"]
+];
+
+let meds;
+try{
+meds=JSON.parse(localStorage.getItem("meds"));
+if(!Array.isArray(meds))meds=null;
+}catch(e){meds=null}
+if(!meds){
+meds=defaults.map((m,i)=>({
+id:i+1,time:m[0],name:m[1]
+}));
+save();
+}
+
+const dateInput=document.getElementById("date");
+function localDate(d=new Date()){
+let y=d.getFullYear();
+let m=String(d.getMonth()+1).padStart(2,"0");
+let day=String(d.getDate()).padStart(2,"0");
+return y+"-"+m+"-"+day;
+}
+dateInput.value=localDate();
+
+function save(){
+localStorage.setItem("meds",JSON.stringify(meds));
+}
+function getRecords(){
+try{return JSON.parse(localStorage.getItem("records"))||{}}
+catch(e){return {}}
+}
+function safe(t){
+return String(t).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",
+'"':"&quot;","'":"&#39;"
+})[c]);
+}
+function toggle(id,checked){
+let all=getRecords();
+let day=dateInput.value;
+if(!all[day])all[day]={};
+all[day][id]=checked;
+localStorage.setItem("records",JSON.stringify(all));
+render();
+}
+function render(){
+let day=dateInput.value;
+let records=getRecords()[day]||{};
+let sorted=[...meds].sort((a,b)=>a.time.localeCompare(b.time));
+let groups={};
+sorted.forEach(m=>{
+if(!groups[m.time])groups[m.time]=[];
+groups[m.time].push(m);
+});
+let html="";
+Object.entries(groups).forEach(([time,items])=>{
+html+='<div class="card"><div class="time">⏰ '+time+'</div>';
+items.forEach(m=>{
+let checked=records[m.id]===true;
+html+='<div class="med">'+
+'<input type="checkbox" '+(checked?"checked":"")+
+' onchange="toggle('+m.id+',this.checked)">'+
+'<span class="'+(checked?"done":"")+'" style="flex:1">'+safe(m.name)+'</span>'+
+'<button class="delete" onclick="removeMed('+m.id+')">×</button>'+
+'</div>';
+});
+html+='</div>';
+});
+document.getElementById("schedule").innerHTML=html||
+'<div class="card">Henüz ilaç eklenmedi.</div>';
+let done=meds.filter(m=>records[m.id]===true).length;
+document.getElementById("count").textContent=done+" / "+meds.length;
+document.getElementById("bar").style.width=
+(meds.length?done/meds.length*100:0)+"%";
+document.getElementById("today").textContent=
+new Date(day+"T12:00:00").toLocaleDateString("tr-TR",{
+day:"numeric",month:"long",year:"numeric",weekday:"long"
+});
+}
+function addMed(){
+let name=document.getElementById("name").value.trim();
+let time=document.getElementById("time").value;
+if(!name||!time){alert("İlaç adı ve saatini girin.");return}
+meds.push({id:Date.now(),name,time});
+save();
+document.getElementById("name").value="";
+render();
+}
+function removeMed(id){
+if(!confirm("Bu ilaç kaydını silmek istiyor musunuz?"))return;
+meds=meds.filter(m=>m.id!==id);
+save();
+render();
+}
+function goToday(){
+dateInput.value=localDate();
+render();
+}
+render();
+</script>
+</body>
+</html>
