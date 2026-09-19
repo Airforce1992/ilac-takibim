@@ -339,7 +339,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
 <main>
   <div class="tabs" aria-label="Ana bölümler">
-    <button class="tab active" data-tab="today" onclick="showTab('today')" data-i18n="tabToday" data-i18n="today">Bugün</button>
+    <button class="tab active" data-tab="today" onclick="showTab('today')" data-i18n="tabToday">Bugün</button>
     <button class="tab" data-tab="health" onclick="showTab('health')" data-i18n="tabHealth">Sağlık</button>
     <button class="tab" data-tab="add" onclick="showTab('add')" data-i18n="tabAdd">Ekle</button>
     <button class="tab" data-tab="calendar" onclick="showTab('calendar')" data-i18n="tabCalendar">Takvim</button>
@@ -411,14 +411,14 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
     <div class="card">
       <details id="medAddDetails">
-        <summary>Yeni ilaç ekle</summary>
+        <summary data-i18n="newMedicine">Yeni ilaç ekle</summary>
         <div class="details-body">
-          <label for="name">İlaç adı</label>
-          <input class="field" id="name" placeholder="Örn. Vitamin D">
-          <label for="time">İlaç saati</label>
+          <label for="name" data-i18n="medicineName">İlaç adı</label>
+          <input class="field" id="name" placeholder="Örn. Vitamin D" data-i18n-placeholder="medicineNamePh">
+          <label for="time" data-i18n="medicineTime">İlaç saati</label>
           <input class="field" id="time" type="time" value="08:00">
 
-          <label>Hangi günler?</label>
+          <label data-i18n="whichDays">Hangi günler?</label>
           <div id="addDays" class="days">
             <label class="daycheck"><input type="checkbox" value="1" checked>Pzt</label>
             <label class="daycheck"><input type="checkbox" value="2" checked>Sal</label>
@@ -431,15 +431,15 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
           <div class="date-grid">
             <div>
-              <label for="startDate">Başlangıç</label>
+              <label for="startDate" data-i18n="startDate">Başlangıç</label>
               <input class="field" id="startDate" type="date">
             </div>
             <div>
-              <label for="endDate">Bitiş (isteğe bağlı)</label>
+              <label for="endDate" data-i18n="endDate">Bitiş (isteğe bağlı)</label>
               <input class="field" id="endDate" type="date">
             </div>
           </div>
-          <button class="btn" onclick="addMed()">İlaç ekle</button>
+          <button class="btn" onclick="addMed()" data-i18n="addMedicine">İlaç ekle</button>
         </div>
       </details>
     </div>
@@ -461,28 +461,28 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
         <summary data-i18n="addMeasurement">Yeni ölçüm ekle</summary>
         <div class="details-body">
           <div class="date-grid">
-            <div><label for="healthDate">Tarih</label><input class="field" id="healthDate" type="date"></div>
-            <div><label for="healthTime">Saat</label><input class="field" id="healthTime" type="time"></div>
+            <div><label for="healthDate" data-i18n="date">Tarih</label><input class="field" id="healthDate" type="date"></div>
+            <div><label for="healthTime" data-i18n="time">Saat</label><input class="field" id="healthTime" type="time"></div>
           </div>
 
           <div class="health-form-grid">
-            <div><label for="sys">Büyük tansiyon</label><input class="field" id="sys" type="number" inputmode="numeric" placeholder="örn. 120"></div>
-            <div><label for="dia">Küçük tansiyon</label><input class="field" id="dia" type="number" inputmode="numeric" placeholder="örn. 80"></div>
-            <div><label for="pulse">Nabız</label><input class="field" id="pulse" type="number" inputmode="numeric" placeholder="atım/dk"></div>
-            <div><label for="spo2">Oksijen (SpO₂)</label><input class="field" id="spo2" type="number" inputmode="decimal" step="0.1" placeholder="%"></div>
-            <div><label for="temp">Ateş</label><input class="field" id="temp" type="number" inputmode="decimal" step="0.1" placeholder="°C"></div>
-            <div><label for="glucose">Kan şekeri</label><input class="field" id="glucose" type="number" inputmode="decimal" step="0.1" placeholder="mg/dL"></div>
-            <div><label for="weight">Kilo</label><input class="field" id="weight" type="number" inputmode="decimal" step="0.1" placeholder="kg"></div>
-            <div><label for="customHealthName">Özel ölçüm</label><input class="field" id="customHealthName" placeholder="örn. Bel çevresi"></div>
+            <div><label for="sys" data-i18n="systolic">Büyük tansiyon</label><input class="field" id="sys" type="number" inputmode="numeric" placeholder="örn. 120"></div>
+            <div><label for="dia" data-i18n="diastolic">Küçük tansiyon</label><input class="field" id="dia" type="number" inputmode="numeric" placeholder="örn. 80"></div>
+            <div><label for="pulse" data-i18n="pulse">Nabız</label><input class="field" id="pulse" type="number" inputmode="numeric" placeholder="atım/dk"></div>
+            <div><label for="spo2" data-i18n="oxygen">Oksijen (SpO₂)</label><input class="field" id="spo2" type="number" inputmode="decimal" step="0.1" placeholder="%"></div>
+            <div><label for="temp" data-i18n="temperature">Ateş</label><input class="field" id="temp" type="number" inputmode="decimal" step="0.1" placeholder="°C"></div>
+            <div><label for="glucose" data-i18n="glucose">Kan şekeri</label><input class="field" id="glucose" type="number" inputmode="decimal" step="0.1" placeholder="mg/dL"></div>
+            <div><label for="weight" data-i18n="weight">Kilo</label><input class="field" id="weight" type="number" inputmode="decimal" step="0.1" placeholder="kg"></div>
+            <div><label for="customHealthName" data-i18n="customMeasurement">Özel ölçüm</label><input class="field" id="customHealthName" placeholder="örn. Bel çevresi"></div>
           </div>
 
-          <label for="customHealthValue">Özel ölçüm değeri</label>
+          <label for="customHealthValue" data-i18n="customMeasurementValue">Özel ölçüm değeri</label>
           <input class="field" id="customHealthValue" placeholder="örn. 82 cm">
 
-          <label for="healthNote">Not</label>
+          <label for="healthNote" data-i18n="note">Not</label>
           <textarea class="field" id="healthNote" rows="2" placeholder="İsteğe bağlı not"></textarea>
 
-          <button class="btn" onclick="addHealthEntry()">Ölçümü kaydet</button>
+          <button class="btn" onclick="addHealthEntry()" data-i18n="saveMeasurement">Ölçümü kaydet</button>
         </div>
       </details>
     </div>
@@ -504,15 +504,15 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       <div class="quick-add-grid">
         <button class="quick-add" onclick="openManualTarget('medicine')">
           <span class="quick-add-icon">💊</span>
-          <span><div class="quick-add-title">İlaç ekle</div><div class="quick-add-desc">İlaç adı, saat, günler ve tarih aralığı ekle.</div></span>
+          <span><div class="quick-add-title" data-i18n="addMedicine">İlaç ekle</div><div class="quick-add-desc" data-i18n="addMedicineDesc">İlaç adı, saat, günler ve tarih aralığı ekle.</div></span>
         </button>
         <button class="quick-add" onclick="openManualTarget('health')">
           <span class="quick-add-icon">♥</span>
-          <span><div class="quick-add-title">Sağlık ölçümü ekle</div><div class="quick-add-desc">Tansiyon, nabız, SpO₂, ateş, şeker, kilo veya özel ölçüm.</div></span>
+          <span><div class="quick-add-title" data-i18n="addHealthMeasurement">Sağlık ölçümü ekle</div><div class="quick-add-desc" data-i18n="addHealthMeasurementDesc">Tansiyon, nabız, SpO₂, ateş, şeker, kilo veya özel ölçüm.</div></span>
         </button>
         <button class="quick-add" onclick="openManualTarget('calendar')">
           <span class="quick-add-icon">▦</span>
-          <span><div class="quick-add-title">Takvime kayıt ekle</div><div class="quick-add-desc">Aşı, rutin tedavi, kontrol, tahlil veya özel başlık.</div></span>
+          <span><div class="quick-add-title" data-i18n="addCalendarEntry">Takvime kayıt ekle</div><div class="quick-add-desc" data-i18n="addCalendarEntryDesc">Aşı, rutin tedavi, kontrol, tahlil veya özel başlık.</div></span>
         </button>
       </div>
     </div>
@@ -541,28 +541,28 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       <div class="special-form">
         <div class="section-subtitle" id="specialSelectedLabel">Seçilen tarih</div>
 
-        <label for="specialCategory">Başlık</label>
+        <label for="specialCategory" data-i18n="category">Başlık</label>
         <select class="field" id="specialCategory"></select>
 
-        <label for="specialTitle">Alt başlık / işlem</label>
-        <input class="field" id="specialTitle" placeholder="Örn. Tetanoz aşısı, kan tahlili">
+        <label for="specialTitle" data-i18n="subtitleAction">Alt başlık / işlem</label>
+        <input class="field" id="specialTitle" placeholder="Örn. Tetanoz aşısı, kan tahlili" data-i18n-placeholder="specialTitlePh">
 
-        <label for="specialTime">Saat (isteğe bağlı)</label>
+        <label for="specialTime" data-i18n="optionalTime">Saat (isteğe bağlı)</label>
         <input class="field" id="specialTime" type="time">
 
-        <label for="specialNote">Not (isteğe bağlı)</label>
-        <textarea class="field" id="specialNote" rows="3" placeholder="Doktor, hastane, hazırlık notu vb."></textarea>
+        <label for="specialNote" data-i18n="optionalNote">Not (isteğe bağlı)</label>
+        <textarea class="field" id="specialNote" rows="3" placeholder="Doktor, hastane, hazırlık notu vb." data-i18n-placeholder="specialNotePh"></textarea>
 
-        <button class="btn" onclick="addSpecialEvent()">Bu tarihe ekle</button>
+        <button class="btn" onclick="addSpecialEvent()" data-i18n="addToDate">Bu tarihe ekle</button>
 
-        <div class="section-subtitle">Kendi başlığını oluştur</div>
+        <div class="section-subtitle" data-i18n="createOwnCategory">Kendi başlığını oluştur</div>
         <div class="category-tools">
-          <input class="field" id="newSpecialCategory" placeholder="Örn. Diş Tedavisi" style="flex:1">
-          <button class="btn secondary" onclick="addSpecialCategory()">Başlık ekle</button>
+          <input class="field" id="newSpecialCategory" placeholder="Örn. Diş Tedavisi" data-i18n-placeholder="customCategoryPh" style="flex:1">
+          <button class="btn secondary" onclick="addSpecialCategory()" data-i18n="addCategory">Başlık ekle</button>
         </div>
         <div id="customCategoryList" class="custom-cats"></div>
 
-        <div class="section-subtitle">Seçilen tarihteki kayıtlar</div>
+        <div class="section-subtitle" data-i18n="selectedDateRecords">Seçilen tarihteki kayıtlar</div>
         <div id="specialEventList" class="event-list"></div>
       </div>
     </div>
@@ -571,27 +571,27 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
   <section id="panel-settings" class="panel">
 
     <div class="card">
-      <h3>Görünüm</h3>
+      <h3 data-i18n="appearance">Görünüm</h3>
       <div class="setting-row">
         <div>
-          <div class="setting-title">Tema</div>
-          <div class="setting-desc">Açık, koyu veya telefon ayarını takip et.</div>
+          <div class="setting-title" data-i18n="theme">Tema</div>
+          <div class="setting-desc" data-i18n="themeDesc">Açık, koyu veya telefon ayarını takip et.</div>
         </div>
         <div class="theme-choice">
-          <button data-theme-choice="light" onclick="setThemeMode('light')">Açık</button>
-          <button data-theme-choice="dark" onclick="setThemeMode('dark')">Koyu</button>
-          <button data-theme-choice="auto" onclick="setThemeMode('auto')">Oto</button>
+          <button data-theme-choice="light" onclick="setThemeMode('light')" data-i18n="light">Açık</button>
+          <button data-theme-choice="dark" onclick="setThemeMode('dark')" data-i18n="dark">Koyu</button>
+          <button data-theme-choice="auto" onclick="setThemeMode('auto')" data-i18n="auto">Oto</button>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <h3>Bildirimler</h3>
-      <p class="note">Anlık ve zamanlı push bildirimlerini buradan kontrol edebilirsin.</p>
+      <h3 data-i18n="notifications">Bildirimler</h3>
+      <p class="note"><span data-i18n="notificationsDesc">Anlık ve zamanlı push bildirimlerini buradan kontrol edebilirsin.</span></p>
       <div class="actions">
         <button class="btn" onclick="enableNotifications()">Bildirimleri etkinleştir</button>
-        <button class="btn secondary" onclick="sendTestNotification()">Test bildirimi</button>
-        <button class="btn secondary" onclick="sendScheduledTest()">2 dk sonra test</button>
+        <button class="btn secondary" onclick="sendTestNotification()" data-i18n="testNotification">Test bildirimi</button>
+        <button class="btn secondary" onclick="sendScheduledTest()" data-i18n="scheduledTest">2 dk sonra test</button>
       </div>
     </div>
 
@@ -642,21 +642,21 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
 <div id="profileModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
   <div class="modal-card">
-    <h3 id="profileModalTitle">Profil bilgileri</h3>
+    <h3 id="profileModalTitle" data-i18n="profileInfo">Profil bilgileri</h3>
 
     <div class="photo-picker">
       <div class="photo-preview" id="profilePhotoPreview"></div>
       <div>
         <input class="file-input" id="profilePhotoInput" type="file" accept="image/*" onchange="handleProfilePhoto(event)">
-        <button class="btn secondary" type="button" onclick="document.getElementById('profilePhotoInput').click()">Fotoğraf seç</button>
-        <button class="btn secondary small" type="button" onclick="removeProfilePhoto()" style="margin-top:7px">Fotoğrafı kaldır</button>
+        <button class="btn secondary" type="button" onclick="document.getElementById('profilePhotoInput').click()" data-i18n="choosePhoto">Fotoğraf seç</button>
+        <button class="btn secondary small" type="button" onclick="removeProfilePhoto()" style="margin-top:7px" data-i18n="removePhoto">Fotoğrafı kaldır</button>
       </div>
     </div>
 
-    <label for="profileFullName">Ad soyad</label>
+    <label for="profileFullName" data-i18n="fullName">Ad soyad</label>
     <input class="field" id="profileFullName" placeholder="Ad soyad">
 
-    <label for="profileBloodType">Kan grubu</label>
+    <label for="profileBloodType" data-i18n="bloodGroup">Kan grubu</label>
     <select class="field" id="profileBloodType">
       <option value="">Seçiniz</option>
       <option value="A+">A Rh+</option>
@@ -669,21 +669,21 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       <option value="0-">0 Rh-</option>
     </select>
 
-    <label for="profileBirthDate">Doğum tarihi</label>
+    <label for="profileBirthDate" data-i18n="birthDate">Doğum tarihi</label>
     <input class="field" id="profileBirthDate" type="date">
 
-    <label for="profilePhone">Telefon (isteğe bağlı)</label>
+    <label for="profilePhone" data-i18n="optionalPhone">Telefon (isteğe bağlı)</label>
     <input class="field" id="profilePhone" type="tel" placeholder="05xx xxx xx xx">
 
-    <label for="profileEmergency">Acil durum kişisi (isteğe bağlı)</label>
+    <label for="profileEmergency" data-i18n="optionalEmergencyContact">Acil durum kişisi (isteğe bağlı)</label>
     <input class="field" id="profileEmergency" placeholder="Ad soyad / telefon">
 
-    <label for="profileNote">Profil notu (isteğe bağlı)</label>
+    <label for="profileNote" data-i18n="optionalProfileNote">Profil notu (isteğe bağlı)</label>
     <textarea class="field" id="profileNote" rows="2" placeholder="Alerji, önemli not vb."></textarea>
 
     <div class="actions">
-      <button class="btn" onclick="saveProfile()">Profili kaydet</button>
-      <button class="btn secondary" onclick="closeProfileModal()">Vazgeç</button>
+      <button class="btn" onclick="saveProfile()" data-i18n="saveProfile">Profili kaydet</button>
+      <button class="btn secondary" onclick="closeProfileModal()" data-i18n="cancel">Vazgeç</button>
     </div>
     <p class="note" style="margin-bottom:0">Profil bilgileri ve fotoğraf yalnızca bu cihazda saklanır.</p>
   </div>
@@ -751,6 +751,14 @@ const I18N = {
     bloodGroup:"Kan grubu", birthDate:"Doğum tarihi", noData:"—",
     emergencyTitle:"Acil sağlık", emergencyDesc:"Acil durumda 112 Acil Çağrı Merkezi'ni ara.", emergencyCall:"112'yi Ara",
     emergencyConfirm:"112 Acil Çağrı Merkezi aranacak. Devam etmek istiyor musun?",
+    newMedicine:"Yeni ilaç ekle", medicineName:"İlaç adı", medicineNamePh:"Örn. Vitamin D", medicineTime:"İlaç saati", whichDays:"Hangi günler?", startDate:"Başlangıç", endDate:"Bitiş (isteğe bağlı)", addMedicine:"İlaç ekle",
+    date:"Tarih", time:"Saat", systolic:"Büyük tansiyon", diastolic:"Küçük tansiyon", pulse:"Nabız", oxygen:"Oksijen (SpO₂)", temperature:"Ateş", glucose:"Kan şekeri", weight:"Kilo", customMeasurement:"Özel ölçüm", customMeasurementValue:"Özel ölçüm değeri", note:"Not", saveMeasurement:"Ölçümü kaydet",
+    addMedicineDesc:"İlaç adı, saat, günler ve tarih aralığı ekle.", addHealthMeasurement:"Sağlık ölçümü ekle", addHealthMeasurementDesc:"Tansiyon, nabız, SpO₂, ateş, şeker, kilo veya özel ölçüm.", addCalendarEntry:"Takvime kayıt ekle", addCalendarEntryDesc:"Aşı, rutin tedavi, kontrol, tahlil veya özel başlık.",
+    category:"Başlık", subtitleAction:"Alt başlık / işlem", specialTitlePh:"Örn. Tetanoz aşısı, kan tahlili", optionalTime:"Saat (isteğe bağlı)", optionalNote:"Not (isteğe bağlı)", specialNotePh:"Doktor, hastane, hazırlık notu vb.", addToDate:"Bu tarihe ekle", createOwnCategory:"Kendi başlığını oluştur", customCategoryPh:"Örn. Diş Tedavisi", addCategory:"Başlık ekle", selectedDateRecords:"Seçilen tarihteki kayıtlar",
+    appearance:"Görünüm", theme:"Tema", themeDesc:"Açık, koyu veya telefon ayarını takip et.", light:"Açık", dark:"Koyu", auto:"Oto", notifications:"Bildirimler", notificationsDesc:"Anlık ve zamanlı push bildirimlerini buradan kontrol edebilirsin.", testNotification:"Test bildirimi", scheduledTest:"2 dk sonra test",
+    profileInfo:"Profil bilgileri", choosePhoto:"Fotoğraf seç", removePhoto:"Fotoğrafı kaldır", fullName:"Ad soyad", optionalPhone:"Telefon (isteğe bağlı)", optionalEmergencyContact:"Acil durum kişisi (isteğe bağlı)", optionalProfileNote:"Profil notu (isteğe bağlı)", saveProfile:"Profili kaydet", cancel:"Vazgeç",
+    emptyMedicineDay:"Bu gün için ilaç kaydı yok.", emptyHealth:"Henüz sağlık ölçümü eklenmedi.", noRecords:"Kayıt bulunmuyor.", selectedDate:"Seçilen tarih", noDateRecords:"Bu tarihte kayıt yok.", noCustomCategory:"Henüz özel başlık eklenmedi.",
+    bp:"Tansiyon", bloodSugar:"Kan şekeri", daysEvery:"Her gün", daysWeekdays:"Hafta içi", daysWeekend:"Hafta sonu", dayNames:["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"],
     aboutHtml:'<p><strong>Sağlığın, cebinde.</strong></p><p>Sağlık Cepte; ilaçlarını, sağlık ölçümlerini ve önemli sağlık tarihlerini tek bir yerde düzenli şekilde takip edebilmen için tasarlandı.</p><p>İlaç saatlerini planlayabilir, tansiyon ve nabız gibi ölçümlerini kaydedebilir, aşı ve kontrol tarihlerini takvimine ekleyebilir, profil ve acil durum bilgilerini saklayabilirsin.</p><p>Amacımız sağlık bilgilerini daha ulaşılabilir, düzenli ve takip edilebilir hale getirmek.</p><p>Uygulama tıbbi değerlendirme veya tedavi önerisi yerine geçmez. İlaç kullanımı ve sağlık kararlarında doktor veya eczacı önerilerini dikkate al.</p>'
   },
   en: {
@@ -769,6 +777,14 @@ const I18N = {
     bloodGroup:"Blood type", birthDate:"Birth date", noData:"—",
     emergencyTitle:"Emergency care", emergencyDesc:"Call the 112 Emergency Call Center in an emergency.", emergencyCall:"Call 112",
     emergencyConfirm:"The 112 Emergency Call Center will be called. Do you want to continue?",
+    newMedicine:"Add new medicine", medicineName:"Medicine name", medicineNamePh:"E.g. Vitamin D", medicineTime:"Medication time", whichDays:"Which days?", startDate:"Start date", endDate:"End date (optional)", addMedicine:"Add medicine",
+    date:"Date", time:"Time", systolic:"Systolic blood pressure", diastolic:"Diastolic blood pressure", pulse:"Pulse", oxygen:"Oxygen (SpO₂)", temperature:"Temperature", glucose:"Blood glucose", weight:"Weight", customMeasurement:"Custom measurement", customMeasurementValue:"Custom measurement value", note:"Note", saveMeasurement:"Save measurement",
+    addMedicineDesc:"Add medicine name, time, days and date range.", addHealthMeasurement:"Add health measurement", addHealthMeasurementDesc:"Blood pressure, pulse, SpO₂, temperature, glucose, weight or a custom measurement.", addCalendarEntry:"Add calendar entry", addCalendarEntryDesc:"Vaccine, routine treatment, check-up, test or custom category.",
+    category:"Category", subtitleAction:"Subtitle / action", specialTitlePh:"E.g. Tetanus vaccine, blood test", optionalTime:"Time (optional)", optionalNote:"Note (optional)", specialNotePh:"Doctor, hospital, preparation note, etc.", addToDate:"Add to this date", createOwnCategory:"Create your own category", customCategoryPh:"E.g. Dental Treatment", addCategory:"Add category", selectedDateRecords:"Records on selected date",
+    appearance:"Appearance", theme:"Theme", themeDesc:"Use light, dark or follow your phone setting.", light:"Light", dark:"Dark", auto:"Auto", notifications:"Notifications", notificationsDesc:"Manage instant and scheduled push notifications here.", testNotification:"Test notification", scheduledTest:"Test in 2 min",
+    profileInfo:"Profile information", choosePhoto:"Choose photo", removePhoto:"Remove photo", fullName:"Full name", optionalPhone:"Phone (optional)", optionalEmergencyContact:"Emergency contact (optional)", optionalProfileNote:"Profile note (optional)", saveProfile:"Save profile", cancel:"Cancel",
+    emptyMedicineDay:"No medication scheduled for this day.", emptyHealth:"No health measurement has been added yet.", noRecords:"No records found.", selectedDate:"Selected date", noDateRecords:"No records on this date.", noCustomCategory:"No custom category added yet.",
+    bp:"Blood pressure", bloodSugar:"Blood glucose", daysEvery:"Every day", daysWeekdays:"Weekdays", daysWeekend:"Weekend", dayNames:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
     aboutHtml:'<p><strong>Your health, in your pocket.</strong></p><p>Sağlık Cepte is designed to help you keep your medications, health measurements and important health dates organized in one place.</p><p>You can plan medication times, record measurements such as blood pressure and pulse, add vaccine and check-up dates to your calendar, and keep profile and emergency information.</p><p>Our aim is to make personal health information more accessible, organized and easier to follow.</p><p>This app does not replace medical evaluation or treatment advice. Follow the recommendations of your doctor or pharmacist when making medication and health decisions.</p>'
   },
   de: {
@@ -787,6 +803,14 @@ const I18N = {
     bloodGroup:"Blutgruppe", birthDate:"Geburtsdatum", noData:"—",
     emergencyTitle:"Notfallhilfe", emergencyDesc:"Rufe im Notfall die Notrufnummer 112 an.", emergencyCall:"112 anrufen",
     emergencyConfirm:"Die Notrufnummer 112 wird gewählt. Möchtest du fortfahren?",
+    newMedicine:"Neues Medikament hinzufügen", medicineName:"Medikamentenname", medicineNamePh:"Z. B. Vitamin D", medicineTime:"Einnahmezeit", whichDays:"An welchen Tagen?", startDate:"Startdatum", endDate:"Enddatum (optional)", addMedicine:"Medikament hinzufügen",
+    date:"Datum", time:"Uhrzeit", systolic:"Systolischer Blutdruck", diastolic:"Diastolischer Blutdruck", pulse:"Puls", oxygen:"Sauerstoff (SpO₂)", temperature:"Temperatur", glucose:"Blutzucker", weight:"Gewicht", customMeasurement:"Eigener Messwert", customMeasurementValue:"Wert", note:"Notiz", saveMeasurement:"Messung speichern",
+    addMedicineDesc:"Medikamentenname, Uhrzeit, Tage und Zeitraum hinzufügen.", addHealthMeasurement:"Gesundheitswert hinzufügen", addHealthMeasurementDesc:"Blutdruck, Puls, SpO₂, Temperatur, Blutzucker, Gewicht oder eigener Messwert.", addCalendarEntry:"Kalendereintrag hinzufügen", addCalendarEntryDesc:"Impfung, Routinebehandlung, Kontrolle, Untersuchung oder eigene Kategorie.",
+    category:"Kategorie", subtitleAction:"Untertitel / Vorgang", specialTitlePh:"Z. B. Tetanusimpfung, Blutuntersuchung", optionalTime:"Uhrzeit (optional)", optionalNote:"Notiz (optional)", specialNotePh:"Arzt, Krankenhaus, Vorbereitungshinweis usw.", addToDate:"Zu diesem Datum hinzufügen", createOwnCategory:"Eigene Kategorie erstellen", customCategoryPh:"Z. B. Zahnbehandlung", addCategory:"Kategorie hinzufügen", selectedDateRecords:"Einträge am ausgewählten Datum",
+    appearance:"Darstellung", theme:"Design", themeDesc:"Hell, dunkel oder der Systemeinstellung folgen.", light:"Hell", dark:"Dunkel", auto:"Auto", notifications:"Benachrichtigungen", notificationsDesc:"Sofortige und zeitgesteuerte Push-Benachrichtigungen verwalten.", testNotification:"Testbenachrichtigung", scheduledTest:"Test in 2 Min.",
+    profileInfo:"Profilinformationen", choosePhoto:"Foto auswählen", removePhoto:"Foto entfernen", fullName:"Vor- und Nachname", optionalPhone:"Telefon (optional)", optionalEmergencyContact:"Notfallkontakt (optional)", optionalProfileNote:"Profilnotiz (optional)", saveProfile:"Profil speichern", cancel:"Abbrechen",
+    emptyMedicineDay:"Für diesen Tag sind keine Medikamente eingetragen.", emptyHealth:"Noch keine Gesundheitsmessung hinzugefügt.", noRecords:"Keine Einträge gefunden.", selectedDate:"Ausgewähltes Datum", noDateRecords:"Für dieses Datum gibt es keine Einträge.", noCustomCategory:"Noch keine eigene Kategorie hinzugefügt.",
+    bp:"Blutdruck", bloodSugar:"Blutzucker", daysEvery:"Jeden Tag", daysWeekdays:"Werktage", daysWeekend:"Wochenende", dayNames:["So","Mo","Di","Mi","Do","Fr","Sa"],
     aboutHtml:'<p><strong>Deine Gesundheit – immer dabei.</strong></p><p>Sağlık Cepte wurde entwickelt, damit du Medikamente, Gesundheitswerte und wichtige Gesundheitstermine übersichtlich an einem Ort verfolgen kannst.</p><p>Du kannst Medikamentenzeiten planen, Werte wie Blutdruck und Puls erfassen, Impf- und Kontrolltermine in den Kalender eintragen sowie Profil- und Notfallinformationen speichern.</p><p>Unser Ziel ist es, persönliche Gesundheitsinformationen leichter zugänglich, übersichtlich und einfacher nachverfolgbar zu machen.</p><p>Die App ersetzt keine medizinische Beurteilung oder Behandlungsempfehlung. Bei Medikamenten und gesundheitlichen Entscheidungen solltest du den Empfehlungen deines Arztes oder Apothekers folgen.</p>'
   }
 };
@@ -809,6 +833,10 @@ function setLanguage(lang) {
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.dataset.i18n;
     if (I18N[lang]?.[key] != null) el.textContent = I18N[lang][key];
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (I18N[lang]?.[key] != null) el.placeholder = I18N[lang][key];
   });
   const about = document.getElementById("aboutText");
   if (about) about.innerHTML = I18N[lang].aboutHtml;
@@ -1100,10 +1128,11 @@ function medAppliesToDate(med, day) {
 
 function daysLabel(days) {
   const d = Array.isArray(days) && days.length ? days : [0,1,2,3,4,5,6];
-  if (d.length === 7) return "Her gün";
-  if (d.length === 5 && [1,2,3,4,5].every(x => d.includes(x))) return "Hafta içi";
-  if (d.length === 2 && [0,6].every(x => d.includes(x))) return "Hafta sonu";
-  return [1,2,3,4,5,6,0].filter(x => d.includes(x)).map(x => DAY_NAMES[x]).join(", ");
+  if (d.length === 7) return t("daysEvery");
+  if (d.length === 5 && [1,2,3,4,5].every(x => d.includes(x))) return t("daysWeekdays");
+  if (d.length === 2 && [0,6].every(x => d.includes(x))) return t("daysWeekend");
+  const names = t("dayNames");
+  return [1,2,3,4,5,6,0].filter(x => d.includes(x)).map(x => names[x]).join(", ");
 }
 
 function toggle(id, checked) {
@@ -1145,7 +1174,7 @@ function render() {
   });
 
   document.getElementById("schedule").innerHTML = html ||
-    '<div class="card empty">Bu gün için ilaç kaydı yok.</div>';
+    '<div class="card empty">' + safe(t("emptyMedicineDay")) + '</div>';
 
   const done = todaysMeds.filter(m => records[m.id] === true).length;
   document.getElementById("count").textContent = done + " / " + todaysMeds.length;
@@ -1328,12 +1357,12 @@ function removeHealthEntry(id) {
 
 function healthChips(entry) {
   const chips = [];
-  if (entry.sys !== "" && entry.dia !== "") chips.push("Tansiyon " + entry.sys + "/" + entry.dia + " mmHg");
-  if (entry.pulse !== "") chips.push("Nabız " + entry.pulse + " /dk");
+  if (entry.sys !== "" && entry.dia !== "") chips.push(t("bp") + " " + entry.sys + "/" + entry.dia + " mmHg");
+  if (entry.pulse !== "") chips.push(t("pulse") + " " + entry.pulse + " /dk");
   if (entry.spo2 !== "") chips.push("SpO₂ " + entry.spo2 + "%");
-  if (entry.temp !== "") chips.push("Ateş " + entry.temp + "°C");
-  if (entry.glucose !== "") chips.push("Şeker " + entry.glucose + " mg/dL");
-  if (entry.weight !== "") chips.push("Kilo " + entry.weight + " kg");
+  if (entry.temp !== "") chips.push(t("temperature") + " " + entry.temp + "°C");
+  if (entry.glucose !== "") chips.push(t("bloodSugar") + " " + entry.glucose + " mg/dL");
+  if (entry.weight !== "") chips.push(t("weight") + " " + entry.weight + " kg");
   if (entry.customName && entry.customValue) chips.push(entry.customName + " " + entry.customValue);
   return chips;
 }
@@ -1346,15 +1375,15 @@ function renderHealth() {
 
   const latestBox = document.getElementById("healthLatest");
   if (!latest) {
-    latestBox.innerHTML = '<div class="empty" style="grid-column:1/-1">Henüz sağlık ölçümü eklenmedi.</div>';
+    latestBox.innerHTML = '<div class="empty" style="grid-column:1/-1">' + safe(t("emptyHealth")) + '</div>';
   } else {
     const stats = [];
-    if (latest.sys !== "" && latest.dia !== "") stats.push(["Tansiyon", latest.sys + "/" + latest.dia, "mmHg"]);
-    if (latest.pulse !== "") stats.push(["Nabız", latest.pulse, "/dk"]);
+    if (latest.sys !== "" && latest.dia !== "") stats.push([t("bp"), latest.sys + "/" + latest.dia, "mmHg"]);
+    if (latest.pulse !== "") stats.push([t("pulse"), latest.pulse, "/dk"]);
     if (latest.spo2 !== "") stats.push(["SpO₂", latest.spo2, "%"]);
-    if (latest.temp !== "") stats.push(["Ateş", latest.temp, "°C"]);
-    if (latest.glucose !== "") stats.push(["Kan şekeri", latest.glucose, "mg/dL"]);
-    if (latest.weight !== "") stats.push(["Kilo", latest.weight, "kg"]);
+    if (latest.temp !== "") stats.push([t("temperature"), latest.temp, "°C"]);
+    if (latest.glucose !== "") stats.push([t("bloodSugar"), latest.glucose, "mg/dL"]);
+    if (latest.weight !== "") stats.push([t("weight"), latest.weight, "kg"]);
     if (latest.customName && latest.customValue) stats.push([latest.customName, latest.customValue, ""]);
 
     latestBox.innerHTML = stats.slice(0,6).map(s =>
@@ -1365,7 +1394,7 @@ function renderHealth() {
 
   const history = document.getElementById("healthHistory");
   if (!sorted.length) {
-    history.innerHTML = '<div class="empty">Kayıt bulunmuyor.</div>';
+    history.innerHTML = '<div class="empty">' + safe(t("noRecords")) + '</div>';
     return;
   }
 
@@ -1459,7 +1488,7 @@ function renderSpecialCategories() {
         '<span class="cat-chip">' + safe(cat) +
         '<button type="button" onclick="removeSpecialCategory(' + JSON.stringify(cat) + ')">×</button></span>'
       ).join("")
-    : '<span class="note">Henüz özel başlık eklenmedi.</span>';
+    : '<span class="note">' + safe(t("noCustomCategory")) + '</span>';
 }
 
 function addSpecialCategory() {
@@ -1577,7 +1606,7 @@ function renderCalendar() {
 
 function renderSpecialEvents() {
   document.getElementById("specialSelectedLabel").textContent =
-    "Seçilen tarih: " + formatTrDate(selectedSpecialDate);
+    t("selectedDate") + ": " + formatTrDate(selectedSpecialDate);
 
   const events = specialEvents
     .filter(e => e.date === selectedSpecialDate)
@@ -1586,7 +1615,7 @@ function renderSpecialEvents() {
   const list = document.getElementById("specialEventList");
 
   if (!events.length) {
-    list.innerHTML = '<div class="empty">Bu tarihte kayıt yok.</div>';
+    list.innerHTML = '<div class="empty">' + safe(t("noDateRecords")) + '</div>';
     return;
   }
 
