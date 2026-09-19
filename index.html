@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#137c70">
+<meta name="theme-color" content="#14213d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -24,106 +24,451 @@
 })();
 </script>
 <style>
+:root{
+  --bg:#f5f6f8;
+  --surface:#ffffff;
+  --surface-2:#f8f9fb;
+  --text:#172033;
+  --muted:#6d7480;
+  --border:#e6e8ee;
+  --navy:#14213d;
+  --navy-2:#22345d;
+  --yellow:#f7c948;
+  --yellow-soft:#fff7d8;
+  --accent:#14213d;
+  --accent-soft:#eef1f7;
+  --danger:#c83d4a;
+  --danger-soft:#fff0f2;
+  --success:#237a57;
+  --success-soft:#eaf7f1;
+  --shadow:0 8px 28px rgba(20,33,61,.07);
+}
+html[data-theme="dark"]{
+  --bg:#0e1420;
+  --surface:#151e2e;
+  --surface-2:#101827;
+  --text:#f5f7fb;
+  --muted:#9da7b7;
+  --border:#28354a;
+  --navy:#f7c948;
+  --navy-2:#e6b72f;
+  --yellow:#f7c948;
+  --yellow-soft:#2a2512;
+  --accent:#f7c948;
+  --accent-soft:#24283a;
+  --danger:#ff7885;
+  --danger-soft:#321b23;
+  --success:#72d1a7;
+  --success-soft:#183128;
+  --shadow:0 10px 34px rgba(0,0,0,.22);
+}
 *{box-sizing:border-box}
-body{margin:0;background:#f2f6f5;color:#203c38;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-header{background:#137c70;color:white;padding:calc(28px + env(safe-area-inset-top)) 20px 25px;border-radius:0 0 25px 25px}
-h1{margin:0;font-size:27px}
-header p{margin:8px 0}
-small{opacity:.85}
-main{max-width:550px;margin:auto;padding:18px}
-.card{background:white;border-radius:17px;padding:18px;margin-bottom:14px;box-shadow:0 3px 12px #00000008}
-.time{font-size:21px;font-weight:700;color:#137c70;margin-bottom:12px}
-.med{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #eee;font-size:17px}
-.med input{width:23px;height:23px;accent-color:#137c70}
-.done{text-decoration:line-through;color:#999}
-button{border:0;background:#137c70;color:white;padding:13px;border-radius:11px;font-size:15px;cursor:pointer}
-button.secondary{background:#eef6f4;color:#137c70}
-button.danger{background:#fff0f0;color:#b7352a}
+html{background:var(--bg)}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  transition:background .2s,color .2s;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app-header{
+  background:var(--surface);
+  padding:calc(18px + env(safe-area-inset-top)) 18px 16px;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.header-inner{max-width:720px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.pill-logo{
+  width:52px;height:26px;border-radius:999px;flex:0 0 auto;
+  background:linear-gradient(90deg,var(--yellow) 0 50%,#14213d 50% 100%);
+  transform:rotate(-28deg);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.45),0 4px 12px rgba(20,33,61,.18);
+}
+html[data-theme="dark"] .pill-logo{background:linear-gradient(90deg,var(--yellow) 0 50%,#213258 50% 100%)}
+.brand-text{min-width:0}
+.brand-text h1{font-size:22px;margin:0;letter-spacing:-.3px}
+.brand-text p{margin:3px 0 0;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-button{
+  width:42px;height:42px;border-radius:13px;border:1px solid var(--border);
+  background:var(--surface-2);color:var(--text);display:grid;place-items:center;font-size:19px
+}
+main{max-width:720px;margin:auto;padding:14px 14px calc(88px + env(safe-area-inset-bottom))}
+.tabs{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--surface);
+  border:1px solid var(--border);padding:6px;border-radius:16px;box-shadow:var(--shadow);margin-bottom:14px
+}
+.tab{
+  border:0;background:transparent;color:var(--muted);padding:11px 8px;border-radius:12px;font-weight:700;font-size:14px
+}
+.tab.active{background:var(--accent);color:#fff}
+html[data-theme="dark"] .tab.active{color:#14213d}
+.panel{display:none}
+.panel.active{display:block}
+.hero{
+  background:linear-gradient(135deg,#14213d 0%,#22345d 100%);
+  color:white;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 12px 30px rgba(20,33,61,.18)
+}
+.hero-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.hero h2{margin:0 0 6px;font-size:19px}
+.hero .date{font-size:13px;opacity:.78}
+.hero-count{font-size:26px;font-weight:800;white-space:nowrap}
+.progress{height:9px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;margin-top:16px}
+.bar{height:100%;background:var(--yellow);width:0%;transition:width .25s}
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:17px;
+  margin-bottom:14px;box-shadow:var(--shadow)
+}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.card h3{margin:0;font-size:17px}
+.muted{color:var(--muted)}
+.note{font-size:13px;color:var(--muted);line-height:1.5}
+.status-box{
+  display:flex;align-items:flex-start;gap:10px;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:14px;padding:12px;margin-bottom:12px
+}
+.status-dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);margin-top:5px;flex:0 0 auto}
+.status{font-size:13px;line-height:1.45;color:var(--muted)}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
-input,select,textarea{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px;max-width:100%;font-family:inherit}
-.field{width:100%;margin:5px 0 12px}
-.progress{height:10px;background:#dce9e5;border-radius:10px;overflow:hidden}
-.bar{height:100%;background:#27a68e;width:0%}
-.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.delete{background:#fff0f0;color:#c0392b;padding:7px}
-.editable{background:transparent;color:inherit;padding:4px 2px;border-radius:8px;text-align:left}
-.editable:hover{background:#f2f6f5}
-.medtime{font-size:14px;color:#137c70;background:#eef6f4;padding:7px 9px;border-radius:9px;white-space:nowrap}
-.modal-backdrop{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px;z-index:999}
-.modal-backdrop.open{display:flex}
-.modal-card{background:white;width:min(460px,100%);border-radius:18px;padding:20px;box-shadow:0 12px 40px #0003}
-.modal-card h3{margin-top:0}
-.days{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 14px}
-.daycheck{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid #d7e5e1;border-radius:10px;padding:9px 6px;background:#f8fbfa;font-size:14px}
-.daycheck input{width:18px;height:18px;accent-color:#137c70}
+.btn{
+  border:0;background:var(--accent);color:#fff;padding:12px 14px;border-radius:12px;font-weight:700;font-size:14px
+}
+html[data-theme="dark"] .btn{color:#14213d}
+.btn.secondary{background:var(--accent-soft);color:var(--text);border:1px solid var(--border)}
+.btn.yellow{background:var(--yellow);color:#14213d}
+.btn.danger{background:var(--danger-soft);color:var(--danger);border:1px solid color-mix(in srgb,var(--danger) 25%, transparent)}
+.btn.small{padding:8px 10px;font-size:13px}
+.time-block{
+  background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 16px;
+  margin-bottom:10px;box-shadow:var(--shadow)
+}
+.time-title{font-size:16px;font-weight:800;color:var(--accent);margin-bottom:6px}
+.med{
+  display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:9px;
+  padding:11px 0;border-top:1px solid var(--border)
+}
+.med:first-of-type{border-top:0}
+.med input[type=checkbox]{width:22px;height:22px;accent-color:var(--yellow)}
+.med-name{
+  border:0;background:transparent;color:var(--text);text-align:left;padding:2px;min-width:0;font-weight:700
+}
+.med-name.done{text-decoration:line-through;color:var(--muted)}
+.medmeta{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:3px}
+.medtime{
+  border:1px solid var(--border);background:var(--accent-soft);color:var(--text);padding:8px 9px;border-radius:10px;font-size:12px
+}
+.delete{border:0;background:var(--danger-soft);color:var(--danger);width:34px;height:34px;border-radius:10px;font-size:18px}
+.empty{text-align:center;color:var(--muted);padding:24px 10px}
+details{border:0}
+summary{
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-weight:800;cursor:pointer
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";font-size:21px;color:var(--accent)}
+details[open] summary::after{content:"−"}
+.details-body{padding-top:16px}
+label{font-size:13px;font-weight:700;color:var(--muted)}
+input,select,textarea{
+  width:100%;padding:12px 13px;border:1px solid var(--border);border-radius:12px;font-size:16px;
+  background:var(--surface-2);color:var(--text);outline:none
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%, transparent)}
+.field{margin:6px 0 13px}
+.days{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:8px 0 14px}
+.daycheck{
+  display:flex;align-items:center;justify-content:center;gap:5px;border:1px solid var(--border);
+  border-radius:11px;padding:9px 5px;background:var(--surface-2);font-size:12px;color:var(--text)
+}
+.daycheck input{width:17px;height:17px;accent-color:var(--yellow)}
 .date-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.medmeta{display:block;font-size:12px;color:#667;margin-top:3px}
-.note{font-size:13px;color:#667;line-height:1.45}
-@media(max-width:380px){.days{grid-template-columns:repeat(2,1fr)}.date-grid{grid-template-columns:1fr}}
-.status{line-height:1.4}
-.empty{text-align:center;color:#667;padding:12px}
-.calendar-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
-.calendar-title{font-weight:700;font-size:18px;text-align:center;flex:1}
-.calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.calendar-weekdays div{text-align:center;font-size:12px;color:#667;padding:4px 0;font-weight:600}
-.calday{position:relative;min-height:42px;border:1px solid #e2ece9;background:#fff;color:#203c38;border-radius:10px;padding:6px 2px;font-size:14px}
-.calday.other{opacity:.35}
-.calday.today{border-color:#137c70;font-weight:700}
-.calday.selected{background:#137c70;color:white;border-color:#137c70}
-.calday.has-event::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#d98b2b;bottom:4px;left:50%;transform:translateX(-50%)}
-.calday.selected.has-event::after{background:white}
-.special-form{margin-top:16px;padding-top:14px;border-top:1px solid #edf2f0}
-.event-list{display:grid;gap:10px;margin-top:12px}
-.event-card{border:1px solid #e2ece9;border-radius:12px;padding:12px;background:#fbfdfc}
+.date-picker-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;
+  padding:18px;z-index:999;overflow:auto
+}
+.modal-backdrop.open{display:flex}
+.modal-card{
+  background:var(--surface);color:var(--text);width:min(480px,100%);border-radius:22px;padding:19px;
+  border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.28);max-height:90vh;overflow:auto
+}
+.modal-card h3{margin:0 0 16px}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:5px 0 12px}
+.calendar-title{font-weight:800;font-size:17px;text-align:center;flex:1}
+.calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.calendar-weekdays div{text-align:center;font-size:11px;color:var(--muted);padding:4px 0;font-weight:700}
+.calday{
+  position:relative;min-height:43px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);
+  border-radius:11px;padding:6px 2px;font-size:13px
+}
+.calday.other{opacity:.32}
+.calday.today{border-color:var(--yellow);box-shadow:inset 0 0 0 1px var(--yellow)}
+.calday.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
+html[data-theme="dark"] .calday.selected{color:#14213d}
+.calday.has-event::after{
+  content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--yellow);
+  bottom:4px;left:50%;transform:translateX(-50%)
+}
+.calday.selected.has-event::after{background:#fff}
+html[data-theme="dark"] .calday.selected.has-event::after{background:#14213d}
+.special-form{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.section-subtitle{margin:14px 0 7px;font-size:13px;font-weight:800;color:var(--text)}
+.event-list{display:grid;gap:9px;margin-top:10px}
+.event-card{border:1px solid var(--border);border-radius:14px;padding:12px;background:var(--surface-2)}
 .event-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.event-type{display:inline-block;background:#eef6f4;color:#137c70;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:600;margin-bottom:6px}
-.event-title{font-weight:700}
-.event-note{font-size:13px;color:#667;margin-top:6px;white-space:pre-wrap}
-.category-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.category-tools .field{margin:5px 0}
+.event-type{display:inline-block;background:var(--yellow-soft);color:var(--text);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;margin-bottom:6px}
+.event-title{font-weight:800}
+.event-note{font-size:12px;color:var(--muted);margin-top:6px;white-space:pre-wrap}
+.category-tools{display:flex;gap:8px;align-items:end;flex-wrap:wrap}
 .custom-cats{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
-.cat-chip{display:flex;align-items:center;gap:4px;background:#f2f6f5;border:1px solid #dfeae7;border-radius:999px;padding:5px 8px;font-size:12px}
-.cat-chip button{background:transparent;color:#b7352a;padding:0 2px;font-size:14px}
-.section-subtitle{margin:14px 0 6px;font-size:14px;font-weight:700;color:#345}
-
+.cat-chip{display:flex;align-items:center;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:5px 8px;font-size:11px}
+.cat-chip button{border:0;background:transparent;color:var(--danger);padding:0 2px}
+.setting-row{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-top:1px solid var(--border)
+}
+.setting-row:first-child{border-top:0}
+.setting-title{font-weight:800;font-size:14px}
+.setting-desc{font-size:12px;color:var(--muted);margin-top:3px}
+.theme-choice{display:flex;gap:6px;background:var(--surface-2);border:1px solid var(--border);padding:4px;border-radius:12px}
+.theme-choice button{border:0;background:transparent;color:var(--muted);padding:8px 9px;border-radius:9px;font-size:12px;font-weight:800}
+.theme-choice button.active{background:var(--accent);color:#fff}
+html[data-theme="dark"] .theme-choice button.active{color:#14213d}
+.bottom-nav{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));
+  width:min(680px,calc(100% - 24px));display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  background:color-mix(in srgb,var(--surface) 94%, transparent);border:1px solid var(--border);
+  box-shadow:0 12px 36px rgba(0,0,0,.18);border-radius:18px;padding:6px;z-index:30;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+.nav-btn{border:0;background:transparent;color:var(--muted);padding:9px 6px;border-radius:13px;font-size:12px;font-weight:800}
+.nav-btn span{display:block;font-size:18px;margin-bottom:2px}
+.nav-btn.active{background:var(--accent);color:#fff}
+html[data-theme="dark"] .nav-btn.active{color:#14213d}
+@media(min-width:700px){.bottom-nav{position:sticky;transform:none;left:auto;bottom:12px;margin:0 auto}}
+@media(max-width:380px){
+  .days{grid-template-columns:repeat(2,1fr)}
+  .date-grid{grid-template-columns:1fr}
+  .med{grid-template-columns:auto 1fr auto}
+  .medtime{grid-column:2/3;width:max-content}
+}
 </style>
 </head>
 <body>
-<header>
-<h1>💊 İlaç Takibim</h1>
-<p>Kendi ilaç programını oluştur, saatinde hatırlat.</p>
-<small id="today"></small>
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="pill-logo" aria-hidden="true"></div>
+      <div class="brand-text">
+        <h1>İlaç Takibim</h1>
+        <p>Kişisel ilaç ve sağlık takvimin</p>
+      </div>
+    </div>
+    <button class="icon-button" id="quickThemeButton" onclick="cycleTheme()" aria-label="Tema değiştir">◐</button>
+  </div>
 </header>
 
 <main>
-<div class="card">
-  <div class="row">
-    <h3>Günlük ilerleme</h3>
-    <strong id="count">0 / 0</strong>
+  <div class="tabs" aria-label="Ana bölümler">
+    <button class="tab active" data-tab="today" onclick="showTab('today')">Bugün</button>
+    <button class="tab" data-tab="calendar" onclick="showTab('calendar')">Takvim</button>
+    <button class="tab" data-tab="settings" onclick="showTab('settings')">Ayarlar</button>
   </div>
-  <div class="progress"><div class="bar" id="bar"></div></div>
-</div>
 
-<div class="card">
-  <h3>🔔 Bildirimler</h3>
-  <p id="notificationStatus" class="status">Bildirim durumu kontrol ediliyor...</p>
-  <div class="actions">
-    <button id="notificationButton" onclick="enableNotifications()">Bildirimleri etkinleştir</button>
-    <button class="secondary" onclick="sendTestNotification()">Test bildirimi gönder</button>
-    <button class="secondary" onclick="sendScheduledTest()">2 dk sonra test et</button>
-  </div>
-</div>
+  <section id="panel-today" class="panel active">
+    <div class="hero">
+      <div class="hero-row">
+        <div>
+          <h2>Bugünkü planın</h2>
+          <div id="today" class="date"></div>
+        </div>
+        <div id="count" class="hero-count">0 / 0</div>
+      </div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+    </div>
 
-<div id="schedule"></div>
+    <div class="card">
+      <div class="card-head">
+        <h3>Bildirim durumu</h3>
+        <span class="status-dot"></span>
+      </div>
+      <div class="status-box">
+        <div class="status-dot"></div>
+        <div id="notificationStatus" class="status">Bildirim durumu kontrol ediliyor...</div>
+      </div>
+      <button id="notificationButton" class="btn yellow" onclick="enableNotifications()">Bildirimleri etkinleştir</button>
+    </div>
+
+    <div class="card">
+      <div class="date-picker-row">
+        <div>
+          <label for="date">Görüntülenecek gün</label>
+          <input class="field" type="date" id="date" onchange="render()">
+        </div>
+        <button class="btn secondary small" onclick="goToday()">Bugün</button>
+      </div>
+    </div>
+
+    <div id="schedule"></div>
+
+    <div class="card">
+      <details>
+        <summary>Yeni ilaç ekle</summary>
+        <div class="details-body">
+          <label for="name">İlaç adı</label>
+          <input class="field" id="name" placeholder="Örn. Vitamin D">
+          <label for="time">İlaç saati</label>
+          <input class="field" id="time" type="time" value="08:00">
+
+          <label>Hangi günler?</label>
+          <div id="addDays" class="days">
+            <label class="daycheck"><input type="checkbox" value="1" checked>Pzt</label>
+            <label class="daycheck"><input type="checkbox" value="2" checked>Sal</label>
+            <label class="daycheck"><input type="checkbox" value="3" checked>Çar</label>
+            <label class="daycheck"><input type="checkbox" value="4" checked>Per</label>
+            <label class="daycheck"><input type="checkbox" value="5" checked>Cum</label>
+            <label class="daycheck"><input type="checkbox" value="6" checked>Cmt</label>
+            <label class="daycheck"><input type="checkbox" value="0" checked>Paz</label>
+          </div>
+
+          <div class="date-grid">
+            <div>
+              <label for="startDate">Başlangıç</label>
+              <input class="field" id="startDate" type="date">
+            </div>
+            <div>
+              <label for="endDate">Bitiş (isteğe bağlı)</label>
+              <input class="field" id="endDate" type="date">
+            </div>
+          </div>
+          <button class="btn" onclick="addMed()">İlaç ekle</button>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="panel-calendar" class="panel">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Özel Günler & Takvim</h3>
+          <div class="note">Aşı, rutin tedavi, kontrol ve kendi sağlık başlıklarını planla.</div>
+        </div>
+      </div>
+
+      <div class="calendar-head">
+        <button class="btn secondary small" onclick="changeCalendarMonth(-1)" aria-label="Önceki ay">‹</button>
+        <div class="calendar-title" id="calendarTitle"></div>
+        <button class="btn secondary small" onclick="changeCalendarMonth(1)" aria-label="Sonraki ay">›</button>
+      </div>
+
+      <div class="calendar-weekdays">
+        <div>Pzt</div><div>Sal</div><div>Çar</div><div>Per</div><div>Cum</div><div>Cmt</div><div>Paz</div>
+      </div>
+      <div id="calendarGrid" class="calendar-grid"></div>
+
+      <div class="special-form">
+        <div class="section-subtitle" id="specialSelectedLabel">Seçilen tarih</div>
+
+        <label for="specialCategory">Başlık</label>
+        <select class="field" id="specialCategory"></select>
+
+        <label for="specialTitle">Alt başlık / işlem</label>
+        <input class="field" id="specialTitle" placeholder="Örn. Tetanoz aşısı, kan tahlili">
+
+        <label for="specialTime">Saat (isteğe bağlı)</label>
+        <input class="field" id="specialTime" type="time">
+
+        <label for="specialNote">Not (isteğe bağlı)</label>
+        <textarea class="field" id="specialNote" rows="3" placeholder="Doktor, hastane, hazırlık notu vb."></textarea>
+
+        <button class="btn" onclick="addSpecialEvent()">Bu tarihe ekle</button>
+
+        <div class="section-subtitle">Kendi başlığını oluştur</div>
+        <div class="category-tools">
+          <input class="field" id="newSpecialCategory" placeholder="Örn. Diş Tedavisi" style="flex:1">
+          <button class="btn secondary" onclick="addSpecialCategory()">Başlık ekle</button>
+        </div>
+        <div id="customCategoryList" class="custom-cats"></div>
+
+        <div class="section-subtitle">Seçilen tarihteki kayıtlar</div>
+        <div id="specialEventList" class="event-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-settings" class="panel">
+    <div class="card">
+      <h3>Görünüm</h3>
+      <div class="setting-row">
+        <div>
+          <div class="setting-title">Tema</div>
+          <div class="setting-desc">Açık, koyu veya telefon ayarını takip et.</div>
+        </div>
+        <div class="theme-choice">
+          <button data-theme-choice="light" onclick="setThemeMode('light')">Açık</button>
+          <button data-theme-choice="dark" onclick="setThemeMode('dark')">Koyu</button>
+          <button data-theme-choice="auto" onclick="setThemeMode('auto')">Oto</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Bildirimler</h3>
+      <p class="note">Anlık ve zamanlı push bildirimlerini buradan kontrol edebilirsin.</p>
+      <div class="actions">
+        <button class="btn" onclick="enableNotifications()">Bildirimleri etkinleştir</button>
+        <button class="btn secondary" onclick="sendTestNotification()">Test bildirimi</button>
+        <button class="btn secondary" onclick="sendScheduledTest()">2 dk sonra test</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Telefona kurulum</h3>
+      <div class="setting-row">
+        <div>
+          <div class="setting-title">iPhone</div>
+          <div class="setting-desc">Safari → Paylaş → Ana Ekrana Ekle. Web Push için iOS 16.4+.</div>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-title">Android</div>
+          <div class="setting-desc">Chrome → Uygulamayı yükle / Ana ekrana ekle → bildirim izni ver.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Gizlilik ve veriler</h3>
+      <p class="note">Hesap açılmaz. Bu cihaz için rastgele kimlik oluşturulur. İlaç programı ve push aboneliği yalnızca hatırlatma amacıyla kullanılır. Özel takvim kayıtları bu cihazda saklanır.</p>
+      <button class="btn danger" onclick="deleteMyData()">Tüm verilerimi sil</button>
+    </div>
+
+    <p class="note">İlaçlarınızı yalnızca doktorunuzun veya eczacınızın güncel talimatına göre kullanın. İlk normal saatli bildirimi doğrulayana kadar mevcut telefon alarmlarınızı açık tutun.</p>
+  </section>
+</main>
+
+<nav class="bottom-nav" aria-label="Alt menü">
+  <button class="nav-btn active" data-nav="today" onclick="showTab('today')"><span>●</span>Bugün</button>
+  <button class="nav-btn" data-nav="calendar" onclick="showTab('calendar')"><span>▦</span>Takvim</button>
+  <button class="nav-btn" data-nav="settings" onclick="showTab('settings')"><span>⚙</span>Ayarlar</button>
+</nav>
 
 <div id="editModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="editTitle">
   <div class="modal-card">
-    <h3 id="editTitle">✏️ İlacı düzenle</h3>
+    <h3 id="editTitle">İlacı düzenle</h3>
     <input type="hidden" id="editId">
+
     <label for="editName">İlaç adı</label>
     <input class="field" id="editName" placeholder="İlaç adı">
+
     <label for="editTime">İlaç saati</label>
     <input class="field" id="editTime" type="time">
+
     <label>Hangi günler?</label>
     <div id="editDays" class="days">
       <label class="daycheck"><input type="checkbox" value="1">Pzt</label>
@@ -134,109 +479,76 @@ input,select,textarea{padding:12px;border:1px solid #ddd;border-radius:9px;font-
       <label class="daycheck"><input type="checkbox" value="6">Cmt</label>
       <label class="daycheck"><input type="checkbox" value="0">Paz</label>
     </div>
+
     <div class="date-grid">
-      <div><label for="editStartDate">Başlangıç</label><input class="field" id="editStartDate" type="date"></div>
-      <div><label for="editEndDate">Bitiş (isteğe bağlı)</label><input class="field" id="editEndDate" type="date"></div>
+      <div>
+        <label for="editStartDate">Başlangıç</label>
+        <input class="field" id="editStartDate" type="date">
+      </div>
+      <div>
+        <label for="editEndDate">Bitiş</label>
+        <input class="field" id="editEndDate" type="date">
+      </div>
     </div>
+
     <div class="actions">
-      <button onclick="saveEdit()">Değişiklikleri kaydet</button>
-      <button class="secondary" onclick="closeEdit()">Vazgeç</button>
+      <button class="btn" onclick="saveEdit()">Kaydet</button>
+      <button class="btn secondary" onclick="closeEdit()">Vazgeç</button>
     </div>
   </div>
 </div>
-
-<div class="card">
-  <h3>➕ Yeni ilaç ekle</h3>
-  <input class="field" id="name" placeholder="İlaç adı">
-  <label for="time">İlaç saati</label>
-  <input class="field" id="time" type="time" value="08:00">
-  <label>Hangi günler?</label>
-  <div id="addDays" class="days">
-    <label class="daycheck"><input type="checkbox" value="1" checked>Pzt</label>
-    <label class="daycheck"><input type="checkbox" value="2" checked>Sal</label>
-    <label class="daycheck"><input type="checkbox" value="3" checked>Çar</label>
-    <label class="daycheck"><input type="checkbox" value="4" checked>Per</label>
-    <label class="daycheck"><input type="checkbox" value="5" checked>Cum</label>
-    <label class="daycheck"><input type="checkbox" value="6" checked>Cmt</label>
-    <label class="daycheck"><input type="checkbox" value="0" checked>Paz</label>
-  </div>
-  <div class="date-grid">
-    <div><label for="startDate">Başlangıç</label><input class="field" id="startDate" type="date"></div>
-    <div><label for="endDate">Bitiş (isteğe bağlı)</label><input class="field" id="endDate" type="date"></div>
-  </div>
-  <button onclick="addMed()">İlaç ekle</button>
-</div>
-
-<div class="card">
-  <h3>📅 Geçmiş günler</h3>
-  <input class="field" type="date" id="date" onchange="render()">
-  <button class="secondary" onclick="goToday()">Bugüne dön</button>
-</div>
-
-<div class="card">
-  <h3>🗓️ Özel Günler & Takvim</h3>
-  <p class="note">Aşı, rutin tedavi, kontrol, tahlil veya kendi oluşturduğun başlıkları seçtiğin tarihe ekleyebilirsin.</p>
-
-  <div class="calendar-head">
-    <button class="secondary" onclick="changeCalendarMonth(-1)" aria-label="Önceki ay">‹</button>
-    <div class="calendar-title" id="calendarTitle"></div>
-    <button class="secondary" onclick="changeCalendarMonth(1)" aria-label="Sonraki ay">›</button>
-  </div>
-
-  <div class="calendar-weekdays">
-    <div>Pzt</div><div>Sal</div><div>Çar</div><div>Per</div><div>Cum</div><div>Cmt</div><div>Paz</div>
-  </div>
-  <div id="calendarGrid" class="calendar-grid"></div>
-
-  <div class="special-form">
-    <div class="section-subtitle" id="specialSelectedLabel">Seçilen tarih</div>
-
-    <label for="specialCategory">Başlık</label>
-    <select class="field" id="specialCategory"></select>
-
-    <label for="specialTitle">Alt başlık / işlem</label>
-    <input class="field" id="specialTitle" placeholder="Örn. Tetanoz aşısı, kan tahlili, fizik tedavi">
-
-    <label for="specialTime">Saat (isteğe bağlı)</label>
-    <input class="field" id="specialTime" type="time">
-
-    <label for="specialNote">Not (isteğe bağlı)</label>
-    <textarea class="field" id="specialNote" rows="3" placeholder="Doktor, hastane, doz, hazırlık notu vb."></textarea>
-
-    <button onclick="addSpecialEvent()">Bu tarihe ekle</button>
-
-    <div class="section-subtitle">Kendi başlığını ekle</div>
-    <div class="category-tools">
-      <input class="field" id="newSpecialCategory" placeholder="Örn. Diş Tedavisi" style="flex:1">
-      <button class="secondary" onclick="addSpecialCategory()">Başlık ekle</button>
-    </div>
-    <div id="customCategoryList" class="custom-cats"></div>
-
-    <div class="section-subtitle">Seçilen tarihteki kayıtlar</div>
-    <div id="specialEventList" class="event-list"></div>
-  </div>
-</div>
-
-<div class="card">
-  <h3>📲 Telefona kurulum</h3>
-  <p class="note"><strong>iPhone:</strong> Safari → Paylaş → Ana Ekrana Ekle. Web Push için iOS 16.4 veya üzeri gerekir.</p>
-  <p class="note"><strong>Android:</strong> Chrome → menü → Ana ekrana ekle / Uygulamayı yükle. Bildirim iznini kabul et.</p>
-</div>
-
-<div class="card">
-  <h3>🔐 Gizlilik ve veriler</h3>
-  <p class="note">Hesap açılmaz. Bu cihaz için rastgele bir kimlik oluşturulur. İlaç adı, saat, saat dilimi ve push aboneliği yalnızca hatırlatma göndermek amacıyla bildirim sunucusunda saklanır.</p>
-  <button class="danger" onclick="deleteMyData()">Tüm verilerimi sil</button>
-</div>
-
-<p class="note">
-İlaçlarınızı yalnızca doktorunuzun veya eczacınızın güncel talimatına göre kullanın.
-İlk normal saatli bildirimin geldiğini doğrulayana kadar mevcut telefon alarmlarınızı açık tutun.
-</p>
-</main>
 
 <script>
 const PUSH_SERVER = "https://ilac-takibim-push.almanpazari.workers.dev";
+const THEME_KEY = "themeMode";
+
+function systemPrefersDark() {
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+function currentThemeMode() {
+  return localStorage.getItem(THEME_KEY) || "auto";
+}
+
+function applyTheme(mode) {
+  const resolved = mode === "auto" ? (systemPrefersDark() ? "dark" : "light") : mode;
+  document.documentElement.dataset.theme = resolved;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", resolved === "dark" ? "#0e1420" : "#14213d");
+  document.querySelectorAll("[data-theme-choice]").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.themeChoice === mode);
+  });
+  const quick = document.getElementById("quickThemeButton");
+  if (quick) quick.textContent = mode === "dark" ? "☾" : mode === "light" ? "☀" : "◐";
+}
+
+function setThemeMode(mode) {
+  localStorage.setItem(THEME_KEY, mode);
+  applyTheme(mode);
+}
+
+function cycleTheme() {
+  const order = ["auto","light","dark"];
+  const current = currentThemeMode();
+  setThemeMode(order[(order.indexOf(current) + 1) % order.length]);
+}
+
+if (window.matchMedia) {
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {
+    if (currentThemeMode() === "auto") applyTheme("auto");
+  });
+}
+
+function showTab(name) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.nav === name));
+  if (name === "calendar") {
+    renderCalendar();
+    renderSpecialEvents();
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 function createClientId() {
   if (crypto.randomUUID) return crypto.randomUUID();
@@ -260,9 +572,8 @@ try {
 } catch {
   meds = null;
 }
-if (!meds) {
-  meds = [];
-}
+if (!meds) meds = [];
+
 let migrated = false;
 meds = meds.map(m => {
   const copy = { ...m };
@@ -271,9 +582,7 @@ meds = meds.map(m => {
   if (typeof copy.endDate !== "string") { copy.endDate = ""; migrated = true; }
   return copy;
 });
-if (migrated || !localStorage.getItem("meds")) {
-  localStorage.setItem("meds", JSON.stringify(meds));
-}
+if (migrated || !localStorage.getItem("meds")) localStorage.setItem("meds", JSON.stringify(meds));
 
 const dateInput = document.getElementById("date");
 
@@ -283,6 +592,7 @@ function localDate(d = new Date()) {
   const day = String(d.getDate()).padStart(2, "0");
   return y + "-" + m + "-" + day;
 }
+
 dateInput.value = localDate();
 document.getElementById("startDate").value = localDate();
 
@@ -356,14 +666,15 @@ function render() {
 
   let html = "";
   Object.entries(groups).forEach(([time, items]) => {
-    html += '<div class="card"><div class="time">⏰ ' + safe(time) + '</div>';
+    html += '<div class="time-block"><div class="time-title">' + safe(time) + '</div>';
     items.forEach(m => {
       const checked = records[m.id] === true;
       html += '<div class="med">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") +
         ' onchange="toggle(' + JSON.stringify(m.id) + ',this.checked)">' +
-        '<button class="editable ' + (checked ? "done" : "") + '" style="flex:1" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name) + ' ilacını düzenle">' + safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span></button>' +
-        '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.time) + ' saatini düzenle">' + safe(m.time) + ' ✏️</button>' +
+        '<button class="med-name ' + (checked ? "done" : "") + '" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name) + ' ilacını düzenle">' +
+          safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span></button>' +
+        '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')">' + safe(m.time) + '</button>' +
         '<button class="delete" onclick="removeMed(' + JSON.stringify(m.id) + ')">×</button>' +
         '</div>';
     });
@@ -371,7 +682,7 @@ function render() {
   });
 
   document.getElementById("schedule").innerHTML = html ||
-    '<div class="card empty">Henüz ilaç eklenmedi. Aşağıdan ilk ilacını ekleyebilirsin.</div>';
+    '<div class="card empty">Bu gün için ilaç kaydı yok.</div>';
 
   const done = todaysMeds.filter(m => records[m.id] === true).length;
   document.getElementById("count").textContent = done + " / " + todaysMeds.length;
@@ -394,7 +705,6 @@ function openEdit(id) {
   document.getElementById("editStartDate").value = med.startDate || "";
   document.getElementById("editEndDate").value = med.endDate || "";
   document.getElementById("editModal").classList.add("open");
-  setTimeout(() => document.getElementById("editName").focus(), 50);
 }
 
 function closeEdit() {
@@ -408,6 +718,7 @@ async function saveEdit() {
   const days = getSelectedDays("editDays");
   const startDate = document.getElementById("editStartDate").value;
   const endDate = document.getElementById("editEndDate").value;
+
   if (!name || !time || !days.length) {
     alert("İlaç adı, saati ve en az bir gün seçin.");
     return;
@@ -416,13 +727,16 @@ async function saveEdit() {
     alert("Bitiş tarihi başlangıç tarihinden önce olamaz.");
     return;
   }
+
   const med = meds.find(m => String(m.id) === String(id));
   if (!med) return;
+
   med.name = name;
   med.time = time;
   med.days = days;
   med.startDate = startDate;
   med.endDate = endDate;
+
   save();
   render();
   closeEdit();
@@ -439,6 +753,7 @@ async function addMed() {
   const days = getSelectedDays("addDays");
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
+
   if (!name || !time || !days.length) {
     alert("İlaç adı, saati ve en az bir gün seçin.");
     return;
@@ -447,6 +762,7 @@ async function addMed() {
     alert("Bitiş tarihi başlangıç tarihinden önce olamaz.");
     return;
   }
+
   meds.push({ id: Date.now(), name, time, days, startDate, endDate });
   save();
   render();
@@ -512,15 +828,19 @@ function renderSpecialCategories() {
   const select = document.getElementById("specialCategory");
   const current = select.value;
   const all = [...DEFAULT_SPECIAL_CATEGORIES, ...customSpecialCategories]
-    .filter((v, i, arr) => v && arr.indexOf(v) === i);
-  select.innerHTML = all.map(cat => '<option value="' + safe(cat) + '">' + safe(cat) + '</option>').join("");
+    .filter((v, idx, arr) => v && arr.indexOf(v) === idx);
+
+  select.innerHTML = all.map(cat =>
+    '<option value="' + safe(cat) + '">' + safe(cat) + '</option>'
+  ).join("");
+
   if (all.includes(current)) select.value = current;
 
   const list = document.getElementById("customCategoryList");
   list.innerHTML = customSpecialCategories.length
     ? customSpecialCategories.map(cat =>
         '<span class="cat-chip">' + safe(cat) +
-        '<button type="button" onclick="removeSpecialCategory(' + JSON.stringify(cat) + ')" aria-label="' + safe(cat) + ' başlığını sil">×</button></span>'
+        '<button type="button" onclick="removeSpecialCategory(' + JSON.stringify(cat) + ')">×</button></span>'
       ).join("")
     : '<span class="note">Henüz özel başlık eklenmedi.</span>';
 }
@@ -529,11 +849,15 @@ function addSpecialCategory() {
   const input = document.getElementById("newSpecialCategory");
   const value = input.value.trim();
   if (!value) return;
-  const all = [...DEFAULT_SPECIAL_CATEGORIES, ...customSpecialCategories].map(v => v.toLocaleLowerCase("tr-TR"));
+
+  const all = [...DEFAULT_SPECIAL_CATEGORIES, ...customSpecialCategories]
+    .map(v => v.toLocaleLowerCase("tr-TR"));
+
   if (all.includes(value.toLocaleLowerCase("tr-TR"))) {
     alert("Bu başlık zaten mevcut.");
     return;
   }
+
   customSpecialCategories.push(value.slice(0, 60));
   input.value = "";
   saveSpecialData();
@@ -574,6 +898,7 @@ function addSpecialEvent() {
   document.getElementById("specialTitle").value = "";
   document.getElementById("specialTime").value = "";
   document.getElementById("specialNote").value = "";
+
   saveSpecialData();
   renderCalendar();
   renderSpecialEvents();
@@ -613,11 +938,12 @@ function renderCalendar() {
   const today = localDate();
 
   let html = "";
-  for (let i = 0; i < 42; i++) {
-    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+  for (let idx = 0; idx < 42; idx++) {
+    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + idx);
     const key = localDate(d);
     const other = d.getMonth() !== m;
     const hasEvent = specialEvents.some(e => e.date === key);
+
     const classes = [
       "calday",
       other ? "other" : "",
@@ -627,7 +953,7 @@ function renderCalendar() {
     ].filter(Boolean).join(" ");
 
     html += '<button type="button" class="' + classes + '" onclick="selectSpecialDate(' +
-      JSON.stringify(key) + ')" aria-label="' + safe(formatTrDate(key)) + '">' + d.getDate() + '</button>';
+      JSON.stringify(key) + ')">' + d.getDate() + '</button>';
   }
   grid.innerHTML = html;
 }
@@ -641,6 +967,7 @@ function renderSpecialEvents() {
     .sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99"));
 
   const list = document.getElementById("specialEventList");
+
   if (!events.length) {
     list.innerHTML = '<div class="empty">Bu tarihte kayıt yok.</div>';
     return;
@@ -651,7 +978,7 @@ function renderSpecialEvents() {
       '<div class="event-top"><div style="min-width:0;flex:1">' +
         '<span class="event-type">' + safe(e.category) + '</span>' +
         '<div class="event-title">' + safe(e.title) + '</div>' +
-        (e.time ? '<div class="medmeta">⏰ ' + safe(e.time) + '</div>' : '') +
+        (e.time ? '<div class="medmeta">' + safe(e.time) + '</div>' : '') +
         (e.note ? '<div class="event-note">' + safe(e.note) + '</div>' : '') +
       '</div>' +
       '<button class="delete" onclick="removeSpecialEvent(' + JSON.stringify(e.id) + ')">×</button>' +
@@ -682,16 +1009,17 @@ async function enableNotifications() {
     if (permission !== "granted") throw new Error("Bildirim izni verilmedi.");
     await subscribeToPush();
   } catch (error) {
-    status.textContent = "❌ " + (error.message || String(error));
+    status.textContent = "Bildirim açılamadı: " + (error.message || String(error));
   }
 }
 
 async function subscribeToPush() {
   const status = document.getElementById("notificationStatus");
   let step = "Bildirim kurulumu";
+
   try {
     step = "Servis çalışanı";
-    status.textContent = "⏳ Bildirim sistemi hazırlanıyor...";
+    status.textContent = "Bildirim sistemi hazırlanıyor...";
     const registration = await registerServiceWorker();
     if (!registration.pushManager) throw new Error("Bu ortam Web Push desteklemiyor.");
 
@@ -704,11 +1032,12 @@ async function subscribeToPush() {
 
     step = "Push aboneliği";
     let subscription = await registration.pushManager.getSubscription();
+
     if (subscription) {
       const existingKey = subscription.options?.applicationServerKey;
       const current = existingKey && new Uint8Array(existingKey);
       if (!current || current.length !== applicationServerKey.length ||
-          Array.from(current).some((value, i) => value !== applicationServerKey[i])) {
+          Array.from(current).some((value, idx) => value !== applicationServerKey[idx])) {
         await subscription.unsubscribe();
         subscription = null;
       }
@@ -730,15 +1059,17 @@ async function subscribeToPush() {
         subscription
       })
     });
+
     if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
 
     const scheduleOk = await syncSchedule();
     status.textContent = scheduleOk
-      ? "✅ Bildirimler ve ilaç saatleri hazır."
-      : "✅ Bildirimler hazır; ilaç saatleri yeniden eşitlenecek.";
+      ? "Bildirimler ve ilaç saatleri hazır."
+      : "Bildirimler hazır; ilaç saatleri yeniden eşitlenecek.";
+
     return true;
   } catch (error) {
-    status.textContent = "❌ " + step + ": " + (error.message || String(error));
+    status.textContent = step + ": " + (error.message || String(error));
     return false;
   }
 }
@@ -770,44 +1101,50 @@ async function syncSchedule() {
 async function sendTestNotification() {
   const status = document.getElementById("notificationStatus");
   try {
-    status.textContent = "⏳ Test bildirimi gönderiliyor...";
+    status.textContent = "Test bildirimi gönderiliyor...";
     const response = await fetch(PUSH_SERVER + "/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ clientId: getClientId() })
     });
+
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
-    status.textContent = "✅ Test bildirimi gönderildi.";
+    status.textContent = "Test bildirimi gönderildi. Telefonunu kontrol et.";
   } catch (error) {
-    status.textContent = "❌ Test bildirimi gönderilemedi: " + (error.message || String(error));
+    status.textContent = "Test bildirimi gönderilemedi: " + (error.message || String(error));
   }
 }
 
 async function sendScheduledTest() {
   const status = document.getElementById("notificationStatus");
   try {
-    status.textContent = "⏳ 2 dakika sonrası için zamanlı test kuruluyor...";
+    status.textContent = "2 dakika sonrası için zamanlı test kuruluyor...";
     const response = await fetch(PUSH_SERVER + "/scheduled-test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ clientId: getClientId() })
     });
+
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
-    status.textContent = "✅ Zamanlı test kuruldu. Uygulamayı kapat; yaklaşık 2-3 dakika içinde bildirim gelmeli.";
+
+    status.textContent = "Zamanlı test kuruldu. Uygulamayı kapat; yaklaşık 2-3 dakika içinde bildirim gelmeli.";
   } catch (error) {
-    status.textContent = "❌ Zamanlı test kurulamadı: " + (error.message || String(error));
+    status.textContent = "Zamanlı test kurulamadı: " + (error.message || String(error));
   }
 }
 
 async function deleteMyData() {
-  if (!confirm("Bu cihazdaki ilaçlar, geçmiş işaretleri ve bildirim kaydı silinsin mi?")) return;
+  if (!confirm("Bu cihazdaki ilaçlar, takvim kayıtları, geçmiş işaretleri ve bildirim kaydı silinsin mi?")) return;
+
   const status = document.getElementById("notificationStatus");
+
   try {
     const clientId = getClientId();
     const registration = await navigator.serviceWorker.ready.catch(() => null);
     const subscription = registration ? await registration.pushManager?.getSubscription() : null;
+
     if (subscription) await subscription.unsubscribe();
 
     const response = await fetch(PUSH_SERVER + "/delete", {
@@ -815,6 +1152,7 @@ async function deleteMyData() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ clientId })
     });
+
     if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
 
     localStorage.removeItem("meds");
@@ -822,21 +1160,25 @@ async function deleteMyData() {
     localStorage.removeItem("clientId");
     localStorage.removeItem("specialEvents");
     localStorage.removeItem("customSpecialCategories");
+
     meds = [];
     specialEvents = [];
     customSpecialCategories = [];
+
     save();
     saveSpecialData();
     render();
     renderSpecialCategories();
     renderCalendar();
     renderSpecialEvents();
-    status.textContent = "✅ Bu cihazın ilaç ve bildirim verileri silindi.";
+
+    status.textContent = "Bu cihazın ilaç, takvim ve bildirim verileri silindi.";
   } catch (error) {
-    status.textContent = "❌ Veriler silinemedi: " + (error.message || String(error));
+    status.textContent = "Veriler silinemedi: " + (error.message || String(error));
   }
 }
 
+applyTheme(currentThemeMode());
 render();
 renderSpecialCategories();
 renderCalendar();
@@ -845,6 +1187,7 @@ renderSpecialEvents();
 window.addEventListener("load", async () => {
   try {
     await registerServiceWorker();
+
     if ("Notification" in window && Notification.permission === "granted") {
       await subscribeToPush();
     } else {
