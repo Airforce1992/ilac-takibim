@@ -253,22 +253,33 @@ function base64UrlToBytes(value) {
 
 async function subscribeToPush() {
   const status = document.getElementById("notificationStatus");
+  let step = "Bildirim izni";
   try {
     if (Notification.permission !== "granted") {
       status.textContent = "Önce bildirim izni vermelisin.";
       return;
     }
+    step = "Servis çalışanı";
+    status.textContent = "⏳ 1/4 Servis çalışanı kontrol ediliyor...";
     const registration = await navigator.serviceWorker.ready;
     if (!registration.pushManager) throw new Error("Bu ortam Web Push desteklemiyor.");
-    const keyResponse = await fetch(PUSH_SERVER + "/vapid-public-key");
-    if (!keyResponse.ok) throw new Error("Bildirim sunucusuna ulaşılamadı.");
+
+    step = "Public key bağlantısı";
+    status.textContent = "⏳ 2/4 Public key alınıyor...";
+    const keyResponse = await fetch(PUSH_SERVER + "/vapid-public-key", { cache: "no-store" });
+    if (!keyResponse.ok) throw new Error("Sunucu HTTP " + keyResponse.status);
     const { publicKey } = await keyResponse.json();
     if (!publicKey) throw new Error("Sunucuda public key bulunamadı.");
     const applicationServerKey = base64UrlToBytes(publicKey);
+
+    step = "iPhone push aboneliği";
+    status.textContent = "⏳ 3/4 iPhone push aboneliği oluşturuluyor...";
     let subscription = await registration.pushManager.getSubscription();
     if (subscription) {
       const existingKey = subscription.options?.applicationServerKey;
-      if (!existingKey || Array.from(new Uint8Array(existingKey)).some((v, i) => v !== applicationServerKey[i])) {
+      const current = existingKey && new Uint8Array(existingKey);
+      if (!current || current.length !== applicationServerKey.length ||
+          Array.from(current).some((value, i) => value !== applicationServerKey[i])) {
         await subscription.unsubscribe();
         subscription = null;
       }
@@ -279,15 +290,18 @@ async function subscribeToPush() {
         applicationServerKey
       });
     }
+
+    step = "Cloudflare abonelik kaydı";
+    status.textContent = "⏳ 4/4 Abonelik sunucuya kaydediliyor...";
     const response = await fetch(PUSH_SERVER + "/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(subscription)
     });
-    if (!response.ok) throw new Error("Abonelik sunucuya kaydedilemedi (" + response.status + ").");
-    status.textContent = "✅ Push aboneliğin sunucuya kaydedildi. Test bildirimi henüz gönderilmedi.";
+    if (!response.ok) throw new Error("Sunucu HTTP " + response.status);
+    status.textContent = "✅ Push aboneliği sunucuya kaydedildi. Test bildirimi henüz gönderilmedi.";
   } catch (error) {
-    status.textContent = "❌ Push aboneliği kurulamadı: " + error.message;
+    status.textContent = "❌ " + step + ": " + (error.message || String(error));
   }
 }
 
