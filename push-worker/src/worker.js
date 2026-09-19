@@ -25,12 +25,15 @@ function getLocalParts(date, timeZone) {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
+    weekday: "short",
     hourCycle: "h23",
   }).formatToParts(date);
   const map = Object.fromEntries(parts.map(p => [p.type, p.value]));
+  const weekdayMap = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
   return {
     date: `${map.year}-${map.month}-${map.day}`,
     time: `${map.hour}:${map.minute}`,
+    weekday: weekdayMap[map.weekday],
   };
 }
 
@@ -82,7 +85,16 @@ export default {
       const meds = Array.isArray(body?.meds) ? body.meds
         .filter(m => /^([01]\d|2[0-3]):[0-5]\d$/.test(String(m?.time || "")) && String(m?.name || "").trim())
         .slice(0, 100)
-        .map(m => ({ time: String(m.time), name: String(m.name).trim().slice(0, 120) })) : [];
+        .map(m => ({
+          time: String(m.time),
+          name: String(m.name).trim().slice(0, 120),
+          days: Array.isArray(m.days)
+            ? [...new Set(m.days.map(Number).filter(d => Number.isInteger(d) && d >= 0 && d <= 6))]
+            : [0,1,2,3,4,5,6],
+          startDate: /^\d{4}-\d{2}-\d{2}$/.test(String(m.startDate || "")) ? String(m.startDate) : "",
+          endDate: /^\d{4}-\d{2}-\d{2}$/.test(String(m.endDate || "")) ? String(m.endDate) : ""
+        }))
+        .map(m => ({ ...m, days: m.days.length ? m.days : [0,1,2,3,4,5,6] })) : [];
 
       await env.PUSH_KV.put(
         `schedule:${clientId}`,
@@ -212,7 +224,13 @@ export default {
             local = getLocalParts(new Date(controller.scheduledTime), "Europe/Istanbul");
           }
 
-          const due = meds.filter(m => m.time === local.time);
+          const due = meds.filter(m => {
+            const days = Array.isArray(m.days) && m.days.length ? m.days : [0,1,2,3,4,5,6];
+            if (m.time !== local.time || !days.includes(local.weekday)) return false;
+            if (m.startDate && local.date < m.startDate) return false;
+            if (m.endDate && local.date > m.endDate) return false;
+            return true;
+          });
           if (!due.length) continue;
 
           const sentKey = `sent:${clientId}:${local.date}:${local.time}`;
