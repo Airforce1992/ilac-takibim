@@ -50,6 +50,9 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
   <button id="notificationButton" onclick="enableNotifications()">
     Bildirimleri etkinleştir
   </button>
+  <button id="testNotificationButton" onclick="sendTestNotification()" style="margin-left:8px">
+    Test bildirimi gönder
+  </button>
 </div>
 <div id="schedule"></div>
 <div class="card">
@@ -302,6 +305,19 @@ async function subscribeToPush() {
     status.textContent = "✅ Push aboneliği sunucuya kaydedildi. Test bildirimi henüz gönderilmedi.";
   } catch (error) {
     status.textContent = "❌ " + step + ": " + (error.message || String(error));
+  }
+}
+
+async function sendTestNotification() {
+  const status = document.getElementById("notificationStatus");
+  try {
+    status.textContent = "⏳ Test bildirimi gönderiliyor...";
+    const response = await fetch(PUSH_SERVER + "/test", { method: "POST" });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || ("Sunucu HTTP " + response.status));
+    status.textContent = "✅ Test bildirimi gönderildi. iPhone bildirimini kontrol et.";
+  } catch (error) {
+    status.textContent = "❌ Test bildirimi gönderilemedi: " + (error.message || String(error));
   }
 }
 
