@@ -33,6 +33,13 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
 .bar{height:100%;background:#27a68e;width:0%}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .delete{background:#fff0f0;color:#c0392b;padding:7px}
+.editable{background:transparent;color:inherit;padding:4px 2px;border-radius:8px;text-align:left}
+.editable:hover{background:#f2f6f5}
+.medtime{font-size:14px;color:#137c70;background:#eef6f4;padding:7px 9px;border-radius:9px;white-space:nowrap}
+.modal-backdrop{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px;z-index:999}
+.modal-backdrop.open{display:flex}
+.modal-card{background:white;width:min(460px,100%);border-radius:18px;padding:20px;box-shadow:0 12px 40px #0003}
+.modal-card h3{margin-top:0}
 .note{font-size:13px;color:#667;line-height:1.45}
 .status{line-height:1.4}
 .empty{text-align:center;color:#667;padding:12px}
@@ -64,6 +71,21 @@ input,select{padding:12px;border:1px solid #ddd;border-radius:9px;font-size:16px
 </div>
 
 <div id="schedule"></div>
+
+<div id="editModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+  <div class="modal-card">
+    <h3 id="editTitle">✏️ İlacı düzenle</h3>
+    <input type="hidden" id="editId">
+    <label for="editName">İlaç adı</label>
+    <input class="field" id="editName" placeholder="İlaç adı">
+    <label for="editTime">İlaç saati</label>
+    <input class="field" id="editTime" type="time">
+    <div class="actions">
+      <button onclick="saveEdit()">Değişiklikleri kaydet</button>
+      <button class="secondary" onclick="closeEdit()">Vazgeç</button>
+    </div>
+  </div>
+</div>
 
 <div class="card">
   <h3>➕ Yeni ilaç ekle</h3>
@@ -180,7 +202,8 @@ function render() {
       html += '<div class="med">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") +
         ' onchange="toggle(' + JSON.stringify(m.id) + ',this.checked)">' +
-        '<span class="' + (checked ? "done" : "") + '" style="flex:1">' + safe(m.name) + '</span>' +
+        '<button class="editable ' + (checked ? "done" : "") + '" style="flex:1" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name) + ' ilacını düzenle">' + safe(m.name) + '</button>' +
+        '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.time) + ' saatini düzenle">' + safe(m.time) + ' ✏️</button>' +
         '<button class="delete" onclick="removeMed(' + JSON.stringify(m.id) + ')">×</button>' +
         '</div>';
     });
@@ -200,6 +223,42 @@ function render() {
       day:"numeric", month:"long", year:"numeric", weekday:"long"
     });
 }
+
+function openEdit(id) {
+  const med = meds.find(m => String(m.id) === String(id));
+  if (!med) return;
+  document.getElementById("editId").value = med.id;
+  document.getElementById("editName").value = med.name;
+  document.getElementById("editTime").value = med.time;
+  document.getElementById("editModal").classList.add("open");
+  setTimeout(() => document.getElementById("editName").focus(), 50);
+}
+
+function closeEdit() {
+  document.getElementById("editModal").classList.remove("open");
+}
+
+async function saveEdit() {
+  const id = document.getElementById("editId").value;
+  const name = document.getElementById("editName").value.trim();
+  const time = document.getElementById("editTime").value;
+  if (!name || !time) {
+    alert("İlaç adı ve saatini girin.");
+    return;
+  }
+  const med = meds.find(m => String(m.id) === String(id));
+  if (!med) return;
+  med.name = name;
+  med.time = time;
+  save();
+  render();
+  closeEdit();
+  await syncSchedule();
+}
+
+document.getElementById("editModal").addEventListener("click", event => {
+  if (event.target.id === "editModal") closeEdit();
+});
 
 async function addMed() {
   const name = document.getElementById("name").value.trim();
