@@ -237,6 +237,26 @@ html[data-theme="dark"] .calday.selected.has-event::after{background:#14213d}
 .profile-chip{background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:6px 9px;font-size:12px;font-weight:800}
 .blood-chip{background:var(--yellow-soft);color:var(--text)}
 .profile-edit{flex:0 0 auto}
+.emergency-call-card{
+  border:1px solid color-mix(in srgb,var(--danger) 30%, var(--border));
+  background:linear-gradient(135deg,var(--danger-soft),var(--surface));
+}
+.emergency-call-row{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.emergency-call-info{display:flex;align-items:center;gap:12px;min-width:0}
+.emergency-call-icon{
+  width:46px;height:46px;border-radius:14px;background:var(--danger);color:white;
+  display:grid;place-items:center;font-size:21px;flex:0 0 auto
+}
+.emergency-call-title{font-weight:900;font-size:16px}
+.emergency-call-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+.emergency-call-btn{
+  border:0;background:var(--danger);color:white;padding:12px 14px;border-radius:12px;
+  font-weight:900;white-space:nowrap
+}
+@media(max-width:430px){
+  .emergency-call-row{align-items:stretch;flex-direction:column}
+  .emergency-call-btn{width:100%}
+}
 .photo-picker{display:flex;align-items:center;gap:12px;margin:8px 0 14px}
 .photo-preview{width:84px;height:84px;border-radius:22px;overflow:hidden;background:var(--yellow-soft);border:1px solid var(--border);display:grid;place-items:center}
 .photo-preview img{width:100%;height:100%;object-fit:cover}
@@ -326,6 +346,19 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
           </div>
         </div>
         <button class="btn secondary small profile-edit" onclick="openProfileModal()" data-i18n="edit">Düzenle</button>
+      </div>
+    </div>
+
+    <div class="card emergency-call-card">
+      <div class="emergency-call-row">
+        <div class="emergency-call-info">
+          <div class="emergency-call-icon" aria-hidden="true">☎</div>
+          <div>
+            <div class="emergency-call-title" data-i18n="emergencyTitle">Acil sağlık</div>
+            <div class="emergency-call-desc" data-i18n="emergencyDesc">Acil durumda 112 Acil Çağrı Merkezi'ni ara.</div>
+          </div>
+        </div>
+        <button class="emergency-call-btn" onclick="callEmergency()" data-i18n="emergencyCall">112'yi Ara</button>
       </div>
     </div>
 
@@ -719,6 +752,8 @@ const I18N = {
     aboutTitle:"Hakkında", deleteAllData:"Tüm verilerimi sil",
     medicalDisclaimer:"İlaçlarınızı yalnızca doktorunuzun veya eczacınızın güncel talimatına göre kullanın. İlk normal saatli bildirimi doğrulayana kadar mevcut telefon alarmlarınızı açık tutun.",
     bloodGroup:"Kan grubu", birthDate:"Doğum tarihi", noData:"—",
+    emergencyTitle:"Acil sağlık", emergencyDesc:"Acil durumda 112 Acil Çağrı Merkezi'ni ara.", emergencyCall:"112'yi Ara",
+    emergencyConfirm:"112 Acil Çağrı Merkezi aranacak. Devam etmek istiyor musun?",
     aboutHtml:'<p><strong>Sağlığın, cebinde.</strong></p><p>Sağlık Cepte; ilaçlarını, sağlık ölçümlerini ve önemli sağlık tarihlerini tek bir yerde düzenli şekilde takip edebilmen için tasarlandı.</p><p>İlaç saatlerini planlayabilir, tansiyon ve nabız gibi ölçümlerini kaydedebilir, aşı ve kontrol tarihlerini takvimine ekleyebilir, profil ve acil durum bilgilerini saklayabilirsin.</p><p>Amacımız sağlık bilgilerini daha ulaşılabilir, düzenli ve takip edilebilir hale getirmek.</p><p>Uygulama tıbbi değerlendirme veya tedavi önerisi yerine geçmez. İlaç kullanımı ve sağlık kararlarında doktor veya eczacı önerilerini dikkate al.</p>'
   },
   en: {
@@ -735,6 +770,8 @@ const I18N = {
     aboutTitle:"About", deleteAllData:"Delete all my data",
     medicalDisclaimer:"Use medications only according to the current instructions of your doctor or pharmacist. Keep your existing phone alarms active until you verify the first regular scheduled notification.",
     bloodGroup:"Blood type", birthDate:"Birth date", noData:"—",
+    emergencyTitle:"Emergency care", emergencyDesc:"Call the 112 Emergency Call Center in an emergency.", emergencyCall:"Call 112",
+    emergencyConfirm:"The 112 Emergency Call Center will be called. Do you want to continue?",
     aboutHtml:'<p><strong>Your health, in your pocket.</strong></p><p>Sağlık Cepte is designed to help you keep your medications, health measurements and important health dates organized in one place.</p><p>You can plan medication times, record measurements such as blood pressure and pulse, add vaccine and check-up dates to your calendar, and keep profile and emergency information.</p><p>Our aim is to make personal health information more accessible, organized and easier to follow.</p><p>This app does not replace medical evaluation or treatment advice. Follow the recommendations of your doctor or pharmacist when making medication and health decisions.</p>'
   },
   de: {
@@ -751,6 +788,8 @@ const I18N = {
     aboutTitle:"Über die App", deleteAllData:"Alle meine Daten löschen",
     medicalDisclaimer:"Verwende Medikamente ausschließlich nach den aktuellen Anweisungen deines Arztes oder Apothekers. Lass bestehende Handy-Wecker aktiviert, bis du die erste reguläre zeitgesteuerte Benachrichtigung erfolgreich überprüft hast.",
     bloodGroup:"Blutgruppe", birthDate:"Geburtsdatum", noData:"—",
+    emergencyTitle:"Notfallhilfe", emergencyDesc:"Rufe im Notfall die Notrufnummer 112 an.", emergencyCall:"112 anrufen",
+    emergencyConfirm:"Die Notrufnummer 112 wird gewählt. Möchtest du fortfahren?",
     aboutHtml:'<p><strong>Deine Gesundheit – immer dabei.</strong></p><p>Sağlık Cepte wurde entwickelt, damit du Medikamente, Gesundheitswerte und wichtige Gesundheitstermine übersichtlich an einem Ort verfolgen kannst.</p><p>Du kannst Medikamentenzeiten planen, Werte wie Blutdruck und Puls erfassen, Impf- und Kontrolltermine in den Kalender eintragen sowie Profil- und Notfallinformationen speichern.</p><p>Unser Ziel ist es, persönliche Gesundheitsinformationen leichter zugänglich, übersichtlich und einfacher nachverfolgbar zu machen.</p><p>Die App ersetzt keine medizinische Beurteilung oder Behandlungsempfehlung. Bei Medikamenten und gesundheitlichen Entscheidungen solltest du den Empfehlungen deines Arztes oder Apothekers folgen.</p>'
   }
 };
@@ -968,6 +1007,12 @@ document.getElementById("profileModal").addEventListener("click", event => {
 document.getElementById("profileFullName").addEventListener("input", () => {
   if (!pendingProfilePhoto) renderProfilePhotoPreview();
 });
+
+function callEmergency() {
+  if (confirm(t("emergencyConfirm"))) {
+    window.location.href = "tel:112";
+  }
+}
 
 function createClientId() {
   if (crypto.randomUUID) return crypto.randomUUID();
