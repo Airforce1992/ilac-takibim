@@ -99,11 +99,11 @@ html[data-theme="dark"] .pill-logo{background:linear-gradient(90deg,var(--yellow
 }
 main{max-width:720px;margin:auto;padding:14px 14px calc(88px + env(safe-area-inset-bottom))}
 .tabs{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--surface);
+  display:grid;grid-template-columns:repeat(5,minmax(76px,1fr));gap:6px;background:var(--surface);
   border:1px solid var(--border);padding:6px;border-radius:16px;box-shadow:var(--shadow);margin-bottom:14px
 }
 .tab{
-  border:0;background:transparent;color:var(--muted);padding:11px 8px;border-radius:12px;font-weight:700;font-size:14px
+  border:0;background:transparent;color:var(--muted);padding:11px 7px;border-radius:12px;font-weight:700;font-size:12px
 }
 .tab.active{background:var(--accent);color:#fff}
 html[data-theme="dark"] .tab.active{color:#14213d}
@@ -227,6 +227,23 @@ html[data-theme="dark"] .calday.selected.has-event::after{background:#14213d}
 .custom-cats{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
 .cat-chip{display:flex;align-items:center;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:5px 8px;font-size:11px}
 .cat-chip button{border:0;background:transparent;color:var(--danger);padding:0 2px}
+.health-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.health-stat{background:var(--surface-2);border:1px solid var(--border);border-radius:15px;padding:13px}
+.health-stat .label{font-size:11px;color:var(--muted);font-weight:700}
+.health-stat .value{font-size:20px;font-weight:900;margin-top:4px}
+.health-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.health-entry{border:1px solid var(--border);border-radius:15px;padding:13px;background:var(--surface-2);margin-bottom:9px}
+.health-entry-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.health-date{font-size:12px;color:var(--muted);margin-bottom:6px}
+.health-values{display:flex;flex-wrap:wrap;gap:6px}
+.health-chip{background:var(--yellow-soft);border:1px solid var(--border);border-radius:999px;padding:6px 9px;font-size:12px;font-weight:800}
+.quick-add-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.quick-add{display:flex;align-items:center;gap:13px;text-align:left;width:100%;background:var(--surface-2);color:var(--text);border:1px solid var(--border);padding:14px;border-radius:16px}
+.quick-add-icon{width:42px;height:42px;border-radius:13px;background:var(--yellow-soft);display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.quick-add-title{font-weight:900}
+.quick-add-desc{font-size:12px;color:var(--muted);margin-top:3px}
+@media(max-width:430px){.health-form-grid{grid-template-columns:1fr}.health-grid{grid-template-columns:1fr 1fr}}
+
 .setting-row{
   display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-top:1px solid var(--border)
 }
@@ -239,16 +256,17 @@ html[data-theme="dark"] .calday.selected.has-event::after{background:#14213d}
 html[data-theme="dark"] .theme-choice button.active{color:#14213d}
 .bottom-nav{
   position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));
-  width:min(680px,calc(100% - 24px));display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  width:min(680px,calc(100% - 24px));display:grid;grid-template-columns:repeat(5,1fr);gap:5px;
   background:color-mix(in srgb,var(--surface) 94%, transparent);border:1px solid var(--border);
   box-shadow:0 12px 36px rgba(0,0,0,.18);border-radius:18px;padding:6px;z-index:30;
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
 }
-.nav-btn{border:0;background:transparent;color:var(--muted);padding:9px 6px;border-radius:13px;font-size:12px;font-weight:800}
+.nav-btn{border:0;background:transparent;color:var(--muted);padding:8px 3px;border-radius:13px;font-size:10px;font-weight:800}
 .nav-btn span{display:block;font-size:18px;margin-bottom:2px}
 .nav-btn.active{background:var(--accent);color:#fff}
 html[data-theme="dark"] .nav-btn.active{color:#14213d}
 @media(min-width:700px){.bottom-nav{position:sticky;transform:none;left:auto;bottom:12px;margin:0 auto}}
+@media(max-width:520px){.tabs{overflow-x:auto;grid-template-columns:repeat(5,minmax(76px,1fr))}}
 @media(max-width:380px){
   .days{grid-template-columns:repeat(2,1fr)}
   .date-grid{grid-template-columns:1fr}
@@ -274,6 +292,8 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 <main>
   <div class="tabs" aria-label="Ana bölümler">
     <button class="tab active" data-tab="today" onclick="showTab('today')">Bugün</button>
+    <button class="tab" data-tab="health" onclick="showTab('health')">Sağlık</button>
+    <button class="tab" data-tab="add" onclick="showTab('add')">Ekle</button>
     <button class="tab" data-tab="calendar" onclick="showTab('calendar')">Takvim</button>
     <button class="tab" data-tab="settings" onclick="showTab('settings')">Ayarlar</button>
   </div>
@@ -315,7 +335,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     <div id="schedule"></div>
 
     <div class="card">
-      <details>
+      <details id="medAddDetails">
         <summary>Yeni ilaç ekle</summary>
         <div class="details-body">
           <label for="name">İlaç adı</label>
@@ -347,6 +367,79 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
           <button class="btn" onclick="addMed()">İlaç ekle</button>
         </div>
       </details>
+    </div>
+  </section>
+
+  <section id="panel-health" class="panel">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Sağlık Ölçümlerim</h3>
+          <div class="note">Tansiyon, nabız ve diğer kişisel ölçümlerini tarih-saat ile kaydet.</div>
+        </div>
+      </div>
+      <div id="healthLatest" class="health-grid"></div>
+    </div>
+
+    <div class="card">
+      <details id="healthAddDetails" open>
+        <summary>Yeni ölçüm ekle</summary>
+        <div class="details-body">
+          <div class="date-grid">
+            <div><label for="healthDate">Tarih</label><input class="field" id="healthDate" type="date"></div>
+            <div><label for="healthTime">Saat</label><input class="field" id="healthTime" type="time"></div>
+          </div>
+
+          <div class="health-form-grid">
+            <div><label for="sys">Büyük tansiyon</label><input class="field" id="sys" type="number" inputmode="numeric" placeholder="örn. 120"></div>
+            <div><label for="dia">Küçük tansiyon</label><input class="field" id="dia" type="number" inputmode="numeric" placeholder="örn. 80"></div>
+            <div><label for="pulse">Nabız</label><input class="field" id="pulse" type="number" inputmode="numeric" placeholder="atım/dk"></div>
+            <div><label for="spo2">Oksijen (SpO₂)</label><input class="field" id="spo2" type="number" inputmode="decimal" step="0.1" placeholder="%"></div>
+            <div><label for="temp">Ateş</label><input class="field" id="temp" type="number" inputmode="decimal" step="0.1" placeholder="°C"></div>
+            <div><label for="glucose">Kan şekeri</label><input class="field" id="glucose" type="number" inputmode="decimal" step="0.1" placeholder="mg/dL"></div>
+            <div><label for="weight">Kilo</label><input class="field" id="weight" type="number" inputmode="decimal" step="0.1" placeholder="kg"></div>
+            <div><label for="customHealthName">Özel ölçüm</label><input class="field" id="customHealthName" placeholder="örn. Bel çevresi"></div>
+          </div>
+
+          <label for="customHealthValue">Özel ölçüm değeri</label>
+          <input class="field" id="customHealthValue" placeholder="örn. 82 cm">
+
+          <label for="healthNote">Not</label>
+          <textarea class="field" id="healthNote" rows="2" placeholder="İsteğe bağlı not"></textarea>
+
+          <button class="btn" onclick="addHealthEntry()">Ölçümü kaydet</button>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Geçmiş ölçümler</h3>
+      <div id="healthHistory" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <section id="panel-add" class="panel">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Manuel Ekle</h3>
+          <div class="note">Eklemek istediğin kayıt türünü seç.</div>
+        </div>
+      </div>
+      <div class="quick-add-grid">
+        <button class="quick-add" onclick="openManualTarget('medicine')">
+          <span class="quick-add-icon">💊</span>
+          <span><div class="quick-add-title">İlaç ekle</div><div class="quick-add-desc">İlaç adı, saat, günler ve tarih aralığı ekle.</div></span>
+        </button>
+        <button class="quick-add" onclick="openManualTarget('health')">
+          <span class="quick-add-icon">♥</span>
+          <span><div class="quick-add-title">Sağlık ölçümü ekle</div><div class="quick-add-desc">Tansiyon, nabız, SpO₂, ateş, şeker, kilo veya özel ölçüm.</div></span>
+        </button>
+        <button class="quick-add" onclick="openManualTarget('calendar')">
+          <span class="quick-add-icon">▦</span>
+          <span><div class="quick-add-title">Takvime kayıt ekle</div><div class="quick-add-desc">Aşı, rutin tedavi, kontrol, tahlil veya özel başlık.</div></span>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -444,7 +537,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
     <div class="card">
       <h3>Gizlilik ve veriler</h3>
-      <p class="note">Hesap açılmaz. Bu cihaz için rastgele kimlik oluşturulur. İlaç programı ve push aboneliği yalnızca hatırlatma amacıyla kullanılır. Özel takvim kayıtları bu cihazda saklanır.</p>
+      <p class="note">Hesap açılmaz. Bu cihaz için rastgele kimlik oluşturulur. İlaç programı ve push aboneliği yalnızca hatırlatma amacıyla kullanılır. Özel takvim ve sağlık ölçüm kayıtları bu cihazda saklanır.</p>
       <button class="btn danger" onclick="deleteMyData()">Tüm verilerimi sil</button>
     </div>
 
@@ -454,6 +547,8 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
 <nav class="bottom-nav" aria-label="Alt menü">
   <button class="nav-btn active" data-nav="today" onclick="showTab('today')"><span>●</span>Bugün</button>
+  <button class="nav-btn" data-nav="health" onclick="showTab('health')"><span>♥</span>Sağlık</button>
+  <button class="nav-btn" data-nav="add" onclick="showTab('add')"><span>＋</span>Ekle</button>
   <button class="nav-btn" data-nav="calendar" onclick="showTab('calendar')"><span>▦</span>Takvim</button>
   <button class="nav-btn" data-nav="settings" onclick="showTab('settings')"><span>⚙</span>Ayarlar</button>
 </nav>
@@ -547,6 +642,9 @@ function showTab(name) {
     renderCalendar();
     renderSpecialEvents();
   }
+  if (name === "health") {
+    renderHealth();
+  }
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -595,6 +693,8 @@ function localDate(d = new Date()) {
 
 dateInput.value = localDate();
 document.getElementById("startDate").value = localDate();
+document.getElementById("healthDate").value = localDate();
+document.getElementById("healthTime").value = localTimeNow();
 
 function save() {
   localStorage.setItem("meds", JSON.stringify(meds));
@@ -782,6 +882,159 @@ async function removeMed(id) {
 function goToday() {
   dateInput.value = localDate();
   render();
+}
+
+let healthEntries;
+try {
+  healthEntries = JSON.parse(localStorage.getItem("healthEntries"));
+  if (!Array.isArray(healthEntries)) healthEntries = [];
+} catch {
+  healthEntries = [];
+}
+
+function saveHealthEntries() {
+  localStorage.setItem("healthEntries", JSON.stringify(healthEntries));
+}
+
+function localTimeNow() {
+  const d = new Date();
+  return String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
+}
+
+function cleanNumber(id, min, max) {
+  const raw = document.getElementById(id).value.trim();
+  if (!raw) return "";
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < min || n > max) return null;
+  return n;
+}
+
+function addHealthEntry() {
+  const date = document.getElementById("healthDate").value;
+  const time = document.getElementById("healthTime").value;
+  const sys = cleanNumber("sys", 40, 300);
+  const dia = cleanNumber("dia", 20, 200);
+  const pulse = cleanNumber("pulse", 20, 250);
+  const spo2 = cleanNumber("spo2", 30, 100);
+  const temp = cleanNumber("temp", 30, 45);
+  const glucose = cleanNumber("glucose", 20, 1000);
+  const weight = cleanNumber("weight", 1, 500);
+  const customName = document.getElementById("customHealthName").value.trim().slice(0,60);
+  const customValue = document.getElementById("customHealthValue").value.trim().slice(0,80);
+  const note = document.getElementById("healthNote").value.trim().slice(0,500);
+
+  if (!date || !time) {
+    alert("Tarih ve saat seçmelisin.");
+    return;
+  }
+  if ([sys,dia,pulse,spo2,temp,glucose,weight].some(v => v === null)) {
+    alert("Ölçüm değerlerinden biri geçerli aralıkta değil.");
+    return;
+  }
+  const hasStandard = [sys,dia,pulse,spo2,temp,glucose,weight].some(v => v !== "");
+  const hasCustom = customName && customValue;
+  if (!hasStandard && !hasCustom) {
+    alert("En az bir ölçüm değeri gir.");
+    return;
+  }
+  if ((sys === "") !== (dia === "")) {
+    alert("Tansiyon için büyük ve küçük tansiyonu birlikte gir.");
+    return;
+  }
+
+  healthEntries.push({
+    id: Date.now(), date, time, sys, dia, pulse, spo2, temp, glucose, weight,
+    customName: hasCustom ? customName : "",
+    customValue: hasCustom ? customValue : "",
+    note
+  });
+  saveHealthEntries();
+
+  ["sys","dia","pulse","spo2","temp","glucose","weight","customHealthName","customHealthValue","healthNote"]
+    .forEach(id => document.getElementById(id).value = "");
+
+  renderHealth();
+}
+
+function removeHealthEntry(id) {
+  if (!confirm("Bu sağlık ölçümü silinsin mi?")) return;
+  healthEntries = healthEntries.filter(e => String(e.id) !== String(id));
+  saveHealthEntries();
+  renderHealth();
+}
+
+function healthChips(entry) {
+  const chips = [];
+  if (entry.sys !== "" && entry.dia !== "") chips.push("Tansiyon " + entry.sys + "/" + entry.dia + " mmHg");
+  if (entry.pulse !== "") chips.push("Nabız " + entry.pulse + " /dk");
+  if (entry.spo2 !== "") chips.push("SpO₂ " + entry.spo2 + "%");
+  if (entry.temp !== "") chips.push("Ateş " + entry.temp + "°C");
+  if (entry.glucose !== "") chips.push("Şeker " + entry.glucose + " mg/dL");
+  if (entry.weight !== "") chips.push("Kilo " + entry.weight + " kg");
+  if (entry.customName && entry.customValue) chips.push(entry.customName + " " + entry.customValue);
+  return chips;
+}
+
+function renderHealth() {
+  const sorted = [...healthEntries].sort((a,b) =>
+    (b.date + " " + b.time).localeCompare(a.date + " " + a.time)
+  );
+  const latest = sorted[0];
+
+  const latestBox = document.getElementById("healthLatest");
+  if (!latest) {
+    latestBox.innerHTML = '<div class="empty" style="grid-column:1/-1">Henüz sağlık ölçümü eklenmedi.</div>';
+  } else {
+    const stats = [];
+    if (latest.sys !== "" && latest.dia !== "") stats.push(["Tansiyon", latest.sys + "/" + latest.dia, "mmHg"]);
+    if (latest.pulse !== "") stats.push(["Nabız", latest.pulse, "/dk"]);
+    if (latest.spo2 !== "") stats.push(["SpO₂", latest.spo2, "%"]);
+    if (latest.temp !== "") stats.push(["Ateş", latest.temp, "°C"]);
+    if (latest.glucose !== "") stats.push(["Kan şekeri", latest.glucose, "mg/dL"]);
+    if (latest.weight !== "") stats.push(["Kilo", latest.weight, "kg"]);
+    if (latest.customName && latest.customValue) stats.push([latest.customName, latest.customValue, ""]);
+
+    latestBox.innerHTML = stats.slice(0,6).map(s =>
+      '<div class="health-stat"><div class="label">' + safe(s[0]) + '</div><div class="value">' +
+      safe(s[1]) + ' <span style="font-size:11px;color:var(--muted)">' + safe(s[2]) + '</span></div></div>'
+    ).join("") || '<div class="empty" style="grid-column:1/-1">Son kayıtta gösterilecek ölçüm yok.</div>';
+  }
+
+  const history = document.getElementById("healthHistory");
+  if (!sorted.length) {
+    history.innerHTML = '<div class="empty">Kayıt bulunmuyor.</div>';
+    return;
+  }
+
+  history.innerHTML = sorted.slice(0,50).map(e => {
+    const chips = healthChips(e).map(v => '<span class="health-chip">' + safe(v) + '</span>').join("");
+    return '<div class="health-entry"><div class="health-entry-head"><div style="min-width:0;flex:1">' +
+      '<div class="health-date">' + safe(formatTrDate(e.date)) + ' • ' + safe(e.time) + '</div>' +
+      '<div class="health-values">' + chips + '</div>' +
+      (e.note ? '<div class="event-note">' + safe(e.note) + '</div>' : '') +
+      '</div><button class="delete" onclick="removeHealthEntry(' + JSON.stringify(e.id) + ')">×</button></div></div>';
+  }).join("");
+}
+
+function openManualTarget(type) {
+  if (type === "medicine") {
+    showTab("today");
+    const d = document.getElementById("medAddDetails");
+    if (d) d.open = true;
+    setTimeout(() => document.getElementById("name")?.focus(), 180);
+    return;
+  }
+  if (type === "health") {
+    showTab("health");
+    const d = document.getElementById("healthAddDetails");
+    if (d) d.open = true;
+    setTimeout(() => document.getElementById("sys")?.focus(), 180);
+    return;
+  }
+  if (type === "calendar") {
+    showTab("calendar");
+    setTimeout(() => document.getElementById("specialTitle")?.focus(), 180);
+  }
 }
 
 const DEFAULT_SPECIAL_CATEGORIES = [
@@ -1160,10 +1413,12 @@ async function deleteMyData() {
     localStorage.removeItem("clientId");
     localStorage.removeItem("specialEvents");
     localStorage.removeItem("customSpecialCategories");
+    localStorage.removeItem("healthEntries");
 
     meds = [];
     specialEvents = [];
     customSpecialCategories = [];
+    healthEntries = [];
 
     save();
     saveSpecialData();
@@ -1171,6 +1426,8 @@ async function deleteMyData() {
     renderSpecialCategories();
     renderCalendar();
     renderSpecialEvents();
+    saveHealthEntries();
+    renderHealth();
 
     status.textContent = "Bu cihazın ilaç, takvim ve bildirim verileri silindi.";
   } catch (error) {
@@ -1183,6 +1440,7 @@ render();
 renderSpecialCategories();
 renderCalendar();
 renderSpecialEvents();
+renderHealth();
 
 window.addEventListener("load", async () => {
   try {
