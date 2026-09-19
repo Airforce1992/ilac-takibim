@@ -314,7 +314,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       </div>
     </div>
     <div class="header-actions">
-      <select id="languageSelect" class="header-language" onchange="setLanguage(this.value)" data-i18n-aria-label="languageSelectAria" aria-label="Dil seçimi">
+      <select id="languageSelect" class="header-language" onchange="setLanguage(this.value); void syncSchedule()" data-i18n-aria-label="languageSelectAria" aria-label="Dil seçimi">
         <option value="tr">TR</option>
         <option value="en">EN</option>
         <option value="de">DE</option>
