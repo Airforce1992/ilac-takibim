@@ -178,6 +178,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 }
 .daycheck input{width:17px;height:17px;accent-color:var(--yellow)}
 .date-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.med-times{display:grid;gap:8px;margin:6px 0 10px}
+.med-time-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.med-time-row input{margin:0}
+.med-time-remove{width:42px;height:42px;border:0;border-radius:11px;background:var(--danger-soft);color:var(--danger);font-size:20px;font-weight:900}
+.add-time-btn{margin:0 0 14px}
 .date-picker-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
 .modal-backdrop{
   position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;
@@ -402,8 +407,13 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
         <div class="details-body">
           <label for="name" data-i18n="medicineName">İlaç adı</label>
           <input class="field" id="name" placeholder="Örn. Vitamin D" data-i18n-placeholder="medicineNamePh">
-          <label for="time" data-i18n="medicineTime">İlaç saati</label>
-          <input class="field" id="time" type="time" value="08:00">
+          <label data-i18n="medicineTimes">İlaç saatleri</label>
+          <div id="addTimes" class="med-times">
+            <div class="med-time-row">
+              <input class="med-time-input" type="time" value="08:00" aria-label="İlaç saati">
+            </div>
+          </div>
+          <button type="button" class="btn secondary small add-time-btn" onclick="addMedicationTime('addTimes')" data-i18n="addTime">+ Saat ekle</button>
 
           <label data-i18n="whichDays">Hangi günler?</label>
           <div id="addDays" class="days">
@@ -684,8 +694,9 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     <label for="editName" data-i18n="medicineName">İlaç adı</label>
     <input class="field" id="editName" placeholder="İlaç adı" data-i18n-placeholder="medicineName">
 
-    <label for="editTime" data-i18n="medicineTime">İlaç saati</label>
-    <input class="field" id="editTime" type="time">
+    <label data-i18n="medicineTimes">İlaç saatleri</label>
+    <div id="editTimes" class="med-times"></div>
+    <button type="button" class="btn secondary small add-time-btn" onclick="addMedicationTime('editTimes')" data-i18n="addTime">+ Saat ekle</button>
 
     <label data-i18n="whichDays">Hangi günler?</label>
     <div id="editDays" class="days">
@@ -738,7 +749,7 @@ const I18N = {
     bloodGroup:"Kan grubu", birthDate:"Doğum tarihi", noData:"—",
     emergencyTitle:"Acil sağlık", emergencyDesc:"Acil durumda 112 Acil Çağrı Merkezi'ni ara.", emergencyCall:"112'yi Ara",
     emergencyConfirm:"112 Acil Çağrı Merkezi aranacak. Devam etmek istiyor musun?",
-    newMedicine:"Yeni ilaç ekle", medicineName:"İlaç adı", medicineNamePh:"Örn. Vitamin D", medicineTime:"İlaç saati", whichDays:"Hangi günler?", startDate:"Başlangıç", endDate:"Bitiş (isteğe bağlı)", addMedicine:"İlaç ekle",
+    newMedicine:"Yeni ilaç ekle", medicineName:"İlaç adı", medicineNamePh:"Örn. Vitamin D", medicineTime:"İlaç saati", medicineTimes:"İlaç saatleri", addTime:"+ Saat ekle", removeTime:"Saati kaldır", whichDays:"Hangi günler?", startDate:"Başlangıç", endDate:"Bitiş (isteğe bağlı)", addMedicine:"İlaç ekle",
     date:"Tarih", time:"Saat", systolic:"Büyük tansiyon", diastolic:"Küçük tansiyon", pulse:"Nabız", oxygen:"Oksijen (SpO₂)", temperature:"Ateş", glucose:"Kan şekeri", weight:"Kilo", customMeasurement:"Özel ölçüm", customMeasurementValue:"Özel ölçüm değeri", note:"Not", saveMeasurement:"Ölçümü kaydet",
     addMedicineDesc:"İlaç adı, saat, günler ve tarih aralığı ekle.", addHealthMeasurement:"Sağlık ölçümü ekle", addHealthMeasurementDesc:"Tansiyon, nabız, SpO₂, ateş, şeker, kilo veya özel ölçüm.", addCalendarEntry:"Takvime kayıt ekle", addCalendarEntryDesc:"Aşı, rutin tedavi, kontrol, tahlil veya özel başlık.",
     category:"Başlık", subtitleAction:"Alt başlık / işlem", specialTitlePh:"Örn. Tetanoz aşısı, kan tahlili", optionalTime:"Saat (isteğe bağlı)", optionalNote:"Not (isteğe bağlı)", specialNotePh:"Doktor, hastane, hazırlık notu vb.", addToDate:"Bu tarihe ekle", createOwnCategory:"Kendi başlığını oluştur", customCategoryPh:"Örn. Diş Tedavisi", addCategory:"Başlık ekle", selectedDateRecords:"Seçilen tarihteki kayıtlar",
@@ -769,7 +780,7 @@ const I18N = {
     bloodGroup:"Blood type", birthDate:"Birth date", noData:"—",
     emergencyTitle:"Emergency care", emergencyDesc:"Call the 112 Emergency Call Center in an emergency.", emergencyCall:"Call 112",
     emergencyConfirm:"The 112 Emergency Call Center will be called. Do you want to continue?",
-    newMedicine:"Add new medicine", medicineName:"Medicine name", medicineNamePh:"E.g. Vitamin D", medicineTime:"Medication time", whichDays:"Which days?", startDate:"Start date", endDate:"End date (optional)", addMedicine:"Add medicine",
+    newMedicine:"Add new medicine", medicineName:"Medicine name", medicineNamePh:"E.g. Vitamin D", medicineTime:"Medication time", medicineTimes:"Medication times", addTime:"+ Add time", removeTime:"Remove time", whichDays:"Which days?", startDate:"Start date", endDate:"End date (optional)", addMedicine:"Add medicine",
     date:"Date", time:"Time", systolic:"Systolic blood pressure", diastolic:"Diastolic blood pressure", pulse:"Pulse", oxygen:"Oxygen (SpO₂)", temperature:"Temperature", glucose:"Blood glucose", weight:"Weight", customMeasurement:"Custom measurement", customMeasurementValue:"Custom measurement value", note:"Note", saveMeasurement:"Save measurement",
     addMedicineDesc:"Add medicine name, time, days and date range.", addHealthMeasurement:"Add health measurement", addHealthMeasurementDesc:"Blood pressure, pulse, SpO₂, temperature, glucose, weight or a custom measurement.", addCalendarEntry:"Add calendar entry", addCalendarEntryDesc:"Vaccine, routine treatment, check-up, test or custom category.",
     category:"Category", subtitleAction:"Subtitle / action", specialTitlePh:"E.g. Tetanus vaccine, blood test", optionalTime:"Time (optional)", optionalNote:"Note (optional)", specialNotePh:"Doctor, hospital, preparation note, etc.", addToDate:"Add to this date", createOwnCategory:"Create your own category", customCategoryPh:"E.g. Dental Treatment", addCategory:"Add category", selectedDateRecords:"Records on selected date",
@@ -800,7 +811,7 @@ const I18N = {
     bloodGroup:"Blutgruppe", birthDate:"Geburtsdatum", noData:"—",
     emergencyTitle:"Notfallhilfe", emergencyDesc:"Rufe im Notfall die Notrufnummer 112 an.", emergencyCall:"112 anrufen",
     emergencyConfirm:"Die Notrufnummer 112 wird gewählt. Möchtest du fortfahren?",
-    newMedicine:"Neues Medikament hinzufügen", medicineName:"Medikamentenname", medicineNamePh:"Z. B. Vitamin D", medicineTime:"Einnahmezeit", whichDays:"An welchen Tagen?", startDate:"Startdatum", endDate:"Enddatum (optional)", addMedicine:"Medikament hinzufügen",
+    newMedicine:"Neues Medikament hinzufügen", medicineName:"Medikamentenname", medicineNamePh:"Z. B. Vitamin D", medicineTime:"Einnahmezeit", medicineTimes:"Einnahmezeiten", addTime:"+ Uhrzeit hinzufügen", removeTime:"Uhrzeit entfernen", whichDays:"An welchen Tagen?", startDate:"Startdatum", endDate:"Enddatum (optional)", addMedicine:"Medikament hinzufügen",
     date:"Datum", time:"Uhrzeit", systolic:"Systolischer Blutdruck", diastolic:"Diastolischer Blutdruck", pulse:"Puls", oxygen:"Sauerstoff (SpO₂)", temperature:"Temperatur", glucose:"Blutzucker", weight:"Gewicht", customMeasurement:"Eigener Messwert", customMeasurementValue:"Wert", note:"Notiz", saveMeasurement:"Messung speichern",
     addMedicineDesc:"Medikamentenname, Uhrzeit, Tage und Zeitraum hinzufügen.", addHealthMeasurement:"Gesundheitswert hinzufügen", addHealthMeasurementDesc:"Blutdruck, Puls, SpO₂, Temperatur, Blutzucker, Gewicht oder eigener Messwert.", addCalendarEntry:"Kalendereintrag hinzufügen", addCalendarEntryDesc:"Impfung, Routinebehandlung, Kontrolle, Untersuchung oder eigene Kategorie.",
     category:"Kategorie", subtitleAction:"Untertitel / Vorgang", specialTitlePh:"Z. B. Tetanusimpfung, Blutuntersuchung", optionalTime:"Uhrzeit (optional)", optionalNote:"Notiz (optional)", specialNotePh:"Arzt, Krankenhaus, Vorbereitungshinweis usw.", addToDate:"Zu diesem Datum hinzufügen", createOwnCategory:"Eigene Kategorie erstellen", customCategoryPh:"Z. B. Zahnbehandlung", addCategory:"Kategorie hinzufügen", selectedDateRecords:"Einträge am ausgewählten Datum",
@@ -1077,6 +1088,13 @@ let migrated = false;
 meds = meds.map(m => {
   const copy = { ...m };
   if (!Array.isArray(copy.days) || !copy.days.length) { copy.days = [0,1,2,3,4,5,6]; migrated = true; }
+  if (!Array.isArray(copy.times) || !copy.times.length) {
+    copy.times = copy.time ? [copy.time] : ["08:00"];
+    migrated = true;
+  }
+  copy.times = [...new Set(copy.times.filter(v => /^([01]\d|2[0-3]):[0-5]\d$/.test(String(v))))].sort();
+  if (!copy.times.length) copy.times = ["08:00"];
+  if ("time" in copy) { delete copy.time; migrated = true; }
   if (typeof copy.startDate !== "string") { copy.startDate = ""; migrated = true; }
   if (typeof copy.endDate !== "string") { copy.endDate = ""; migrated = true; }
   return copy;
@@ -1113,6 +1131,41 @@ function safe(t) {
 }
 
 const DAY_NAMES = ["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
+
+function addMedicationTime(containerId, value = "") {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const row = document.createElement("div");
+  row.className = "med-time-row";
+  row.innerHTML =
+    '<input class="med-time-input" type="time" value="' + safe(value) + '" aria-label="' + safe(t("medicineTime")) + '">' +
+    '<button type="button" class="med-time-remove" aria-label="' + safe(t("removeTime")) + '">×</button>';
+  row.querySelector("button").addEventListener("click", () => {
+    const rows = container.querySelectorAll(".med-time-row");
+    if (rows.length <= 1) return;
+    row.remove();
+  });
+  container.appendChild(row);
+}
+
+function getMedicationTimes(containerId) {
+  return [...document.querySelectorAll("#" + containerId + " .med-time-input")]
+    .map(el => el.value)
+    .filter(v => /^([01]\d|2[0-3]):[0-5]\d$/.test(v))
+    .filter((v,i,a) => a.indexOf(v) === i)
+    .sort();
+}
+
+function setMedicationTimes(containerId, times) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  const values = Array.isArray(times) && times.length ? times : ["08:00"];
+  values.forEach(v => addMedicationTime(containerId, v));
+}
+
+function medTimes(med) {
+  return Array.isArray(med.times) && med.times.length ? med.times : [];
+}
 
 function getSelectedDays(containerId) {
   return [...document.querySelectorAll("#" + containerId + " input[type=checkbox]:checked")]
@@ -1158,25 +1211,28 @@ function render() {
   const day = dateInput.value;
   const records = getRecords()[day] || {};
   const todaysMeds = meds.filter(m => medAppliesToDate(m, day));
-  const sorted = [...todaysMeds].sort((a,b) => a.time.localeCompare(b.time));
+  const occurrences = todaysMeds.flatMap(m =>
+    medTimes(m).map(time => ({ med:m, time, key:String(m.id) + "@" + time }))
+  ).sort((a,b) => a.time.localeCompare(b.time) || a.med.name.localeCompare(b.med.name));
   const groups = {};
 
-  sorted.forEach(m => {
-    if (!groups[m.time]) groups[m.time] = [];
-    groups[m.time].push(m);
+  occurrences.forEach(o => {
+    if (!groups[o.time]) groups[o.time] = [];
+    groups[o.time].push(o);
   });
 
   let html = "";
   Object.entries(groups).forEach(([time, items]) => {
     html += '<div class="time-block"><div class="time-title">' + safe(time) + '</div>';
-    items.forEach(m => {
-      const checked = records[m.id] === true;
+    items.forEach(o => {
+      const m = o.med;
+      const checked = records[o.key] === true || (medTimes(m).length === 1 && records[m.id] === true);
       html += '<div class="med">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") +
-        ' onchange="toggle(' + JSON.stringify(m.id) + ',this.checked)">' +
-        '<button class="med-name ' + (checked ? "done" : "") + '" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name) + ' ilacını düzenle">' +
+        ' onchange="toggle(' + JSON.stringify(o.key) + ',this.checked)">' +
+        '<button class="med-name ' + (checked ? "done" : "") + '" onclick="openEdit(' + JSON.stringify(m.id) + ')" aria-label="' + safe(m.name + " " + t("editMedicineAria")) + '">' +
           safe(m.name) + '<span class="medmeta">' + safe(daysLabel(m.days)) + '</span></button>' +
-        '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')">' + safe(m.time) + '</button>' +
+        '<button class="medtime" onclick="openEdit(' + JSON.stringify(m.id) + ')">' + safe(o.time) + '</button>' +
         '<button class="delete" onclick="removeMed(' + JSON.stringify(m.id) + ')">×</button>' +
         '</div>';
     });
@@ -1186,10 +1242,12 @@ function render() {
   document.getElementById("schedule").innerHTML = html ||
     '<div class="card empty">' + safe(t("emptyMedicineDay")) + '</div>';
 
-  const done = todaysMeds.filter(m => records[m.id] === true).length;
-  document.getElementById("count").textContent = done + " / " + todaysMeds.length;
+  const done = occurrences.filter(o =>
+    records[o.key] === true || (medTimes(o.med).length === 1 && records[o.med.id] === true)
+  ).length;
+  document.getElementById("count").textContent = done + " / " + occurrences.length;
   document.getElementById("bar").style.width =
-    (todaysMeds.length ? done / todaysMeds.length * 100 : 0) + "%";
+    (occurrences.length ? done / occurrences.length * 100 : 0) + "%";
 
   document.getElementById("today").textContent =
     new Date(day + "T12:00:00").toLocaleDateString(currentLanguage() === "en" ? "en-US" : currentLanguage() === "de" ? "de-DE" : "tr-TR", {
@@ -1202,7 +1260,7 @@ function openEdit(id) {
   if (!med) return;
   document.getElementById("editId").value = med.id;
   document.getElementById("editName").value = med.name;
-  document.getElementById("editTime").value = med.time;
+  setMedicationTimes("editTimes", medTimes(med));
   setSelectedDays("editDays", med.days);
   document.getElementById("editStartDate").value = med.startDate || "";
   document.getElementById("editEndDate").value = med.endDate || "";
@@ -1216,12 +1274,12 @@ function closeEdit() {
 async function saveEdit() {
   const id = document.getElementById("editId").value;
   const name = document.getElementById("editName").value.trim();
-  const time = document.getElementById("editTime").value;
+  const times = getMedicationTimes("editTimes");
   const days = getSelectedDays("editDays");
   const startDate = document.getElementById("editStartDate").value;
   const endDate = document.getElementById("editEndDate").value;
 
-  if (!name || !time || !days.length) {
+  if (!name || !times.length || !days.length) {
     alert(t("medicineRequired"));
     return;
   }
@@ -1234,7 +1292,7 @@ async function saveEdit() {
   if (!med) return;
 
   med.name = name;
-  med.time = time;
+  med.times = times;
   med.days = days;
   med.startDate = startDate;
   med.endDate = endDate;
@@ -1251,12 +1309,12 @@ document.getElementById("editModal").addEventListener("click", event => {
 
 async function addMed() {
   const name = document.getElementById("name").value.trim();
-  const time = document.getElementById("time").value;
+  const times = getMedicationTimes("addTimes");
   const days = getSelectedDays("addDays");
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
 
-  if (!name || !time || !days.length) {
+  if (!name || !times.length || !days.length) {
     alert(t("medicineRequired"));
     return;
   }
@@ -1265,10 +1323,11 @@ async function addMed() {
     return;
   }
 
-  meds.push({ id: Date.now(), name, time, days, startDate, endDate });
+  meds.push({ id: Date.now(), name, times, days, startDate, endDate });
   save();
   render();
   document.getElementById("name").value = "";
+  setMedicationTimes("addTimes", ["08:00"]);
   document.getElementById("endDate").value = "";
   await syncSchedule();
 }
@@ -1741,13 +1800,13 @@ async function syncSchedule() {
         clientId: getClientId(),
         timeZone,
         lang: currentLanguage(),
-        meds: meds.map(m => ({
-          time: m.time,
+        meds: meds.flatMap(m => medTimes(m).map(time => ({
+          time,
           name: m.name,
           days: Array.isArray(m.days) && m.days.length ? m.days : [0,1,2,3,4,5,6],
           startDate: m.startDate || "",
           endDate: m.endDate || ""
-        }))
+        })))
       })
     });
     return response.ok;
