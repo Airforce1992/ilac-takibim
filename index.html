@@ -184,6 +184,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 .med-time-remove{width:42px;height:42px;border:0;border-radius:11px;background:var(--danger-soft);color:var(--danger);font-size:20px;font-weight:900}
 .add-time-btn{margin:0 0 14px}
 .date-picker-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+.view-mode-switch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:13px;padding:5px;margin-bottom:14px}
+.view-mode-switch button{border:0;border-radius:9px;background:transparent;color:var(--muted);font-weight:800;padding:10px 4px;min-width:0}
+.view-mode-switch button.active{background:var(--accent);color:#fff}
+html[data-theme="dark"] .view-mode-switch button.active{color:#14213d}
+.period-heading{font-weight:800;font-size:14px;margin:4px 0 12px}
+.period-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.period-day{width:100%;text-align:left;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:14px;padding:12px;cursor:pointer}
+.period-day.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.period-day-name{font-size:12px;color:var(--muted);margin-bottom:6px}
+.period-day-count{font-size:18px;font-weight:900}
+.period-day-progress{height:5px;margin-top:9px;background:var(--border);border-radius:99px;overflow:hidden}
+.period-day-progress span{display:block;height:100%;background:var(--yellow)}
+.period-nav{display:flex;gap:8px;margin-top:12px}
+.period-nav button{flex:1}
+@media(min-width:580px){.period-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .modal-backdrop{
   position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;
   padding:18px;z-index:999;overflow:auto
@@ -390,6 +405,11 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     </div>
 
     <div class="card">
+      <div class="view-mode-switch" role="group" aria-label="Görünüm seçimi" data-i18n-aria-label="viewModeAria">
+        <button type="button" class="active" data-view-mode="day" onclick="setViewMode('day')" data-i18n="viewDaily" aria-pressed="true">Günlük</button>
+        <button type="button" data-view-mode="week" onclick="setViewMode('week')" data-i18n="viewWeekly" aria-pressed="false">Haftalık</button>
+        <button type="button" data-view-mode="month" onclick="setViewMode('month')" data-i18n="viewMonthly" aria-pressed="false">Aylık</button>
+      </div>
       <div class="date-picker-row">
         <div>
           <label for="date" data-i18n="viewDay">Görüntülenecek gün</label>
@@ -738,7 +758,7 @@ const I18N = {
     tabToday:"Bugün", tabHealth:"Sağlık", tabAdd:"Ekle", tabCalendar:"Takvim", tabSettings:"Ayarlar",
     createProfile:"Profilini oluştur", edit:"Düzenle", todayPlan:"Bugünkü planın",
     notificationStatusTitle:"Bildirim durumu", enableNotifications:"Bildirimleri etkinleştir",
-    viewDay:"Görüntülenecek gün", today:"Bugün",
+    viewDay:"Görüntülenecek gün", today:"Bugün", viewModeAria:"Görünüm seçimi", viewDaily:"Günlük", viewWeekly:"Haftalık", viewMonthly:"Aylık", previousPeriod:"Önceki", nextPeriod:"Sonraki", dailyDetail:"Günlük ayrıntı", periodNoMeds:"Bu dönemde planlanmış ilaç yok.",
     healthMeasurements:"Sağlık Ölçümlerim", healthMeasurementsDesc:"Tansiyon, nabız ve diğer kişisel ölçümlerini tarih-saat ile kaydet.",
     addMeasurement:"Yeni ölçüm ekle", measurementHistory:"Geçmiş ölçümler",
     manualAdd:"Manuel Ekle", manualAddDesc:"Eklemek istediğin kayıt türünü seç.",
@@ -769,7 +789,7 @@ const I18N = {
     tabToday:"Today", tabHealth:"Health", tabAdd:"Add", tabCalendar:"Calendar", tabSettings:"Settings",
     createProfile:"Create your profile", edit:"Edit", todayPlan:"Today's plan",
     notificationStatusTitle:"Notification status", enableNotifications:"Enable notifications",
-    viewDay:"Day to display", today:"Today",
+    viewDay:"Day to display", today:"Today", viewModeAria:"View selection", viewDaily:"Daily", viewWeekly:"Weekly", viewMonthly:"Monthly", previousPeriod:"Previous", nextPeriod:"Next", dailyDetail:"Daily details", periodNoMeds:"No medication scheduled for this period.",
     healthMeasurements:"My Health Measurements", healthMeasurementsDesc:"Record blood pressure, pulse and other personal measurements with date and time.",
     addMeasurement:"Add new measurement", measurementHistory:"Measurement history",
     manualAdd:"Manual Add", manualAddDesc:"Choose the type of record you want to add.",
@@ -800,7 +820,7 @@ const I18N = {
     tabToday:"Heute", tabHealth:"Gesundheit", tabAdd:"Hinzufügen", tabCalendar:"Kalender", tabSettings:"Einstellungen",
     createProfile:"Profil erstellen", edit:"Bearbeiten", todayPlan:"Dein heutiger Plan",
     notificationStatusTitle:"Benachrichtigungsstatus", enableNotifications:"Benachrichtigungen aktivieren",
-    viewDay:"Angezeigter Tag", today:"Heute",
+    viewDay:"Angezeigter Tag", today:"Heute", viewModeAria:"Ansicht auswählen", viewDaily:"Täglich", viewWeekly:"Wöchentlich", viewMonthly:"Monatlich", previousPeriod:"Zurück", nextPeriod:"Weiter", dailyDetail:"Tagesdetails", periodNoMeds:"Für diesen Zeitraum sind keine Medikamente eingetragen.",
     healthMeasurements:"Meine Gesundheitswerte", healthMeasurementsDesc:"Erfasse Blutdruck, Puls und weitere persönliche Messwerte mit Datum und Uhrzeit.",
     addMeasurement:"Neue Messung hinzufügen", measurementHistory:"Messverlauf",
     manualAdd:"Manuell hinzufügen", manualAddDesc:"Wähle aus, welche Art von Eintrag du hinzufügen möchtest.",
@@ -1102,6 +1122,54 @@ meds = meds.map(m => {
 if (migrated || !localStorage.getItem("meds")) localStorage.setItem("meds", JSON.stringify(meds));
 
 const dateInput = document.getElementById("date");
+let viewMode = ["day","week","month"].includes(localStorage.getItem("medViewMode"))
+  ? localStorage.getItem("medViewMode") : "day";
+
+function setViewMode(mode) {
+  if (!["day","week","month"].includes(mode)) return;
+  viewMode = mode;
+  localStorage.setItem("medViewMode", mode);
+  render();
+}
+
+function offsetDate(day, amount) {
+  const d = new Date(day + "T12:00:00");
+  d.setDate(d.getDate() + amount);
+  return localDate(d);
+}
+
+function getViewDays(day) {
+  if (viewMode === "day") return [day];
+  const d = new Date(day + "T12:00:00");
+  if (viewMode === "week") {
+    const mondayOffset = (d.getDay() + 6) % 7;
+    const start = offsetDate(day, -mondayOffset);
+    return Array.from({length:7},(_,i) => offsetDate(start,i));
+  }
+  const y=d.getFullYear(),m=d.getMonth();
+  const count=new Date(y,m+1,0).getDate();
+  return Array.from({length:count},(_,i) => localDate(new Date(y,m,i+1)));
+}
+
+function changeViewPeriod(step) {
+  if (viewMode === "day") {
+    dateInput.value = offsetDate(dateInput.value,step);
+  } else if (viewMode === "week") {
+    dateInput.value = offsetDate(dateInput.value,step*7);
+  } else {
+    const d=new Date(dateInput.value + "T12:00:00");
+    const target=new Date(d.getFullYear(),d.getMonth()+step,1);
+    const day=Math.min(d.getDate(),new Date(target.getFullYear(),target.getMonth()+1,0).getDate());
+    dateInput.value=localDate(new Date(target.getFullYear(),target.getMonth(),day));
+  }
+  render();
+}
+
+function showDateFromPeriod(day) {
+  dateInput.value=day;
+  setViewMode("day");
+}
+
 
 function localDate(d = new Date()) {
   const y = d.getFullYear();
@@ -1207,13 +1275,62 @@ function toggle(id, checked) {
   render();
 }
 
+function medicationOccurrences(day) {
+  return meds.filter(m => medAppliesToDate(m, day))
+    .flatMap(m => medTimes(m).map(time => ({ med:m, time, key:String(m.id) + "@" + time })))
+    .sort((a,b) => a.time.localeCompare(b.time) || a.med.name.localeCompare(b.med.name));
+}
+
+function medicationDone(occurrences, records) {
+  return occurrences.filter(o =>
+    records[o.key] === true || (medTimes(o.med).length === 1 && records[o.med.id] === true)
+  ).length;
+}
+
 function render() {
-  const day = dateInput.value;
-  const records = getRecords()[day] || {};
-  const todaysMeds = meds.filter(m => medAppliesToDate(m, day));
-  const occurrences = todaysMeds.flatMap(m =>
-    medTimes(m).map(time => ({ med:m, time, key:String(m.id) + "@" + time }))
-  ).sort((a,b) => a.time.localeCompare(b.time) || a.med.name.localeCompare(b.med.name));
+  const day = dateInput.value || localDate();
+  const allRecords = getRecords();
+  const dates = getViewDays(day);
+  const summaries = dates.map(date => {
+    const occurrences = medicationOccurrences(date);
+    return {date, total:occurrences.length, done:medicationDone(occurrences,allRecords[date] || {})};
+  });
+  const total = summaries.reduce((sum,s) => sum+s.total,0);
+  const completed = summaries.reduce((sum,s) => sum+s.done,0);
+  document.querySelectorAll("[data-view-mode]").forEach(button => {
+    const active=button.dataset.viewMode === viewMode;
+    button.classList.toggle("active",active);
+    button.setAttribute("aria-pressed",String(active));
+  });
+  const label=document.querySelector('label[for="date"]');
+  if (label) label.textContent = viewMode === "week" ? t("viewWeekly")
+    : viewMode === "month" ? t("viewMonthly") : t("viewDay");
+  document.getElementById("count").textContent = completed + " / " + total;
+  document.getElementById("bar").style.width = (total ? completed/total*100 : 0) + "%";
+  const formatDate = date => formatTrDate(date);
+  document.getElementById("today").textContent = viewMode === "day" ? formatDate(day)
+    : viewMode === "week" ? formatDate(dates[0]) + " – " + formatDate(dates[6])
+    : new Date(day+"T12:00:00").toLocaleDateString(currentLanguage()==="en"?"en-US":currentLanguage()==="de"?"de-DE":"tr-TR",{month:"long",year:"numeric"});
+
+  if (viewMode !== "day") {
+    const heading = '<div class="period-heading">' + safe(document.getElementById("today").textContent) + '</div>';
+    const cards=summaries.map(s => {
+      const weekday=new Date(s.date+"T12:00:00").toLocaleDateString(currentLanguage()==="en"?"en-US":currentLanguage()==="de"?"de-DE":"tr-TR",{weekday:"short",day:"numeric",month:"short"});
+      return '<button type="button" class="period-day'+(s.date===day?' selected':'')+'" onclick="showDateFromPeriod(' + JSON.stringify(s.date) + ')">' +
+        '<div class="period-day-name">' + safe(weekday) + '</div>' +
+        '<div class="period-day-count">' + s.done + ' / ' + s.total + '</div>' +
+        '<div class="period-day-progress"><span style="width:' + (s.total ? s.done/s.total*100:0) + '%"></span></div>' +
+        '</button>';
+    }).join("");
+    const navigation='<div class="period-nav"><button type="button" class="btn secondary small" onclick="changeViewPeriod(-1)">'+safe(t("previousPeriod"))+'</button><button type="button" class="btn secondary small" onclick="changeViewPeriod(1)">'+safe(t("nextPeriod"))+'</button></div>';
+    document.getElementById("schedule").innerHTML='<div class="card">'+heading+
+      (total ? '' : '<p class="note">'+safe(t("periodNoMeds"))+'</p>')+
+      '<div class="period-grid">'+cards+'</div>'+navigation+'</div>';
+    return;
+  }
+
+  const records = allRecords[day] || {};
+  const occurrences = medicationOccurrences(day);
   const groups = {};
 
   occurrences.forEach(o => {
@@ -1242,17 +1359,7 @@ function render() {
   document.getElementById("schedule").innerHTML = html ||
     '<div class="card empty">' + safe(t("emptyMedicineDay")) + '</div>';
 
-  const done = occurrences.filter(o =>
-    records[o.key] === true || (medTimes(o.med).length === 1 && records[o.med.id] === true)
-  ).length;
-  document.getElementById("count").textContent = done + " / " + occurrences.length;
-  document.getElementById("bar").style.width =
-    (occurrences.length ? done / occurrences.length * 100 : 0) + "%";
 
-  document.getElementById("today").textContent =
-    new Date(day + "T12:00:00").toLocaleDateString(currentLanguage() === "en" ? "en-US" : currentLanguage() === "de" ? "de-DE" : "tr-TR", {
-      day:"numeric", month:"long", year:"numeric", weekday:"long"
-    });
 }
 
 function openEdit(id) {
