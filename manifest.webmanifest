@@ -1,7 +1,7 @@
 {
-  "name": "İlaç Takibim",
-  "short_name": "İlaç Takibim",
-  "description": "Kişisel ilaç takip, hatırlatma ve sağlık takvimi uygulaması",
+  "name": "Sağlık Cepte",
+  "short_name": "Sağlık Cepte",
+  "description": "Kişisel sağlık takibi, ilaç hatırlatma, ölçüm ve sağlık takvimi uygulaması",
   "lang": "tr",
   "start_url": "./",
   "scope": "./",
