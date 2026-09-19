@@ -58,7 +58,7 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/health") {
-      return json({ ok: true, service: "İlaç Takibim Push", mode: "multi-user" });
+      return json({ ok: true, service: "Sağlık Cepte Push", mode: "multi-user" });
     }
 
     if (url.pathname === "/vapid-public-key") {
@@ -114,7 +114,7 @@ export default {
       const subscription = JSON.parse(raw);
       try {
         await sendPush(env, subscription, {
-          title: "💊 İlaç Takibim",
+          title: "💊 Sağlık Cepte",
           body: "Test bildirimi başarıyla ulaştı.",
           tag: "ilac-takibim-test"
         });
@@ -152,7 +152,7 @@ export default {
       return json({ ok: true });
     }
 
-    return new Response("İlaç Takibim bildirim sunucusu aktif.", {
+    return new Response("Sağlık Cepte bildirim sunucusu aktif.", {
       headers: { ...corsHeaders, "Content-Type": "text/plain; charset=UTF-8" }
     });
   },
@@ -182,7 +182,7 @@ export default {
 
           try {
             await sendPush(env, JSON.parse(subscriptionRaw), {
-              title: "⏰ İlaç Takibim",
+              title: "⏰ Sağlık Cepte",
               body: "Zamanlı bildirim testi başarılı.",
               tag: `scheduled-test-${clientId}`
             });
@@ -243,7 +243,7 @@ export default {
 
           try {
             await sendPush(env, subscription, {
-              title: "💊 İlaç Takibim",
+              title: "💊 Sağlık Cepte",
               body,
               tag: `ilac-${clientId}-${local.date}-${local.time}`
             });
