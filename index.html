@@ -268,6 +268,7 @@ html[data-theme="dark"] .calday.selected.has-event::after{background:#14213d}
 .theme-choice{display:flex;gap:6px;background:var(--surface-2);border:1px solid var(--border);padding:4px;border-radius:12px}
 .theme-choice button{border:0;background:transparent;color:var(--muted);padding:8px 9px;border-radius:9px;font-size:12px;font-weight:800}
 .theme-choice button.active{background:var(--accent);color:#fff}
+.language-select{min-width:130px;width:auto;margin:0}
 html[data-theme="dark"] .theme-choice button.active{color:#14213d}
 .bottom-nav{
   position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));
@@ -297,7 +298,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       <div class="pill-logo" aria-hidden="true"></div>
       <div class="brand-text">
         <h1>Sağlık Cepte</h1>
-        <p>Kişisel ilaç ve sağlık takvimin</p>
+        <p data-i18n="brandSubtitle">Kişisel ilaç ve sağlık takvimin</p>
       </div>
     </div>
     <button class="icon-button" id="quickThemeButton" onclick="cycleTheme()" aria-label="Tema değiştir">◐</button>
@@ -306,11 +307,11 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
 <main>
   <div class="tabs" aria-label="Ana bölümler">
-    <button class="tab active" data-tab="today" onclick="showTab('today')">Bugün</button>
-    <button class="tab" data-tab="health" onclick="showTab('health')">Sağlık</button>
-    <button class="tab" data-tab="add" onclick="showTab('add')">Ekle</button>
-    <button class="tab" data-tab="calendar" onclick="showTab('calendar')">Takvim</button>
-    <button class="tab" data-tab="settings" onclick="showTab('settings')">Ayarlar</button>
+    <button class="tab active" data-tab="today" onclick="showTab('today')" data-i18n="tabToday" data-i18n="today">Bugün</button>
+    <button class="tab" data-tab="health" onclick="showTab('health')" data-i18n="tabHealth">Sağlık</button>
+    <button class="tab" data-tab="add" onclick="showTab('add')" data-i18n="tabAdd">Ekle</button>
+    <button class="tab" data-tab="calendar" onclick="showTab('calendar')" data-i18n="tabCalendar">Takvim</button>
+    <button class="tab" data-tab="settings" onclick="showTab('settings')" data-i18n="tabSettings">Ayarlar</button>
   </div>
 
   <section id="panel-today" class="panel active">
@@ -318,20 +319,20 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       <div class="profile-card">
         <div class="profile-avatar" id="profileAvatar"></div>
         <div class="profile-main">
-          <div class="profile-name" id="profileName">Profilini oluştur</div>
+          <div class="profile-name" id="profileName" data-i18n="createProfile">Profilini oluştur</div>
           <div class="profile-meta">
             <span class="profile-chip blood-chip" id="profileBlood">Kan grubu: —</span>
             <span class="profile-chip" id="profileBirth">Doğum tarihi: —</span>
           </div>
         </div>
-        <button class="btn secondary small profile-edit" onclick="openProfileModal()">Düzenle</button>
+        <button class="btn secondary small profile-edit" onclick="openProfileModal()" data-i18n="edit">Düzenle</button>
       </div>
     </div>
 
     <div class="hero">
       <div class="hero-row">
         <div>
-          <h2>Bugünkü planın</h2>
+          <h2 data-i18n="todayPlan">Bugünkü planın</h2>
           <div id="today" class="date"></div>
         </div>
         <div id="count" class="hero-count">0 / 0</div>
@@ -341,20 +342,20 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
     <div class="card">
       <div class="card-head">
-        <h3>Bildirim durumu</h3>
+        <h3 data-i18n="notificationStatusTitle">Bildirim durumu</h3>
         <span class="status-dot"></span>
       </div>
       <div class="status-box">
         <div class="status-dot"></div>
         <div id="notificationStatus" class="status">Bildirim durumu kontrol ediliyor...</div>
       </div>
-      <button id="notificationButton" class="btn yellow" onclick="enableNotifications()">Bildirimleri etkinleştir</button>
+      <button id="notificationButton" class="btn yellow" onclick="enableNotifications()" data-i18n="enableNotifications">Bildirimleri etkinleştir</button>
     </div>
 
     <div class="card">
       <div class="date-picker-row">
         <div>
-          <label for="date">Görüntülenecek gün</label>
+          <label for="date" data-i18n="viewDay">Görüntülenecek gün</label>
           <input class="field" type="date" id="date" onchange="render()">
         </div>
         <button class="btn secondary small" onclick="goToday()">Bugün</button>
@@ -403,8 +404,8 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     <div class="card">
       <div class="card-head">
         <div>
-          <h3>Sağlık Ölçümlerim</h3>
-          <div class="note">Tansiyon, nabız ve diğer kişisel ölçümlerini tarih-saat ile kaydet.</div>
+          <h3 data-i18n="healthMeasurements">Sağlık Ölçümlerim</h3>
+          <div class="note"><span data-i18n="healthMeasurementsDesc">Tansiyon, nabız ve diğer kişisel ölçümlerini tarih-saat ile kaydet.</span></div>
         </div>
       </div>
       <div id="healthLatest" class="health-grid"></div>
@@ -412,7 +413,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
     <div class="card">
       <details id="healthAddDetails" open>
-        <summary>Yeni ölçüm ekle</summary>
+        <summary data-i18n="addMeasurement">Yeni ölçüm ekle</summary>
         <div class="details-body">
           <div class="date-grid">
             <div><label for="healthDate">Tarih</label><input class="field" id="healthDate" type="date"></div>
@@ -442,7 +443,7 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     </div>
 
     <div class="card">
-      <h3>Geçmiş ölçümler</h3>
+      <h3 data-i18n="measurementHistory">Geçmiş ölçümler</h3>
       <div id="healthHistory" style="margin-top:12px"></div>
     </div>
   </section>
@@ -451,8 +452,8 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     <div class="card">
       <div class="card-head">
         <div>
-          <h3>Manuel Ekle</h3>
-          <div class="note">Eklemek istediğin kayıt türünü seç.</div>
+          <h3 data-i18n="manualAdd">Manuel Ekle</h3>
+          <div class="note"><span data-i18n="manualAddDesc">Eklemek istediğin kayıt türünü seç.</span></div>
         </div>
       </div>
       <div class="quick-add-grid">
@@ -476,8 +477,8 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     <div class="card">
       <div class="card-head">
         <div>
-          <h3>Özel Günler & Takvim</h3>
-          <div class="note">Aşı, rutin tedavi, kontrol ve kendi sağlık başlıklarını planla.</div>
+          <h3 data-i18n="specialDaysCalendar">Özel Günler & Takvim</h3>
+          <div class="note"><span data-i18n="specialDaysDesc">Aşı, rutin tedavi, kontrol ve kendi sağlık başlıklarını planla.</span></div>
         </div>
       </div>
 
@@ -524,6 +525,21 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 
   <section id="panel-settings" class="panel">
     <div class="card">
+      <h3 data-i18n="languageTitle">Dil</h3>
+      <div class="setting-row">
+        <div>
+          <div class="setting-title" data-i18n="appLanguage">Uygulama dili</div>
+          <div class="setting-desc" data-i18n="appLanguageDesc">Uygulama arayüzünün dilini seç.</div>
+        </div>
+        <select id="languageSelect" class="language-select" onchange="setLanguage(this.value)">
+          <option value="tr">Türkçe</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+
+
+    <div class="card">
       <h3>Görünüm</h3>
       <div class="setting-row">
         <div>
@@ -567,19 +583,30 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
     <div class="card">
       <h3>Gizlilik ve veriler</h3>
       <p class="note">Hesap açılmaz. Bu cihaz için rastgele kimlik oluşturulur. İlaç programı ve push aboneliği yalnızca hatırlatma amacıyla kullanılır. Özel takvim ve sağlık ölçüm kayıtları bu cihazda saklanır.</p>
-      <button class="btn danger" onclick="deleteMyData()">Tüm verilerimi sil</button>
+      <button class="btn danger" onclick="deleteMyData()" data-i18n="deleteAllData">Tüm verilerimi sil</button>
     </div>
 
-    <p class="note">İlaçlarınızı yalnızca doktorunuzun veya eczacınızın güncel talimatına göre kullanın. İlk normal saatli bildirimi doğrulayana kadar mevcut telefon alarmlarınızı açık tutun.</p>
+    <div class="card">
+      <h3 data-i18n="aboutTitle">Hakkında</h3>
+      <div id="aboutText" class="note" style="font-size:14px;line-height:1.65">
+        <p><strong>Sağlığın, cebinde.</strong></p>
+        <p>Sağlık Cepte; ilaçlarını, sağlık ölçümlerini ve önemli sağlık tarihlerini tek bir yerde düzenli şekilde takip edebilmen için tasarlandı.</p>
+        <p>İlaç saatlerini planlayabilir, tansiyon ve nabız gibi ölçümlerini kaydedebilir, aşı ve kontrol tarihlerini takvimine ekleyebilir, profil ve acil durum bilgilerini saklayabilirsin.</p>
+        <p>Amacımız sağlık bilgilerini daha ulaşılabilir, düzenli ve takip edilebilir hale getirmek.</p>
+        <p>Uygulama tıbbi değerlendirme veya tedavi önerisi yerine geçmez. İlaç kullanımı ve sağlık kararlarında doktor veya eczacı önerilerini dikkate al.</p>
+      </div>
+    </div>
+
+    <p class="note" data-i18n="medicalDisclaimer">İlaçlarınızı yalnızca doktorunuzun veya eczacınızın güncel talimatına göre kullanın. İlk normal saatli bildirimi doğrulayana kadar mevcut telefon alarmlarınızı açık tutun.</p>
   </section>
 </main>
 
 <nav class="bottom-nav" aria-label="Alt menü">
-  <button class="nav-btn active" data-nav="today" onclick="showTab('today')"><span>●</span>Bugün</button>
-  <button class="nav-btn" data-nav="health" onclick="showTab('health')"><span>♥</span>Sağlık</button>
-  <button class="nav-btn" data-nav="add" onclick="showTab('add')"><span>＋</span>Ekle</button>
-  <button class="nav-btn" data-nav="calendar" onclick="showTab('calendar')"><span>▦</span>Takvim</button>
-  <button class="nav-btn" data-nav="settings" onclick="showTab('settings')"><span>⚙</span>Ayarlar</button>
+  <button class="nav-btn active" data-nav="today" onclick="showTab('today')"><span>●</span><span data-i18n="tabToday">Bugün</span></button>
+  <button class="nav-btn" data-nav="health" onclick="showTab('health')"><span>♥</span><span data-i18n="tabHealth">Sağlık</span></button>
+  <button class="nav-btn" data-nav="add" onclick="showTab('add')"><span>＋</span><span data-i18n="tabAdd">Ekle</span></button>
+  <button class="nav-btn" data-nav="calendar" onclick="showTab('calendar')"><span>▦</span><span data-i18n="tabCalendar">Takvim</span></button>
+  <button class="nav-btn" data-nav="settings" onclick="showTab('settings')"><span>⚙</span><span data-i18n="tabSettings">Ayarlar</span></button>
 </nav>
 
 <div id="profileModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
@@ -674,6 +701,72 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
 <script>
 const PUSH_SERVER = "https://ilac-takibim-push.almanpazari.workers.dev";
 const THEME_KEY = "themeMode";
+const LANGUAGE_KEY = "appLanguage";
+
+const I18N = {
+  tr: {
+    brandSubtitle:"Kişisel ilaç ve sağlık takvimin",
+    tabToday:"Bugün", tabHealth:"Sağlık", tabAdd:"Ekle", tabCalendar:"Takvim", tabSettings:"Ayarlar",
+    createProfile:"Profilini oluştur", edit:"Düzenle", todayPlan:"Bugünkü planın",
+    notificationStatusTitle:"Bildirim durumu", enableNotifications:"Bildirimleri etkinleştir",
+    viewDay:"Görüntülenecek gün", today:"Bugün",
+    healthMeasurements:"Sağlık Ölçümlerim", healthMeasurementsDesc:"Tansiyon, nabız ve diğer kişisel ölçümlerini tarih-saat ile kaydet.",
+    addMeasurement:"Yeni ölçüm ekle", measurementHistory:"Geçmiş ölçümler",
+    manualAdd:"Manuel Ekle", manualAddDesc:"Eklemek istediğin kayıt türünü seç.",
+    specialDaysCalendar:"Özel Günler & Takvim", specialDaysDesc:"Aşı, rutin tedavi, kontrol ve kendi sağlık başlıklarını planla.",
+    languageTitle:"Dil", appLanguage:"Uygulama dili", appLanguageDesc:"Uygulama arayüzünün dilini seç.",
+    aboutTitle:"Hakkında", deleteAllData:"Tüm verilerimi sil",
+    medicalDisclaimer:"İlaçlarınızı yalnızca doktorunuzun veya eczacınızın güncel talimatına göre kullanın. İlk normal saatli bildirimi doğrulayana kadar mevcut telefon alarmlarınızı açık tutun.",
+    bloodGroup:"Kan grubu", birthDate:"Doğum tarihi", noData:"—",
+    aboutHtml:'<p><strong>Sağlığın, cebinde.</strong></p><p>Sağlık Cepte; ilaçlarını, sağlık ölçümlerini ve önemli sağlık tarihlerini tek bir yerde düzenli şekilde takip edebilmen için tasarlandı.</p><p>İlaç saatlerini planlayabilir, tansiyon ve nabız gibi ölçümlerini kaydedebilir, aşı ve kontrol tarihlerini takvimine ekleyebilir, profil ve acil durum bilgilerini saklayabilirsin.</p><p>Amacımız sağlık bilgilerini daha ulaşılabilir, düzenli ve takip edilebilir hale getirmek.</p><p>Uygulama tıbbi değerlendirme veya tedavi önerisi yerine geçmez. İlaç kullanımı ve sağlık kararlarında doktor veya eczacı önerilerini dikkate al.</p>'
+  },
+  en: {
+    brandSubtitle:"Your personal medication and health calendar",
+    tabToday:"Today", tabHealth:"Health", tabAdd:"Add", tabCalendar:"Calendar", tabSettings:"Settings",
+    createProfile:"Create your profile", edit:"Edit", todayPlan:"Today's plan",
+    notificationStatusTitle:"Notification status", enableNotifications:"Enable notifications",
+    viewDay:"Day to display", today:"Today",
+    healthMeasurements:"My Health Measurements", healthMeasurementsDesc:"Record blood pressure, pulse and other personal measurements with date and time.",
+    addMeasurement:"Add new measurement", measurementHistory:"Measurement history",
+    manualAdd:"Manual Add", manualAddDesc:"Choose the type of record you want to add.",
+    specialDaysCalendar:"Special Days & Calendar", specialDaysDesc:"Plan vaccines, routine treatments, check-ups and your own health categories.",
+    languageTitle:"Language", appLanguage:"App language", appLanguageDesc:"Choose the interface language.",
+    aboutTitle:"About", deleteAllData:"Delete all my data",
+    medicalDisclaimer:"Use medications only according to the current instructions of your doctor or pharmacist. Keep your existing phone alarms active until you verify the first regular scheduled notification.",
+    bloodGroup:"Blood type", birthDate:"Birth date", noData:"—",
+    aboutHtml:'<p><strong>Your health, in your pocket.</strong></p><p>Sağlık Cepte is designed to help you keep your medications, health measurements and important health dates organized in one place.</p><p>You can plan medication times, record measurements such as blood pressure and pulse, add vaccine and check-up dates to your calendar, and keep profile and emergency information.</p><p>Our aim is to make personal health information more accessible, organized and easier to follow.</p><p>This app does not replace medical evaluation or treatment advice. Follow the recommendations of your doctor or pharmacist when making medication and health decisions.</p>'
+  }
+};
+
+function currentLanguage() {
+  return localStorage.getItem(LANGUAGE_KEY) || "tr";
+}
+
+function t(key) {
+  const lang = currentLanguage();
+  return I18N[lang]?.[key] ?? I18N.tr[key] ?? key;
+}
+
+function setLanguage(lang) {
+  if (!I18N[lang]) lang = "tr";
+  localStorage.setItem(LANGUAGE_KEY, lang);
+  document.documentElement.lang = lang;
+  const select = document.getElementById("languageSelect");
+  if (select) select.value = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    if (I18N[lang]?.[key] != null) el.textContent = I18N[lang][key];
+  });
+  const about = document.getElementById("aboutText");
+  if (about) about.innerHTML = I18N[lang].aboutHtml;
+  renderProfile();
+  render();
+  renderHealth();
+  renderCalendar();
+  renderSpecialEvents();
+}
+
+
 
 function systemPrefersDark() {
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -747,13 +840,14 @@ function profilePhotoMarkup(photo, name) {
 
 function renderProfile() {
   const name = (profileData.fullName || "").trim();
-  document.getElementById("profileName").textContent = name || "Profilini oluştur";
+  document.getElementById("profileName").textContent = name || t("createProfile");
   document.getElementById("profileBlood").textContent =
-    "Kan grubu: " + (profileData.bloodType || "—");
+    t("bloodGroup") + ": " + (profileData.bloodType || t("noData"));
 
+  const locale = currentLanguage() === "en" ? "en-US" : "tr-TR";
   document.getElementById("profileBirth").textContent = profileData.birthDate
-    ? "Doğum: " + new Date(profileData.birthDate + "T12:00:00").toLocaleDateString("tr-TR")
-    : "Doğum tarihi: —";
+    ? t("birthDate") + ": " + new Date(profileData.birthDate + "T12:00:00").toLocaleDateString(locale)
+    : t("birthDate") + ": " + t("noData");
 
   document.getElementById("profileAvatar").innerHTML =
     profilePhotoMarkup(profileData.photo || "", name);
@@ -1000,7 +1094,7 @@ function render() {
     (todaysMeds.length ? done / todaysMeds.length * 100 : 0) + "%";
 
   document.getElementById("today").textContent =
-    new Date(day + "T12:00:00").toLocaleDateString("tr-TR", {
+    new Date(day + "T12:00:00").toLocaleDateString(currentLanguage() === "en" ? "en-US" : "tr-TR", {
       day:"numeric", month:"long", year:"numeric", weekday:"long"
     });
 }
@@ -1282,7 +1376,8 @@ function saveSpecialData() {
 }
 
 function formatTrDate(day) {
-  return new Date(day + "T12:00:00").toLocaleDateString("tr-TR", {
+  const locale = currentLanguage() === "en" ? "en-US" : "tr-TR";
+  return new Date(day + "T12:00:00").toLocaleDateString(locale, {
     day:"numeric", month:"long", year:"numeric", weekday:"long"
   });
 }
@@ -1391,7 +1486,7 @@ function changeCalendarMonth(offset) {
 function renderCalendar() {
   const title = document.getElementById("calendarTitle");
   const grid = document.getElementById("calendarGrid");
-  title.textContent = calendarCursor.toLocaleDateString("tr-TR", { month:"long", year:"numeric" });
+  title.textContent = calendarCursor.toLocaleDateString(currentLanguage() === "en" ? "en-US" : "tr-TR", { month:"long", year:"numeric" });
 
   const y = calendarCursor.getFullYear();
   const m = calendarCursor.getMonth();
@@ -1650,6 +1745,7 @@ async function deleteMyData() {
 }
 
 applyTheme(currentThemeMode());
+setLanguage(currentLanguage());
 render();
 renderSpecialCategories();
 renderCalendar();
