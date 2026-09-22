@@ -587,6 +587,9 @@ html[data-theme="dark"] .nav-btn.active{color:#14213d}
       <div class="special-form">
         <div class="section-subtitle" id="specialSelectedLabel">Seçilen tarih</div>
 
+        <label for="specialDateInput" data-i18n="appointmentDate">Randevu tarihi</label>
+        <input class="field" id="specialDateInput" type="date" onchange="selectSpecialDate(this.value)">
+
         <label for="specialCategory" data-i18n="category">Başlık</label>
         <select class="field" id="specialCategory"></select>
 
@@ -801,7 +804,7 @@ const I18N = {
     newMedicine:"Yeni ilaç ekle", medicineName:"İlaç adı", medicineNamePh:"Örn. Vitamin D", medicineTime:"İlaç saati", medicineTimes:"İlaç saatleri", addTime:"+ Saat ekle", removeTime:"Saati kaldır", whichDays:"Hangi günler?", startDate:"Başlangıç", endDate:"Bitiş (isteğe bağlı)", addMedicine:"İlaç ekle",
     date:"Tarih", time:"Saat", systolic:"Büyük tansiyon", diastolic:"Küçük tansiyon", pulse:"Nabız", oxygen:"Oksijen (SpO₂)", temperature:"Ateş", glucose:"Kan şekeri", weight:"Kilo", customMeasurement:"Özel ölçüm", customMeasurementValue:"Özel ölçüm değeri", note:"Not", saveMeasurement:"Ölçümü kaydet",
     addMedicineDesc:"İlaç adı, saat, günler ve tarih aralığı ekle.", addHealthMeasurement:"Sağlık ölçümü ekle", addHealthMeasurementDesc:"Tansiyon, nabız, SpO₂, ateş, şeker, kilo veya özel ölçüm.", addCalendarEntry:"Takvime kayıt ekle", addCalendarEntryDesc:"Aşı, rutin tedavi, kontrol, tahlil veya özel başlık.",
-    category:"Başlık", subtitleAction:"Alt başlık / işlem", specialTitlePh:"Örn. Tetanoz aşısı, kan tahlili", optionalTime:"Saat (isteğe bağlı)", optionalNote:"Not (isteğe bağlı)", specialNotePh:"Doktor, hastane, hazırlık notu vb.", addToDate:"Bu tarihe ekle", createOwnCategory:"Kendi başlığını oluştur", customCategoryPh:"Örn. Diş Tedavisi", addCategory:"Başlık ekle", selectedDateRecords:"Seçilen tarihteki kayıtlar",
+    appointmentDate:"Randevu tarihi", category:"Başlık", subtitleAction:"Alt başlık / işlem", specialTitlePh:"Örn. Tetanoz aşısı, kan tahlili", optionalTime:"Saat (isteğe bağlı)", optionalNote:"Not (isteğe bağlı)", specialNotePh:"Doktor, hastane, hazırlık notu vb.", addToDate:"Bu tarihe ekle", createOwnCategory:"Kendi başlığını oluştur", customCategoryPh:"Örn. Diş Tedavisi", addCategory:"Başlık ekle", selectedDateRecords:"Seçilen tarihteki kayıtlar",
     appearance:"Görünüm", theme:"Tema", themeDesc:"Açık, koyu veya telefon ayarını takip et.", light:"Açık", dark:"Koyu", auto:"Oto", notifications:"Bildirimler", notificationsDesc:"Anlık ve zamanlı push bildirimlerini buradan kontrol edebilirsin.", testNotification:"Test bildirimi", scheduledTest:"2 dk sonra test",
     profileInfo:"Profil bilgileri", choosePhoto:"Fotoğraf seç", removePhoto:"Fotoğrafı kaldır", fullName:"Ad soyad", optionalPhone:"Telefon (isteğe bağlı)", optionalEmergencyContact:"Acil durum kişisi (isteğe bağlı)", optionalProfileNote:"Profil notu (isteğe bağlı)", saveProfile:"Profili kaydet", cancel:"Vazgeç",
     emptyMedicineDay:"Bu gün için ilaç kaydı yok.", emptyHealth:"Henüz sağlık ölçümü eklenmedi.", noRecords:"Kayıt bulunmuyor.", selectedDate:"Seçilen tarih", noDateRecords:"Bu tarihte kayıt yok.", noCustomCategory:"Henüz özel başlık eklenmedi.",
@@ -832,7 +835,7 @@ const I18N = {
     newMedicine:"Add new medicine", medicineName:"Medicine name", medicineNamePh:"E.g. Vitamin D", medicineTime:"Medication time", medicineTimes:"Medication times", addTime:"+ Add time", removeTime:"Remove time", whichDays:"Which days?", startDate:"Start date", endDate:"End date (optional)", addMedicine:"Add medicine",
     date:"Date", time:"Time", systolic:"Systolic blood pressure", diastolic:"Diastolic blood pressure", pulse:"Pulse", oxygen:"Oxygen (SpO₂)", temperature:"Temperature", glucose:"Blood glucose", weight:"Weight", customMeasurement:"Custom measurement", customMeasurementValue:"Custom measurement value", note:"Note", saveMeasurement:"Save measurement",
     addMedicineDesc:"Add medicine name, time, days and date range.", addHealthMeasurement:"Add health measurement", addHealthMeasurementDesc:"Blood pressure, pulse, SpO₂, temperature, glucose, weight or a custom measurement.", addCalendarEntry:"Add calendar entry", addCalendarEntryDesc:"Vaccine, routine treatment, check-up, test or custom category.",
-    category:"Category", subtitleAction:"Subtitle / action", specialTitlePh:"E.g. Tetanus vaccine, blood test", optionalTime:"Time (optional)", optionalNote:"Note (optional)", specialNotePh:"Doctor, hospital, preparation note, etc.", addToDate:"Add to this date", createOwnCategory:"Create your own category", customCategoryPh:"E.g. Dental Treatment", addCategory:"Add category", selectedDateRecords:"Records on selected date",
+    appointmentDate:"Appointment date", category:"Category", subtitleAction:"Subtitle / action", specialTitlePh:"E.g. Tetanus vaccine, blood test", optionalTime:"Time (optional)", optionalNote:"Note (optional)", specialNotePh:"Doctor, hospital, preparation note, etc.", addToDate:"Add to this date", createOwnCategory:"Create your own category", customCategoryPh:"E.g. Dental Treatment", addCategory:"Add category", selectedDateRecords:"Records on selected date",
     appearance:"Appearance", theme:"Theme", themeDesc:"Use light, dark or follow your phone setting.", light:"Light", dark:"Dark", auto:"Auto", notifications:"Notifications", notificationsDesc:"Manage instant and scheduled push notifications here.", testNotification:"Test notification", scheduledTest:"Test in 2 min",
     profileInfo:"Profile information", choosePhoto:"Choose photo", removePhoto:"Remove photo", fullName:"Full name", optionalPhone:"Phone (optional)", optionalEmergencyContact:"Emergency contact (optional)", optionalProfileNote:"Profile note (optional)", saveProfile:"Save profile", cancel:"Cancel",
     emptyMedicineDay:"No medication scheduled for this day.", emptyHealth:"No health measurement has been added yet.", noRecords:"No records found.", selectedDate:"Selected date", noDateRecords:"No records on this date.", noCustomCategory:"No custom category added yet.",
@@ -863,7 +866,7 @@ const I18N = {
     newMedicine:"Neues Medikament hinzufügen", medicineName:"Medikamentenname", medicineNamePh:"Z. B. Vitamin D", medicineTime:"Einnahmezeit", medicineTimes:"Einnahmezeiten", addTime:"+ Uhrzeit hinzufügen", removeTime:"Uhrzeit entfernen", whichDays:"An welchen Tagen?", startDate:"Startdatum", endDate:"Enddatum (optional)", addMedicine:"Medikament hinzufügen",
     date:"Datum", time:"Uhrzeit", systolic:"Systolischer Blutdruck", diastolic:"Diastolischer Blutdruck", pulse:"Puls", oxygen:"Sauerstoff (SpO₂)", temperature:"Temperatur", glucose:"Blutzucker", weight:"Gewicht", customMeasurement:"Eigener Messwert", customMeasurementValue:"Wert", note:"Notiz", saveMeasurement:"Messung speichern",
     addMedicineDesc:"Medikamentenname, Uhrzeit, Tage und Zeitraum hinzufügen.", addHealthMeasurement:"Gesundheitswert hinzufügen", addHealthMeasurementDesc:"Blutdruck, Puls, SpO₂, Temperatur, Blutzucker, Gewicht oder eigener Messwert.", addCalendarEntry:"Kalendereintrag hinzufügen", addCalendarEntryDesc:"Impfung, Routinebehandlung, Kontrolle, Untersuchung oder eigene Kategorie.",
-    category:"Kategorie", subtitleAction:"Untertitel / Vorgang", specialTitlePh:"Z. B. Tetanusimpfung, Blutuntersuchung", optionalTime:"Uhrzeit (optional)", optionalNote:"Notiz (optional)", specialNotePh:"Arzt, Krankenhaus, Vorbereitungshinweis usw.", addToDate:"Zu diesem Datum hinzufügen", createOwnCategory:"Eigene Kategorie erstellen", customCategoryPh:"Z. B. Zahnbehandlung", addCategory:"Kategorie hinzufügen", selectedDateRecords:"Einträge am ausgewählten Datum",
+    appointmentDate:"Termindatum", category:"Kategorie", subtitleAction:"Untertitel / Vorgang", specialTitlePh:"Z. B. Tetanusimpfung, Blutuntersuchung", optionalTime:"Uhrzeit (optional)", optionalNote:"Notiz (optional)", specialNotePh:"Arzt, Krankenhaus, Vorbereitungshinweis usw.", addToDate:"Zu diesem Datum hinzufügen", createOwnCategory:"Eigene Kategorie erstellen", customCategoryPh:"Z. B. Zahnbehandlung", addCategory:"Kategorie hinzufügen", selectedDateRecords:"Einträge am ausgewählten Datum",
     appearance:"Darstellung", theme:"Design", themeDesc:"Hell, dunkel oder der Systemeinstellung folgen.", light:"Hell", dark:"Dunkel", auto:"Auto", notifications:"Benachrichtigungen", notificationsDesc:"Sofortige und zeitgesteuerte Push-Benachrichtigungen verwalten.", testNotification:"Testbenachrichtigung", scheduledTest:"Test in 2 Min.",
     profileInfo:"Profilinformationen", choosePhoto:"Foto auswählen", removePhoto:"Foto entfernen", fullName:"Vor- und Nachname", optionalPhone:"Telefon (optional)", optionalEmergencyContact:"Notfallkontakt (optional)", optionalProfileNote:"Profilnotiz (optional)", saveProfile:"Profil speichern", cancel:"Abbrechen",
     emptyMedicineDay:"Für diesen Tag sind keine Medikamente eingetragen.", emptyHealth:"Noch keine Gesundheitsmessung hinzugefügt.", noRecords:"Keine Einträge gefunden.", selectedDate:"Ausgewähltes Datum", noDateRecords:"Für dieses Datum gibt es keine Einträge.", noCustomCategory:"Noch keine eigene Kategorie hinzugefügt.",
@@ -1780,6 +1783,8 @@ function removeSpecialCategory(category) {
 }
 
 function addSpecialEvent() {
+  const dateInput = document.getElementById("specialDateInput");
+  if (dateInput?.value) selectedSpecialDate = dateInput.value;
   const category = document.getElementById("specialCategory").value;
   const title = document.getElementById("specialTitle").value.trim();
   const time = document.getElementById("specialTime").value;
@@ -1817,7 +1822,10 @@ function removeSpecialEvent(id) {
 }
 
 function selectSpecialDate(day) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(day || ""))) return;
   selectedSpecialDate = day;
+  const input = document.getElementById("specialDateInput");
+  if (input && input.value !== day) input.value = day;
   const d = new Date(day + "T12:00:00");
   calendarCursor = new Date(d.getFullYear(), d.getMonth(), 1);
   renderCalendar();
@@ -1863,6 +1871,8 @@ function renderCalendar() {
 }
 
 function renderSpecialEvents() {
+  const dateInput = document.getElementById("specialDateInput");
+  if (dateInput && dateInput.value !== selectedSpecialDate) dateInput.value = selectedSpecialDate;
   document.getElementById("specialSelectedLabel").textContent =
     t("selectedDate") + ": " + formatTrDate(selectedSpecialDate);
 
